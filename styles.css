@@ -1,0 +1,13 @@
+.Bd {
+  border: 1px solid #000;
+}
+.O\(2px\,blue\)\:f:focus {
+  box-shadow: 0 0 0 2px blue;
+  outline: 0;
+}
+.C\(blue\) {
+  color: blue;
+}
+.foo:hover .foo\:h\_C\(blue\) {
+  color: blue;
+}
