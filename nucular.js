@@ -28,49 +28,6 @@ const pseudos = className =>
 
 const contextPattern = `[\\w\\-]+(${pseudoClassPattern})?[_>+]`;
 
-const scopePattern = scopes => `\\-\\-(${Object.keys(scopes).join("|")})`;
-
-const expressions = ({ scopes, rules }) => markup =>
-  markup.match(
-    new RegExp(
-      `(?<=\\W)(${contextPattern})?(${
-        Object
-          .entries(rules)
-          .map(([k, v]) => `${k}${v.length > 0 ? "\\([^\\)]+\\)" : "(?![\\w\(\)])"}`)
-          .map(pattern => `(${pattern}((${pseudoClassPattern}|${pseudoElementPattern})*))`)
-          .reduce((pattern, subpattern) => pattern ? `${pattern}|${subpattern}` : subpattern, "")
-      })(${scopePattern(scopes)})?`,
-      "g"
-    )
-  )
-    .reduce((xs, x) => xs.includes(x) ? xs : xs.concat(x), []);
-
-const parse = ({ scopes, rules }) => className => {
-  const f = className.match(new RegExp(`(${Object.keys(rules).join("|")})(\\W.*)?$`))[1];
-  const args = rules[f].length ? className.match(/\(([^\)]+)\)/)[1].split(",") : [];
-
-  const context = (className.match(new RegExp(`^(${contextPattern})`, "g")) || []).map(c => ({
-    className: c.substring(0, c.length - 1),
-    operator: c.substring(c.length - 1),
-  }))[0] || null;
-
-  if (context) {
-    context.pseudos = pseudos(context.className);
-  }
-
-  const scope =
-    (className.match(new RegExp(`(${scopePattern(scopes)})$`, "g")) || ["--default"]).map(x => x.substring(2))[0];
-
-  return {
-    className,
-    pseudos: pseudos(className),
-    context,
-    scope,
-    f,
-    args
-  };
-};
-
 const selector = ({ className, pseudos, context }) => {
   const self = [`.${escape(className)}`].concat(pseudos).join("");
   if (context) {
@@ -83,30 +40,74 @@ const selector = ({ className, pseudos, context }) => {
   return self;
 };
 
-const block = rules => style =>
-  [style.scope, `${selector(style)} { ${rules[style.f].apply(null, style.args)} }`];
+const nucular = ({ scopes, rules }, code) => {
+  const scopePattern = `\\-\\-(${Object.keys(scopes).join("|")})`;
 
-const scope = scopes => blocks =>
-  Object
-    .entries(
-      blocks.reduce((groups, [g, block]) => ({
-          ...groups,
-          [g]: (groups[g] || []).concat(block),
-        }), {})
+  const expressions = markup =>
+    markup.match(
+      new RegExp(
+        `(?<=\\W)(${contextPattern})?(${
+          Object
+            .entries(rules)
+            .map(([k, v]) => `${k}${v.length > 0 ? "\\([^\\)]+\\)" : "(?![\\w\(\)])"}`)
+            .map(pattern => `(${pattern}((${pseudoClassPattern}|${pseudoElementPattern})*))`)
+            .reduce((pattern, subpattern) => pattern ? `${pattern}|${subpattern}` : subpattern, "")
+        })(${scopePattern})?`,
+        "g"
+      )
     )
-    .sort(([a], [b]) => a === "default" ? -1 : b === "default" ? 1 : 0)
-    .map(([scope, styles]) => scopes[scope](styles.join(" ")));
+      .reduce((xs, x) => xs.includes(x) ? xs : xs.concat(x), []);
+
+  const parse = className => {
+    const f = className.match(new RegExp(`(${Object.keys(rules).join("|")})(\\W.*)?$`))[1];
+    const args = rules[f].length ? className.match(/\(([^\)]+)\)/)[1].split(",") : [];
+
+    const context = (className.match(new RegExp(`^(${contextPattern})`, "g")) || []).map(c => ({
+      className: c.substring(0, c.length - 1),
+      operator: c.substring(c.length - 1),
+    }))[0] || null;
+
+    if (context) {
+      context.pseudos = pseudos(context.className);
+    }
+
+    const scope =
+      (className.match(new RegExp(`(${scopePattern})$`, "g")) || ["--default"])
+        .map(x => x.substring(2))[0];
+
+    return {
+      className,
+      pseudos: pseudos(className),
+      context,
+      scope,
+      f,
+      args
+    };
+  };
+
+  const block = style => [style.scope, `${selector(style)} { ${rules[style.f].apply(null, style.args)} }`];
+
+  const stylesheet = blocks =>
+    Object
+      .entries(
+        blocks.reduce((groups, [g, block]) => ({
+            ...groups,
+            [g]: (groups[g] || []).concat(block),
+          }), {})
+      )
+      .sort(([a], [b]) => a === "default" ? -1 : b === "default" ? 1 : 0)
+      .map(([scope, styles]) => scopes[scope](styles.join(" ")))
+      .join(" ");
+
+  return prettier.format(
+    stylesheet(expressions(code).map(parse).map(block)),
+    { parser: "css" },
+  );
+};
 
 const main = () => {
-  const styles =
-    prettier.format(
-      scope(config.scopes)(
-        expressions(config)(fs.readFileSync("index.html", "utf8"))
-          .map(parse(config))
-          .map(block(config.rules))
-      ).join(" "),
-      { parser: "css" },
-    );
+  const code = fs.readFileSync("index.html", "utf8");
+  const styles = nucular(config, code);
   fs.writeFileSync("./styles.css", styles);
   console.log("done");
 };
