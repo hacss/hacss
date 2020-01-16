@@ -1,0 +1,32 @@
+.W\(400px\) {
+  width: 400px;
+}
+.H\(200px\) {
+  height: 200px;
+}
+.Lh\(200px\) {
+  line-height: 200px;
+}
+.Bgc\(\#ccc\) {
+  background-color: #ccc;
+}
+.Bgc\(\#cdc\)\:h:hover {
+  background-color: #cdc;
+}
+.Ta\(c\) {
+  text-align: center;
+}
+.C\(\#fff\) {
+  color: #fff;
+}
+.Tstk\(1px\,\#000\) {
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+.foo:hover .foo\:h_Tstk\(1px\,\#060\) {
+  text-shadow: -1px -1px 0 #060, 1px -1px 0 #060, -1px 1px 0 #060,
+    1px 1px 0 #060;
+}
+.Fz\(64px\) {
+  font-size: 64px;
+}

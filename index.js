@@ -1,6 +1,6 @@
-const prettier = require("prettier");
+require("CSS.escape");
 
-const escape = className => className.replace(/[\:\(\),_>+]/g, x => `\\${x}`);
+const prettier = require("prettier");
 
 const pseudoClasses = {
   f: "focus",
@@ -26,7 +26,7 @@ const pseudos = className =>
 const contextPattern = `[\\w\\-]+(${pseudoClassPattern})?[_>+]`;
 
 const selector = ({ className, pseudos, context }) => {
-  const self = [`.${escape(className)}`].concat(pseudos).join("");
+  const self = [`.${CSS.escape(className)}`].concat(pseudos).join("");
   if (context) {
     const { operator } = context;
     return [

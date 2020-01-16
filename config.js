@@ -1,10 +1,16 @@
 exports.rules = {
   Bd: () => "border: 1px solid #000",
+  Bgc: color => `background-color: ${color}`,
   C: color => `color: ${color}`,
+  Fz: size => `font-size: ${size}`,
+  H: height => `height: ${height}`,
+  Lh: lh => `line-height: ${lh}`,
   O: (size, color) => `
     box-shadow: 0 0 0 ${size} ${color};
     outline: 0;
   `,
+  Ta: ta => ta === "c" ? `text-align: center` : "",
+  W: width => `width: ${width}`,
 };
 
 exports.scopes = {

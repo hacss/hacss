@@ -11,6 +11,7 @@
   "main": "index.js",
   "bin": "cli.js",
   "dependencies": {
+    "css.escape": "^1.5.1",
     "glob": "^7.1.6",
     "mkdirp": "^0.5.1",
     "prettier": "^1.19.1"
