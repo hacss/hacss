@@ -1,7 +1,4 @@
-const fs = require("fs");
 const prettier = require("prettier");
-
-const config = require("./config.js");
 
 const escape = className => className.replace(/[\:\(\),_>+]/g, x => `\\${x}`);
 
@@ -105,11 +102,4 @@ const nucular = ({ scopes, rules }, code) => {
   );
 };
 
-const main = () => {
-  const code = fs.readFileSync("index.html", "utf8");
-  const styles = nucular(config, code);
-  fs.writeFileSync("./styles.css", styles);
-  console.log("done");
-};
-
-main();
+module.exports = nucular;
