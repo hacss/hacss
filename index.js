@@ -37,7 +37,7 @@ const selector = ({ className, pseudos, context }) => {
   return self;
 };
 
-const nucular = ({ scopes, rules }, code) => {
+const hacss = ({ scopes, rules }, code) => {
   const scopePattern = `\\-\\-(${Object.keys(scopes).join("|")})`;
 
   const expressions = markup =>
@@ -102,4 +102,4 @@ const nucular = ({ scopes, rules }, code) => {
   );
 };
 
-module.exports = nucular;
+module.exports = hacss;

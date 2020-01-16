@@ -6,7 +6,8 @@ const mkdirp = require("mkdirp");
 const path = require("path");
 const util = require("util");
 
-const nucular = require("./index.js");
+const { name } = require("./package.json");
+const buildCSS = require("./index.js");
 
 const [
   globP,
@@ -25,10 +26,11 @@ const a = process.argv.slice(2);
 const validArgs =
   [1, 3, 5].includes(a.length)
   && !a[a.length - 1].startsWith("--")
-  && a.every(a => !a.startsWith("--") || ["--config", "--output"].includes(a));
+  && a.every(a => !a.startsWith("--") || ["--config", "--output"].includes(a))
+  && a.includes("--config"); // Temporary measure until default config is more robust. Don't forget to update usage!
 
 if (!validArgs) {
-  console.log("Usage: nucular [--config <config-file>] [--output <output-file>] <sources>");
+  console.log(`Usage: ${name} --config <config-file> [--output <output-file>] <sources>`);
 }
 else {
   const options = {
@@ -53,7 +55,7 @@ else {
   globP(options.sources)
     .then(sources => Promise.all(sources.map(s => readFileP(s, "utf8"))))
     .then(sources => sources.join("\n"))
-    .then(code => nucular(config, code))
+    .then(code => buildCSS(config, code))
     .then(css =>
       options.output
         ? mkdirpP(path.dirname(options.output)).then(() => writeFileP(options.output, css))

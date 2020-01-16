@@ -1,4 +1,15 @@
 {
+  "name": "hacss",
+  "version": "0.0.1",
+  "description": "Hackable inline style language embedded in HTML classes",
+  "repository": "https://github.com/nsaunders/hacss.git",
+  "author": "Nick Saunders <nick@saunde.rs>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=12.4.0"
+  },
+  "main": "index.js",
+  "bin": "cli.js",
   "dependencies": {
     "glob": "^7.1.6",
     "mkdirp": "^0.5.1",
