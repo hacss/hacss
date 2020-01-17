@@ -37,7 +37,7 @@ const selector = ({ className, pseudos, context }) => {
   return self;
 };
 
-const hacss = ({ scopes, rules }, code) => {
+const hacss = ({ scopes, rules, context }, code) => {
   const scopePattern = `\\-\\-(${Object.keys(scopes).join("|")})`;
 
   const expressions = markup =>
@@ -46,7 +46,7 @@ const hacss = ({ scopes, rules }, code) => {
         `(?<=\\W)(${contextPattern})?(${
           Object
             .entries(rules)
-            .map(([k, v]) => `${k}${v.length > 0 ? "\\([^\\)]+\\)" : "(?![\\w\(\)])"}`)
+            .map(([k, v]) => `${k}\\([^\\)]+\\)`)
             .map(pattern => `(${pattern}((${pseudoClassPattern}|${pseudoElementPattern})*))`)
             .reduce((pattern, subpattern) => pattern ? `${pattern}|${subpattern}` : subpattern, "")
         })(${scopePattern})?`,
@@ -57,7 +57,7 @@ const hacss = ({ scopes, rules }, code) => {
 
   const parse = className => {
     const f = className.match(new RegExp(`(${Object.keys(rules).join("|")})(\\W.*)?$`))[1];
-    const args = rules[f].length ? className.match(/\(([^\)]+)\)/)[1].split(",") : [];
+    const args = className.match(/\(([^\)]+)\)/)[1].split(",");
 
     const context = (className.match(new RegExp(`^(${contextPattern})`, "g")) || []).map(c => ({
       className: c.substring(0, c.length - 1),
@@ -94,7 +94,9 @@ const hacss = ({ scopes, rules }, code) => {
       )
       .sort(([a], [b]) => a === "default" ? -1 : b === "default" ? 1 : 0)
       .map(([scope, styles]) => scopes[scope](styles.join(" ")))
-      .join(" ");
+      .join(" ")
+      .replace(/__START__/g, context === "RTL" ? "right" : "left")
+      .replace(/__END__/g, context === "RTL" ? "left" : "right");
 
   return prettier.format(
     stylesheet(expressions(code).map(parse).map(block)),

@@ -15,5 +15,8 @@
     "glob": "^7.1.6",
     "mkdirp": "^0.5.1",
     "prettier": "^1.19.1"
+  },
+  "devDependencies": {
+    "atomizer": "^3.6.2"
   }
 }
