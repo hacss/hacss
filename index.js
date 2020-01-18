@@ -1,6 +1,8 @@
 require("CSS.escape");
 
 const prettier = require("prettier");
+const postcss = require("postcss");
+const nested = require("postcss-nested");
 
 const pseudoClasses = {
   f: "focus",
@@ -91,20 +93,7 @@ const hacss = ({ scopes, rules, context }, code) => {
 
         return { scope, context, className, css };
       })
-      .map(style => {
-        const { scope, css } = style;
-        const sel = selector(style);
-
-        const nested = css.match(/&(?=:)[^\{]+[^\}]*\}/g) || [];
-
-        return [
-          scope,
-          [`& { ${nested.reduce((css, nested) => css.replace(nested, ""), css)} }`]
-            .concat(nested.map(x => x.trim()))
-            .map(x => `${x.replace(/(^&|(&(?=:)))/g, sel)}`)
-            .join(" ")
-        ];
-      });
+      .map(style => [style.scope, postcss([nested]).process(`${selector(style)} { ${style.css} }`).css]);
 
   const stylesheet =
     Object
