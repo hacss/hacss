@@ -54,10 +54,12 @@ const hacss = ({ scopes, rules, context }, code) => {
                   case "function":
                     return `${k}\\([^\\)]+\\)`;
                   case "object":
-                    return v.map(item => mkPattern([k, item])).join(")|(");
-                  return "";
+                    return v.map(item => mkPattern([k, item]));
+                  return null;
                 }
               })
+              .filter(x => x)
+              .reduce((patterns, x) => patterns.concat(x), [])
               .map(pattern => `(${pattern}((${pseudoClassPattern}|${pseudoElementPattern})*))`)
               .reduce((pattern, subpattern) => pattern ? `${pattern}|${subpattern}` : subpattern, "")
           })(${scopePattern})?`,
