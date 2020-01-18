@@ -89,7 +89,20 @@ const hacss = ({ scopes, rules, context }, code) => {
 
         return { scope, context, className, css };
       })
-      .map(style => [style.scope, `${selector(style)} { ${style.css} }`]);
+      .map(style => {
+        const { scope, css } = style;
+        const sel = selector(style);
+
+        const nested = css.match(/&(?=:)[^\{]+[^\}]*\}/g) || [];
+
+        return [
+          scope,
+          [`& { ${nested.reduce((css, nested) => css.replace(nested, ""), css)} }`]
+            .concat(nested.map(x => x.trim()))
+            .map(x => `${x.replace(/(^&|(&(?=:)))/g, sel)}`)
+            .join(" ")
+        ];
+      });
 
   const stylesheet =
     Object
