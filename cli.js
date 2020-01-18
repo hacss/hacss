@@ -9,12 +9,7 @@ const util = require("util");
 const { name } = require("./package.json");
 const buildCSS = require("./index.js");
 
-const [
-  globP,
-  mkdirpP,
-  readFileP,
-  writeFileP,
-] = [
+const [globP, mkdirpP, readFileP, writeFileP] = [
   glob,
   mkdirp,
   fs.readFile,
@@ -24,15 +19,16 @@ const [
 const a = process.argv.slice(2);
 
 const validArgs =
-  [1, 3, 5].includes(a.length)
-  && !a[a.length - 1].startsWith("--")
-  && a.every(a => !a.startsWith("--") || ["--config", "--output"].includes(a))
-  && a.includes("--config"); // Temporary measure until default config is more robust. Don't forget to update usage!
+  [1, 3, 5].includes(a.length) &&
+  !a[a.length - 1].startsWith("--") &&
+  a.every(a => !a.startsWith("--") || ["--config", "--output"].includes(a)) &&
+  a.includes("--config"); // Temporary measure until default config is more robust. Don't forget to update usage!
 
 if (!validArgs) {
-  console.log(`Usage: ${name} --config <config-file> [--output <output-file>] <sources>`);
-}
-else {
+  console.log(
+    `Usage: ${name} --config <config-file> [--output <output-file>] <sources>`,
+  );
+} else {
   const options = {
     config: path.join(__dirname, "config.js"),
     output: null,
@@ -58,8 +54,10 @@ else {
     .then(code => buildCSS(config, code))
     .then(css =>
       options.output
-        ? mkdirpP(path.dirname(options.output)).then(() => writeFileP(options.output, css))
-        : process.stdout.write(css)
+        ? mkdirpP(path.dirname(options.output)).then(() =>
+            writeFileP(options.output, css),
+          )
+        : process.stdout.write(css),
     )
     .catch(err => console.error(err));
 }

@@ -15,7 +15,7 @@ exports.color = c => {
     const dec = hex
       .split(new RegExp(`(.{${hex.length / 3}})`, "g"))
       .filter((_, i) => i % 2)
-      .map(c => c.length === 1 ? `${c}${c}` : c)
+      .map(c => (c.length === 1 ? `${c}${c}` : c))
       .map(c => parseInt(`0x${c}`))
       .join(",");
     return `rgba(${dec},${alpha})`;
@@ -26,4 +26,8 @@ exports.color = c => {
 
 exports.lookup = map => key => map[key] || key;
 
-exports.mapArgs = (f, ...fs) => (...args) => f.apply(null, args.map((a, i) => fs[i](a)));
+exports.mapArgs = (f, ...fs) => (...args) =>
+  f.apply(
+    null,
+    args.map((a, i) => fs[i](a)),
+  );
