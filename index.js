@@ -5,14 +5,49 @@ const postcss = require("postcss");
 const nested = require("postcss-nested");
 
 const pseudoClasses = {
+  a: "active",
+  c: "checked",
+  d: "default",
+  di: "disabled",
+  e: "empty",
+  en: "enabled",
   f: "focus",
+  fc: "first-child",
+  fi: "first",
+  fot: "first-of-type",
+  fs: "fullscreen",
+  fw: "focus-within",
   h: "hover",
+  ind: "indeterminate",
+  inv: "invalid",
+  ir: "in-range",
+  l: "left",
+  lc: "last-child",
+  li: "link",
+  lot: "last-of-type",
+  o: "optional",
+  oc: "only-child",
+  oor: "out-of-range",
+  oot: "only-of-type",
+  r: "right",
+  req: "required",
+  ro: "read-only",
+  rt: "root",
+  rw: "read-write",
+  s: "scope",
+  t: "target",
+  va: "valid",
+  vi: "visited",
 };
 
 const pseudoClassPattern = `\\:(${Object.keys(pseudoClasses).join("|")})`;
 
 const pseudoElements = {
-  ph: "placeholder",
+  a: ":after",
+  b: ":before",
+  fl: ":first-letter",
+  fli: ":first-line",
+  ph: ":placeholder",
 };
 
 const pseudoElementPattern = `\\:{2}(${Object.keys(pseudoElements).join("|")})`;
