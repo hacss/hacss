@@ -11,8 +11,7 @@ exports.borderStyles = {
   s: "solid",
 };
 
-exports.borderWidths =
-  { m: "medium", t: "thin", th: "thick" };
+exports.borderWidths = { m: "medium", t: "thin", th: "thick" };
 
 exports.overflow = {
   a: "auto",
