@@ -2,7 +2,7 @@ const {
   borderStyles,
   borderWidths,
   overflow,
-  transformOrPerspectiveOrigin,
+  transformOrPerspectiveOrigins,
 } = require("./common-maps.js");
 const { color, lookup, mapArgs } = require("./utils.js");
 
@@ -550,8 +550,8 @@ module.exports = {
   Trf: a => `transform: ${a}`,
   Trfo: mapArgs(
     (a, b) => `transform-origin: ${a} ${b}`,
-    lookup(transformOrPerspectiveOrigin),
-    lookup(transformOrPerspectiveOrigin),
+    lookup(transformOrPerspectiveOrigins),
+    lookup(transformOrPerspectiveOrigins),
   ),
   Trfs: mapArgs(
     a => `transform-style: ${a}`,
@@ -560,8 +560,8 @@ module.exports = {
   Prs: mapArgs(a => `perspective: ${a}`, lookup({ n: "none" })),
   Prso: mapArgs(
     (a, b) => `perspective-origin: ${a} ${b}`,
-    lookup(transformOrPerspectiveOrigin),
-    lookup(transformOrPerspectiveOrigin),
+    lookup(transformOrPerspectiveOrigins),
+    lookup(transformOrPerspectiveOrigins),
   ),
   Bfv: mapArgs(
     a => `backface-visibility: ${a}`,

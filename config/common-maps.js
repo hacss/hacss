@@ -21,7 +21,7 @@ exports.overflow = {
   v: "visible",
 };
 
-exports.transformOrPerspectiveOrigin = {
+exports.transformOrPerspectiveOrigins = {
   t: "top",
   end: "__END__",
   bottom: "bottom",

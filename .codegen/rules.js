@@ -80,7 +80,7 @@ const exclude = [
 ];
 
 process.stdout.write(prettier.format(`
-const { borderStyles, borderWidths, overflow, transformOrPerspectiveOrigin } = require("./common-maps.js");
+const { borderStyles, borderWidths, overflow, transformOrPerspectiveOrigins } = require("./common-maps.js");
 const { color, lookup, mapArgs } = require("./utils.js");
 
 module.exports = {
