@@ -40,7 +40,7 @@ const rewriteRule = ({ matcher, styles, arguments: args }) => {
   const f = `${genArgs(css)} => \`${css.replace(/\$[0-9]/g, i => "${" + argName(i.substring(1)) + "}")}\``;
 
   if (args && args.length) {
-    return `${matcher}: mapArgs([${args.map(argMapFn).join(", ")}], ${f}),`;
+    return `${matcher}: mapArgs(${f}, ${args.map(argMapFn).join(", ")}),`;
   }
 
   return `${matcher}: ${f},`;

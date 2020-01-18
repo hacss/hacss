@@ -26,4 +26,4 @@ exports.color = c => {
 
 exports.lookup = map => key => map[key] || key;
 
-exports.mapArgs = (fs, f) => (...args) => f.apply(null, args.map((a, i) => fs[i] ? fs[i](a) : a));
+exports.mapArgs = (f, ...fs) => (...args) => f.apply(null, args.map((a, i) => fs[i](a)));

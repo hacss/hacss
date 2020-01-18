@@ -5,13 +5,13 @@ module.exports = {
   ...config,
   rules: {
     ...config.rules,
-    Tstk: mapArgs([null, color], (size, color) => `
+    Tstk: mapArgs((size, color) => `
       text-shadow:
         -${size} -${size} 0 ${color},
         ${size} -${size} 0 ${color},
         -${size} ${size} 0 ${color},
         ${size} ${size} 0 ${color}
       ;
-    `),
+    `, x => x, color),
   },
 };
