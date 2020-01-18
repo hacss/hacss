@@ -1,4 +1,5 @@
-  const prettier = require("prettier");
+const prettier = require("prettier");
+const commonMaps = require("../config/common-maps.js");
 
 const atomizer = {
   colors: require("atomizer/src/colors.js"),
@@ -28,11 +29,33 @@ const genArgs = css => {
 
 const stringifyStyles = o => Object.entries(o).map(([k, v]) => `${k}: ${v}`).join("; ");
 
-const argMapFn = arg =>
-  arg === atomizer.colors
-    ? "color"
-    : `lookup(${JSON.stringify(arg).replace(/("[^"]+":)/g, x => x.substring(1, x.length - 2) + ":")})`
-    ;
+const argMapFn = arg => {
+  if (arg === atomizer.colors) {
+    return "color";
+  }
+
+  const commonMap = Object.entries(commonMaps)
+    .filter(([k, v]) => {
+      if (Object.keys(v).length !== Object.keys(arg).length) {
+        return false;
+      }
+
+      for (var key in arg) {
+        if (arg[key] !== v[key]) {
+          return false;
+        }
+      }
+
+      return true;
+    })
+    .map(([k]) => k);
+
+  if (commonMap.length) {
+    return `lookup(${commonMap[0]})`;
+  }
+
+  return `lookup(${JSON.stringify(arg).replace(/("[^"]+":)/g, x => x.substring(1, x.length - 2) + ":")})`;
+};
 
 const rewriteRule = ({ matcher, styles, arguments: args }) => {
   const css = stringifyStyles(styles);
@@ -57,6 +80,7 @@ const exclude = [
 ];
 
 process.stdout.write(prettier.format(`
+const { borderStyles, borderWidths, overflow, transformOrPerspectiveOrigin } = require("./common-maps.js");
 const { color, lookup, mapArgs } = require("./utils.js");
 
 module.exports = {
