@@ -44,7 +44,24 @@ module.exports = {
     }),
   ),
   Ap: mapArgs(a => `appearance: ${a}`, lookup({ a: "auto", n: "none" })),
-  Bd: mapArgs(a => `border: ${a}`, lookup({ 0: 0, n: "none" })),
+  Bd: [
+    "border-width: 1px; border-style: solid",
+    mapArgs(a => `border: ${a}`, lookup({ 0: 0, n: "none" })),
+  ],
+  BdX: `
+    border-top-width: 0;
+    border-right-width: 1px;
+    border-bottom-width: 0;
+    border-left-width: 1px;
+    border-style: solid;
+  `,
+  BdY: `
+    border-top-width: 1px;
+    border-right-width: 0;
+    border-bottom-width: 1px;
+    border-left-width: 0;
+    border-style: solid;
+  `,
   Bdx: a => `border-__START__: ${a}; border-__END__: ${a}`,
   Bdy: a => `border-top: ${a}; border-bottom: ${a}`,
   Bdt: a => `border-top: ${a}`,
