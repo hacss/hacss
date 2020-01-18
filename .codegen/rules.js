@@ -71,12 +71,9 @@ const rewriteRule = ({ matcher, styles, arguments: args }) => {
 
 const exclude = [
   "Anim",
-  "Bdx",
-  "Bdy",
-  "Bdt",
-  "Bdend",
-  "Bdb",
-  "Bdstart",
+  "Dropshadow",
+  "Trf",
+  "Trs",
 ];
 
 process.stdout.write(prettier.format(`
