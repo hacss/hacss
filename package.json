@@ -18,9 +18,7 @@
     "postcss-nested": "^4.2.1",
     "prettier": "^1.19.1"
   },
-  "devDependencies": {
-    "atomizer": "^3.6.2"
-  },
+  "devDependencies": {},
   "scripts": {
     "format": "prettier --trailing-comma all --parser babel --write cli.js index.js config/*.js"
   }
