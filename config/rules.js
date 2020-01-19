@@ -779,6 +779,31 @@ module.exports = {
     zoom: 1;
     vertical-align: top;
   `,
+  LineClamp: (a, b) => `
+    -webkit-line-clamp: ${a};
+    -webkit-box-orient: vertical;
+    max-height: ${b};
+    display: -webkit-box;
+    overflow: hidden;
+    @supports (display:-moz-box): {
+      display: block;
+    }
+    a& {
+      display: inline-block;
+      display : -webkit-box;
+      *display: inline;
+      zoom: 1;
+      &::after {
+        content: ".";
+        font-size: 0;
+        visibility: hidden;
+        display: inline-block;
+        overflow: hidden;
+        height: 0;
+        width: 0;
+      }
+    }
+  `,
   Row: `
     clear: both;
     display: inline-block;
