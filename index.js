@@ -84,7 +84,7 @@ const selector = ({ className, context }) => {
   return self;
 };
 
-const hacss = ({ scopes, rules, context }, code) => {
+const hacss = ({ scopes, rules, direction }, code) => {
   const scopePattern = `\\-\\-(${Object.keys(scopes).join("|")})`;
 
   const styles = code
@@ -164,8 +164,8 @@ const hacss = ({ scopes, rules, context }, code) => {
     .sort(([a], [b]) => (a === "default" ? -1 : b === "default" ? 1 : 0))
     .map(([scope, styles]) => scopes[scope](styles.join(" ")))
     .join(" ")
-    .replace(/__START__/g, context === "RTL" ? "right" : "left")
-    .replace(/__END__/g, context === "RTL" ? "left" : "right");
+    .replace(/__START__/g, direction === "RTL" ? "right" : "left")
+    .replace(/__END__/g, direction === "RTL" ? "left" : "right");
 
   return prettier.format(stylesheet, { parser: "css" });
 };

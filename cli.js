@@ -21,8 +21,7 @@ const a = process.argv.slice(2);
 const validArgs =
   [1, 3, 5].includes(a.length) &&
   !a[a.length - 1].startsWith("--") &&
-  a.every(a => !a.startsWith("--") || ["--config", "--output"].includes(a)) &&
-  a.includes("--config"); // Temporary measure until default config is more robust. Don't forget to update usage!
+  a.every(a => !a.startsWith("--") || ["--config", "--output"].includes(a));
 
 if (!validArgs) {
   console.log(
@@ -30,7 +29,7 @@ if (!validArgs) {
   );
 } else {
   const options = {
-    config: path.join(__dirname, "config.js"),
+    config: path.join(__dirname, "hacss.config.js"),
     output: null,
     sources: a[a.length - 1],
   };
@@ -47,7 +46,14 @@ if (!validArgs) {
     options.output = path.join(process.cwd(), a[outputIx + 1]);
   }
 
-  const config = require(options.config);
+  const config = require("./config/index.js");
+  if (fs.existsSync(options.config)) {
+    const custom = require(options.config);
+    config.rules = { ...config.rules, ...custom.rules };
+    config.scopes = { ...config.scopes, ...custom.scopes };
+    config.direction = custom.direction || config.direction;
+  }
+
   globP(options.sources)
     .then(sources => Promise.all(sources.map(s => readFileP(s, "utf8"))))
     .then(sources => sources.join("\n"))

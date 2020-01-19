@@ -4,6 +4,5 @@ const scopes = require("./scopes.js");
 module.exports = {
   rules,
   scopes,
-
-  context: "LTR",
+  direction: "LTR",
 };
