@@ -147,9 +147,9 @@ const hacss = ({ scopes, rules, direction }, code) => {
 
       return { scope, context, className, css };
     })
-    .map(style => [
-      style.scope,
-      postcss([nested]).process(`${selector(style)} { ${style.css} }`).css,
+    .map(styleDef => [
+      styleDef.scope,
+      postcss([nested]).process(`${selector(styleDef)} { ${styleDef.css} }`).css,
     ]);
 
   const stylesheet = Object.entries(
