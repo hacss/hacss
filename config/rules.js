@@ -213,6 +213,22 @@ module.exports = {
       width: 0;
     }
   `,
+  Hidden: `
+    position: absolute !important;
+    *clip: rect(1px 1px 1px 1px);
+    clip: rect(1px,1px,1px,1px);
+    padding: 0 !important;
+    border: 0 !important;
+    height: 1px !important;
+    width: 1px !important;
+    overflow: hidden;
+  `,
+  IbBox: `
+    display: inline-block;
+    *display: inline;
+    zoom: 1;
+    vertical-align: top;
+  `,
   Cl: mapArgs(
     a => `clear: ${a}`,
     lookup({ n: "none", b: "both", start: "__START__", end: "__END__" }),
