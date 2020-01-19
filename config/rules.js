@@ -779,4 +779,22 @@ module.exports = {
     zoom: 1;
     vertical-align: top;
   `,
+  Row: `
+    clear: both;
+    display: inline-block;
+    vertical-align: top;
+    width: 100%;
+    box-sizing: border-box;
+    *display: block;
+    *width: auto;
+    zoom: 1;
+  `,
+  StretchedBox: `
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  `,
+  Zoom: `zoom: 1`,
 };
