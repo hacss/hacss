@@ -788,7 +788,7 @@ module.exports = {
     @supports (display:-moz-box): {
       display: block;
     }
-    a& {
+    &:not(:not(a)) {
       display: inline-block;
       display : -webkit-box;
       *display: inline;

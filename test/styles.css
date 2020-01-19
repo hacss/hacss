@@ -30,3 +30,36 @@
 .Fz\(64px\) {
   font-size: 64px;
 }
+.Fz\(18px\) {
+  font-size: 18px;
+}
+.Lh\(1\.5\) {
+  line-height: 1.5;
+}
+.LineClamp\(2\,54px\) {
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  max-height: 54px;
+  display: -webkit-box;
+  overflow: hidden;
+}
+@supports (display: -moz-box):  {
+  .LineClamp\(2\,54px\) {
+    display: block;
+  }
+}
+.LineClamp\(2\,54px\):not(:not(a)) {
+  display: inline-block;
+  display: -webkit-box;
+  *display: inline;
+  zoom: 1;
+}
+.LineClamp\(2\,54px\):not(:not(a))::after {
+  content: ".";
+  font-size: 0;
+  visibility: hidden;
+  display: inline-block;
+  overflow: hidden;
+  height: 0;
+  width: 0;
+}
