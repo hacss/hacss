@@ -120,6 +120,12 @@ module.exports = {
   Bdrsbend: a => `border-bottom-__END__-radius: ${a}`,
   Bdrsbstart: a => `border-bottom-__START__-radius: ${a}`,
   Bdrststart: a => `border-top-__START__-radius: ${a}`,
+  BfcHack: `
+    display: table-cell;
+    width: 1600px;
+    *width: auto;
+    zoom: 1;
+  `,
   Bg: mapArgs(a => `background: ${a}`, lookup({ n: "none", t: "transparent" })),
   Bgi: mapArgs(a => `background-image: ${a}`, lookup({ n: "none" })),
   Bgc: mapArgs(a => `background-color: ${a}`, color),
@@ -181,6 +187,16 @@ module.exports = {
     lookup({ cb: "content-box", pb: "padding-box", bb: "border-box" }),
   ),
   Bxsh: mapArgs(a => `box-shadow: ${a}`, lookup({ n: "none" })),
+  Cf: `
+    zoom: 1;
+    &::before, &::after {
+      content: " ";
+      display: table;
+    }
+    &::after: {
+      clear: both;
+    }
+  `,
   Cl: mapArgs(
     a => `clear: ${a}`,
     lookup({ n: "none", b: "both", start: "__START__", end: "__END__" }),
