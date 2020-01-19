@@ -120,12 +120,6 @@ module.exports = {
   Bdrsbend: a => `border-bottom-__END__-radius: ${a}`,
   Bdrsbstart: a => `border-bottom-__START__-radius: ${a}`,
   Bdrststart: a => `border-top-__START__-radius: ${a}`,
-  BfcHack: `
-    display: table-cell;
-    width: 1600px;
-    *width: auto;
-    zoom: 1;
-  `,
   Bg: mapArgs(a => `background: ${a}`, lookup({ n: "none", t: "transparent" })),
   Bgi: mapArgs(a => `background-image: ${a}`, lookup({ n: "none" })),
   Bgc: mapArgs(a => `background-color: ${a}`, color),
@@ -187,48 +181,6 @@ module.exports = {
     lookup({ cb: "content-box", pb: "padding-box", bb: "border-box" }),
   ),
   Bxsh: mapArgs(a => `box-shadow: ${a}`, lookup({ n: "none" })),
-  Cf: `
-    zoom: 1;
-    &::before, &::after {
-      content: " ";
-      display: table;
-    }
-    &::after: {
-      clear: both;
-    }
-  `,
-  Ell: `
-    max-width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    hyphens: none;
-    &::after {
-      content: ".";
-      font-size: 0;
-      visibility: hidden;
-      display: inline-block;
-      overflow: hidden;
-      height: 0;
-      width: 0;
-    }
-  `,
-  Hidden: `
-    position: absolute !important;
-    *clip: rect(1px 1px 1px 1px);
-    clip: rect(1px,1px,1px,1px);
-    padding: 0 !important;
-    border: 0 !important;
-    height: 1px !important;
-    width: 1px !important;
-    overflow: hidden;
-  `,
-  IbBox: `
-    display: inline-block;
-    *display: inline;
-    zoom: 1;
-    vertical-align: top;
-  `,
   Cl: mapArgs(
     a => `clear: ${a}`,
     lookup({ n: "none", b: "both", start: "__START__", end: "__END__" }),
@@ -779,4 +731,52 @@ module.exports = {
     a => `stroke-linejoin: ${a}`,
     lookup({ i: "inherit", b: "bevel", r: "round", m: "miter" }),
   ),
+  BfcHack: `
+    display: table-cell;
+    width: 1600px;
+    *width: auto;
+    zoom: 1;
+  `,
+  Cf: `
+    zoom: 1;
+    &::before, &::after {
+      content: " ";
+      display: table;
+    }
+    &::after: {
+      clear: both;
+    }
+  `,
+  Ell: `
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    hyphens: none;
+    &::after {
+      content: ".";
+      font-size: 0;
+      visibility: hidden;
+      display: inline-block;
+      overflow: hidden;
+      height: 0;
+      width: 0;
+    }
+  `,
+  Hidden: `
+    position: absolute !important;
+    *clip: rect(1px 1px 1px 1px);
+    clip: rect(1px,1px,1px,1px);
+    padding: 0 !important;
+    border: 0 !important;
+    height: 1px !important;
+    width: 1px !important;
+    overflow: hidden;
+  `,
+  IbBox: `
+    display: inline-block;
+    *display: inline;
+    zoom: 1;
+    vertical-align: top;
+  `,
 };
