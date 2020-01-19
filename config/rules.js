@@ -62,6 +62,34 @@ module.exports = {
     border-left-width: 0;
     border-style: solid;
   `,
+  BdT: `
+    border-top-width: 1px;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-style: solid;
+  `,
+  BdEnd: `
+    border-top-width: 0;
+    border-__END__-width: 1px;
+    border-bottom-width: 0;
+    border-__START__-width: 0;
+    border-style: solid;
+  `,
+  BdB: `
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 1px;
+    border-left-width: 0;
+    border-style: solid;
+  `,
+  BdStart: `
+    border-top-width: 0;
+    border-__END__-width: 0;
+    border-bottom-width: 0;
+    border-__START__-width: 1px;
+    border-style: solid;
+  `,
   Bdx: a => `border-__START__: ${a}; border-__END__: ${a}`,
   Bdy: a => `border-top: ${a}; border-bottom: ${a}`,
   Bdt: a => `border-top: ${a}`,
