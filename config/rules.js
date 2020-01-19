@@ -197,6 +197,22 @@ module.exports = {
       clear: both;
     }
   `,
+  Ell: `
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    hyphens: none;
+    &::after {
+      content: ".";
+      font-size: 0;
+      visibility: hidden;
+      display: inline-block;
+      overflow: hidden;
+      height: 0;
+      width: 0;
+    }
+  `,
   Cl: mapArgs(
     a => `clear: ${a}`,
     lookup({ n: "none", b: "both", start: "__START__", end: "__END__" }),
