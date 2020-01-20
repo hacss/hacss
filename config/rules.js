@@ -31,6 +31,27 @@ const transformOrPerspectiveOrigins = {
 };
 
 module.exports = {
+  Ac: mapArgs(
+    a => `align-content: ${a}`,
+    lookup({
+      fs: "flex-start",
+      fe: "flex-end",
+      c: "center",
+      sb: "space-between",
+      sa: "space-around",
+      st: "stretch",
+    }),
+  ),
+  Ai: mapArgs(
+    a => `align-items: ${a}`,
+    lookup({
+      fs: "flex-start",
+      fe: "flex-end",
+      c: "center",
+      b: "baseline",
+      st: "stretch",
+    }),
+  ),
   Animdel: a => `animation-delay: ${a}`,
   Animdir: mapArgs(
     a => `animation-direction: ${a}`,
@@ -68,10 +89,49 @@ module.exports = {
     }),
   ),
   Ap: mapArgs(a => `appearance: ${a}`, lookup({ a: "auto", n: "none" })),
+  As: mapArgs(
+    a => `align-self: ${a}`,
+    lookup({
+      a: "auto",
+      fs: "flex-start",
+      fe: "flex-end",
+      c: "center",
+      b: "baseline",
+      st: "stretch",
+    }),
+  ),
   Bd: [
     "border-width: 1px; border-style: solid",
     mapArgs(a => `border: ${a}`, lookup({ 0: 0, n: "none" })),
   ],
+  BdB: `
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 1px;
+    border-left-width: 0;
+    border-style: solid;
+  `,
+  BdEnd: `
+    border-top-width: 0;
+    border-__END__-width: 1px;
+    border-bottom-width: 0;
+    border-__START__-width: 0;
+    border-style: solid;
+  `,
+  BdStart: `
+    border-top-width: 0;
+    border-__END__-width: 0;
+    border-bottom-width: 0;
+    border-__START__-width: 1px;
+    border-style: solid;
+  `,
+  BdT: `
+    border-top-width: 1px;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-style: solid;
+  `,
   BdX: `
     border-top-width: 0;
     border-right-width: 1px;
@@ -86,82 +146,64 @@ module.exports = {
     border-left-width: 0;
     border-style: solid;
   `,
-  BdT: `
-    border-top-width: 1px;
-    border-right-width: 0;
-    border-bottom-width: 0;
-    border-left-width: 0;
-    border-style: solid;
-  `,
-  BdEnd: `
-    border-top-width: 0;
-    border-__END__-width: 1px;
-    border-bottom-width: 0;
-    border-__START__-width: 0;
-    border-style: solid;
-  `,
-  BdB: `
-    border-top-width: 0;
-    border-right-width: 0;
-    border-bottom-width: 1px;
-    border-left-width: 0;
-    border-style: solid;
-  `,
-  BdStart: `
-    border-top-width: 0;
-    border-__END__-width: 0;
-    border-bottom-width: 0;
-    border-__START__-width: 1px;
-    border-style: solid;
-  `,
-  Bdx: a => `border-__START__: ${a}; border-__END__: ${a}`,
-  Bdy: a => `border-top: ${a}; border-bottom: ${a}`,
-  Bdt: a => `border-top: ${a}`,
-  Bdend: a => `border-__END__: ${a}`,
   Bdb: a => `border-bottom: ${a}`,
-  Bdstart: a => `border-__START__: ${a}`,
-  Bdc: mapArgs(a => `border-color: ${a}`, color),
-  Bdtc: mapArgs(a => `border-top-color: ${a}`, color),
-  Bdendc: mapArgs(a => `border-__END__-color: ${a}`, color),
   Bdbc: mapArgs(a => `border-bottom-color: ${a}`, color),
-  Bdstartc: mapArgs(a => `border-__START__-color: ${a}`, color),
+  Bdbs: mapArgs(a => `border-bottom-style: ${a}`, lookup(borderStyles)),
+  Bdbw: mapArgs(a => `border-bottom-width: ${a}`, lookup(borderWidths)),
+  Bdc: mapArgs(a => `border-color: ${a}`, color),
+  Bdcl: mapArgs(
+    a => `border-collapse: ${a}`,
+    lookup({ c: "collapse", s: "separate" }),
+  ),
+  Bdend: a => `border-__END__: ${a}`,
+  Bdendc: mapArgs(a => `border-__END__-color: ${a}`, color),
+  Bdends: mapArgs(a => `border-__END__-style: ${a}`, lookup(borderStyles)),
+  Bdendw: mapArgs(a => `border-__END__-width: ${a}`, lookup(borderWidths)),
+  Bdrs: a => `border-radius: ${a}`,
+  Bdrsbend: a => `border-bottom-__END__-radius: ${a}`,
+  Bdrsbstart: a => `border-bottom-__START__-radius: ${a}`,
+  Bdrstend: a => `border-top-__END__-radius: ${a}`,
+  Bdrststart: a => `border-top-__START__-radius: ${a}`,
+  Bds: mapArgs(a => `border-style: ${a}`, lookup(borderStyles)),
   Bdsp: mapArgs(
     (a, b) => `border-spacing: ${a} ${b}`,
     lookup({ i: "inherit" }),
   ),
-  Bds: mapArgs(a => `border-style: ${a}`, lookup(borderStyles)),
-  Bdts: mapArgs(a => `border-top-style: ${a}`, lookup(borderStyles)),
-  Bdends: mapArgs(a => `border-__END__-style: ${a}`, lookup(borderStyles)),
-  Bdbs: mapArgs(a => `border-bottom-style: ${a}`, lookup(borderStyles)),
+  Bdstart: a => `border-__START__: ${a}`,
+  Bdstartc: mapArgs(a => `border-__START__-color: ${a}`, color),
   Bdstarts: mapArgs(a => `border-__START__-style: ${a}`, lookup(borderStyles)),
-  Bdw: mapArgs(a => `border-width: ${a}`, lookup(borderWidths)),
-  Bdtw: mapArgs(a => `border-top-width: ${a}`, lookup(borderWidths)),
-  Bdendw: mapArgs(a => `border-__END__-width: ${a}`, lookup(borderWidths)),
-  Bdbw: mapArgs(a => `border-bottom-width: ${a}`, lookup(borderWidths)),
   Bdstartw: mapArgs(a => `border-__START__-width: ${a}`, lookup(borderWidths)),
-  Bdrs: a => `border-radius: ${a}`,
-  Bdrstend: a => `border-top-__END__-radius: ${a}`,
-  Bdrsbend: a => `border-bottom-__END__-radius: ${a}`,
-  Bdrsbstart: a => `border-bottom-__START__-radius: ${a}`,
-  Bdrststart: a => `border-top-__START__-radius: ${a}`,
+  Bdt: a => `border-top: ${a}`,
+  Bdtc: mapArgs(a => `border-top-color: ${a}`, color),
+  Bdts: mapArgs(a => `border-top-style: ${a}`, lookup(borderStyles)),
+  Bdtw: mapArgs(a => `border-top-width: ${a}`, lookup(borderWidths)),
+  Bdw: mapArgs(a => `border-width: ${a}`, lookup(borderWidths)),
+  Bdx: a => `border-__START__: ${a}; border-__END__: ${a}`,
+  Bdy: a => `border-top: ${a}; border-bottom: ${a}`,
+  BfcHack: `
+    display: table-cell;
+    width: 1600px;
+    *width: auto;
+    zoom: 1;
+  `,
+  Bfv: mapArgs(
+    a => `backface-visibility: ${a}`,
+    lookup({ h: "hidden", v: "visible" }),
+  ),
   Bg: mapArgs(a => `background: ${a}`, lookup({ n: "none", t: "transparent" })),
-  Bgi: mapArgs(a => `background-image: ${a}`, lookup({ n: "none" })),
+  Bga: mapArgs(
+    a => `background-attachment: ${a}`,
+    lookup({ f: "fixed", l: "local", s: "scroll" }),
+  ),
   Bgc: mapArgs(a => `background-color: ${a}`, color),
   Bgcp: mapArgs(
     a => `background-clip: ${a}`,
     lookup({ bb: "border-box", cb: "content-box", pb: "padding-box" }),
   ),
+  Bgi: mapArgs(a => `background-image: ${a}`, lookup({ n: "none" })),
   Bgo: mapArgs(
     a => `background-origin: ${a}`,
     lookup({ bb: "border-box", cb: "content-box", pb: "padding-box" }),
-  ),
-  Bgz: mapArgs(
-    a => `background-size: ${a}`,
-    lookup({ a: "auto", ct: "contain", cv: "cover" }),
-  ),
-  Bga: mapArgs(
-    a => `background-attachment: ${a}`,
-    lookup({ f: "fixed", l: "local", s: "scroll" }),
   ),
   Bgp: mapArgs(
     (a, b) => `background-position: ${a} ${b}`,
@@ -196,20 +238,44 @@ module.exports = {
       ro: "round",
     }),
   ),
-  Bdcl: mapArgs(
-    a => `border-collapse: ${a}`,
-    lookup({ c: "collapse", s: "separate" }),
+  Bgz: mapArgs(
+    a => `background-size: ${a}`,
+    lookup({ a: "auto", ct: "contain", cv: "cover" }),
   ),
+  Blur: a => `filter: blur(${a})`,
+  Brightness: a => `filter: brightness(${a})`,
+  Bxsh: mapArgs(a => `box-shadow: ${a}`, lookup({ n: "none" })),
   Bxz: mapArgs(
     a => `box-sizing: ${a}`,
     lookup({ cb: "content-box", pb: "padding-box", bb: "border-box" }),
   ),
-  Bxsh: mapArgs(a => `box-shadow: ${a}`, lookup({ n: "none" })),
+  Cf: `
+    zoom: 1;
+    &::before, &::after {
+      content: " ";
+      display: table;
+    }
+    &::after: {
+      clear: both;
+    }
+  `,
   Cl: mapArgs(
     a => `clear: ${a}`,
     lookup({ n: "none", b: "both", start: "__START__", end: "__END__" }),
   ),
   C: mapArgs(a => `color: ${a}`, color),
+  Cnt: mapArgs(
+    a => `content: ${a}`,
+    lookup({
+      n: "none",
+      nor: "normal",
+      oq: "open-quote",
+      cq: "close-quote",
+      noq: "no-open-quote",
+      ncq: "no-close-quote",
+    }),
+  ),
+  Contrast: a => `filter: contrast(${a})`,
   Ctn: mapArgs(
     a => `contain: ${a}`,
     lookup({
@@ -220,17 +286,6 @@ module.exports = {
       l: "layout",
       s: "style",
       p: "paint",
-    }),
-  ),
-  Cnt: mapArgs(
-    a => `content: ${a}`,
-    lookup({
-      n: "none",
-      nor: "normal",
-      oq: "open-quote",
-      cq: "close-quote",
-      noq: "no-open-quote",
-      ncq: "no-close-quote",
     }),
   ),
   Cur: mapArgs(
@@ -295,89 +350,24 @@ module.exports = {
       tbrg: "table-row-group",
     }),
   ),
-  Fil: mapArgs(a => `filter: ${a}`, lookup({ n: "none" })),
-  Blur: a => `filter: blur(${a})`,
-  Brightness: a => `filter: brightness(${a})`,
-  Contrast: a => `filter: contrast(${a})`,
-  Grayscale: a => `filter: grayscale(${a})`,
-  HueRotate: a => `filter: hue-rotate(${a})`,
-  Invert: a => `filter: invert(${a})`,
-  Opacity: a => `filter: opacity(${a})`,
-  Saturate: a => `filter: saturate(${a})`,
-  Sepia: a => `filter: sepia(${a})`,
-  Fx: mapArgs(a => `flex: ${a}`, lookup({ a: "auto", n: "none" })),
-  Fxg: a => `flex-grow: ${a}`,
-  Fxs: a => `flex-shrink: ${a}`,
-  Fxb: mapArgs(a => `flex-basis: ${a}`, lookup({ a: "auto", n: "none" })),
-  As: mapArgs(
-    a => `align-self: ${a}`,
-    lookup({
-      a: "auto",
-      fs: "flex-start",
-      fe: "flex-end",
-      c: "center",
-      b: "baseline",
-      st: "stretch",
-    }),
-  ),
-  Fxd: mapArgs(
-    a => `flex-direction: ${a}`,
-    lookup({ r: "row", rr: "row-reverse", c: "column", cr: "column-reverse" }),
-  ),
-  Fxf: mapArgs(
-    a => `flex-flow: ${a}`,
-    lookup({
-      r: "row",
-      rr: "row-reverse",
-      c: "column",
-      cr: "column-reverse",
-      nw: "nowrap",
-      w: "wrap",
-      wr: "wrap-reverse",
-    }),
-  ),
-  Ai: mapArgs(
-    a => `align-items: ${a}`,
-    lookup({
-      fs: "flex-start",
-      fe: "flex-end",
-      c: "center",
-      b: "baseline",
-      st: "stretch",
-    }),
-  ),
-  Ac: mapArgs(
-    a => `align-content: ${a}`,
-    lookup({
-      fs: "flex-start",
-      fe: "flex-end",
-      c: "center",
-      sb: "space-between",
-      sa: "space-around",
-      st: "stretch",
-    }),
-  ),
-  Or: a => `order: ${a}`,
-  Jc: mapArgs(
-    a => `justify-content: ${a}`,
-    lookup({
-      fs: "flex-start",
-      fe: "flex-end",
-      c: "center",
-      sb: "space-between",
-      sa: "space-around",
-      se: "space-evenly",
-      s: "stretch",
-    }),
-  ),
-  Fxw: mapArgs(
-    a => `flex-wrap: ${a}`,
-    lookup({ nw: "nowrap", w: "wrap", wr: "wrap-reverse" }),
-  ),
-  Fl: mapArgs(
-    a => `float: ${a}`,
-    lookup({ n: "none", start: "__START__", end: "__END__" }),
-  ),
+  Ell: `
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    hyphens: none;
+    &::after {
+      content: ".";
+      font-size: 0;
+      visibility: hidden;
+      display: inline-block;
+      overflow: hidden;
+      height: 0;
+      width: 0;
+    }
+  `,
+  End: mapArgs(a => `__END__: ${a}`, lookup({ a: "auto" })),
+  B: mapArgs(a => `bottom: ${a}`, lookup({ a: "auto" })),
   Ff: mapArgs(
     a => `font-family: ${a}`,
     lookup({
@@ -388,25 +378,12 @@ module.exports = {
       ss: "Helvetica, Arial, sans-serif",
     }),
   ),
-  Fw: mapArgs(
-    a => `font-weight: ${a}`,
-    lookup({
-      100: "100",
-      200: "200",
-      300: "300",
-      400: "400",
-      500: "500",
-      600: "600",
-      700: "700",
-      800: "800",
-      900: "900",
-      b: "bold",
-      br: "bolder",
-      lr: "lighter",
-      n: "normal",
-    }),
+  Fil: mapArgs(a => `filter: ${a}`, lookup({ n: "none" })),
+  Fill: mapArgs(a => `fill: ${a}`, color),
+  Fl: mapArgs(
+    a => `float: ${a}`,
+    lookup({ n: "none", start: "__START__", end: "__END__" }),
   ),
-  Fz: a => `font-size: ${a}`,
   Fs: mapArgs(
     a => `font-style: ${a}`,
     lookup({ n: "normal", i: "italic", o: "oblique" }),
@@ -428,11 +405,116 @@ module.exports = {
       minc: "min-content",
     }),
   ),
+  Fw: mapArgs(
+    a => `font-weight: ${a}`,
+    lookup({
+      100: "100",
+      200: "200",
+      300: "300",
+      400: "400",
+      500: "500",
+      600: "600",
+      700: "700",
+      800: "800",
+      900: "900",
+      b: "bold",
+      br: "bolder",
+      lr: "lighter",
+      n: "normal",
+    }),
+  ),
+  Fx: mapArgs(a => `flex: ${a}`, lookup({ a: "auto", n: "none" })),
+  Fxb: mapArgs(a => `flex-basis: ${a}`, lookup({ a: "auto", n: "none" })),
+  Fxd: mapArgs(
+    a => `flex-direction: ${a}`,
+    lookup({ r: "row", rr: "row-reverse", c: "column", cr: "column-reverse" }),
+  ),
+  Fxf: mapArgs(
+    a => `flex-flow: ${a}`,
+    lookup({
+      r: "row",
+      rr: "row-reverse",
+      c: "column",
+      cr: "column-reverse",
+      nw: "nowrap",
+      w: "wrap",
+      wr: "wrap-reverse",
+    }),
+  ),
+  Fxg: a => `flex-grow: ${a}`,
+  Fxs: a => `flex-shrink: ${a}`,
+  Fxw: mapArgs(
+    a => `flex-wrap: ${a}`,
+    lookup({ nw: "nowrap", w: "wrap", wr: "wrap-reverse" }),
+  ),
+  Fz: a => `font-size: ${a}`,
+  Grayscale: a => `filter: grayscale(${a})`,
+  Hidden: `
+    position: absolute !important;
+    *clip: rect(1px 1px 1px 1px);
+    clip: rect(1px,1px,1px,1px);
+    padding: 0 !important;
+    border: 0 !important;
+    height: 1px !important;
+    width: 1px !important;
+    overflow: hidden;
+  `,
+  HueRotate: a => `filter: hue-rotate(${a})`,
   Hy: mapArgs(
     a => `hyphens: ${a}`,
     lookup({ a: "auto", n: "normal", m: "manual" }),
   ),
-  Lts: mapArgs(a => `letter-spacing: ${a}`, lookup({ n: "normal" })),
+  IbBox: `
+    display: inline-block;
+    *display: inline;
+    zoom: 1;
+    vertical-align: top;
+  `,
+  Invert: a => `filter: invert(${a})`,
+  Jc: mapArgs(
+    a => `justify-content: ${a}`,
+    lookup({
+      fs: "flex-start",
+      fe: "flex-end",
+      c: "center",
+      sb: "space-between",
+      sa: "space-around",
+      se: "space-evenly",
+      s: "stretch",
+    }),
+  ),
+  Lh: mapArgs(a => `line-height: ${a}`, lookup({ n: "normal" })),
+  M: mapArgs(a => `margin: ${a}`, lookup({ 0: "0", a: "auto" })),
+  LineClamp: (a, b) => `
+    -webkit-line-clamp: ${a};
+    -webkit-box-orient: vertical;
+    max-height: ${b};
+    display: -webkit-box;
+    overflow: hidden;
+    @supports (display:-moz-box): {
+      display: block;
+    }
+    &:not(:not(a)) {
+      display: inline-block;
+      display : -webkit-box;
+      *display: inline;
+      zoom: 1;
+      &::after {
+        content: ".";
+        font-size: 0;
+        visibility: hidden;
+        display: inline-block;
+        overflow: hidden;
+        height: 0;
+        width: 0;
+      }
+    }
+  `,
+  Lisi: mapArgs(a => `list-style-image: ${a}`, lookup({ n: "none" })),
+  Lisp: mapArgs(
+    a => `list-style-position: ${a}`,
+    lookup({ i: "inside", o: "outside" }),
+  ),
   List: mapArgs(
     a => `list-style-type: ${a}`,
     lookup({
@@ -453,25 +535,7 @@ module.exports = {
       ua: "upper-alpha",
     }),
   ),
-  Lisp: mapArgs(
-    a => `list-style-position: ${a}`,
-    lookup({ i: "inside", o: "outside" }),
-  ),
-  Lisi: mapArgs(a => `list-style-image: ${a}`, lookup({ n: "none" })),
-  Lh: mapArgs(a => `line-height: ${a}`, lookup({ n: "normal" })),
-  M: mapArgs(a => `margin: ${a}`, lookup({ 0: "0", a: "auto" })),
-  Mx: mapArgs(
-    a => `margin-__START__: ${a}; margin-__END__: ${a}`,
-    lookup({ 0: "0", a: "auto" }),
-  ),
-  My: mapArgs(
-    a => `margin-top: ${a}; margin-bottom: ${a}`,
-    lookup({ 0: "0", a: "auto" }),
-  ),
-  Mt: mapArgs(a => `margin-top: ${a}`, lookup({ 0: "0", a: "auto" })),
-  Mend: mapArgs(a => `margin-__END__: ${a}`, lookup({ 0: "0", a: "auto" })),
-  Mb: mapArgs(a => `margin-bottom: ${a}`, lookup({ 0: "0", a: "auto" })),
-  Mstart: mapArgs(a => `margin-__START__: ${a}`, lookup({ 0: "0", a: "auto" })),
+  Lts: mapArgs(a => `letter-spacing: ${a}`, lookup({ n: "normal" })),
   Mah: mapArgs(
     a => `max-height: ${a}`,
     lookup({
@@ -482,6 +546,8 @@ module.exports = {
       fc: "fit-content",
     }),
   ),
+  Matrix: a => `transform: matrix(${a})`,
+  Matrix3d: a => `transform: matrix(${a})`,
   Maw: mapArgs(
     a => `max-width: ${a}`,
     lookup({
@@ -492,6 +558,8 @@ module.exports = {
       minc: "min-content",
     }),
   ),
+  Mb: mapArgs(a => `margin-bottom: ${a}`, lookup({ 0: "0", a: "auto" })),
+  Mend: mapArgs(a => `margin-__END__: ${a}`, lookup({ 0: "0", a: "auto" })),
   Mih: mapArgs(
     a => `min-height: ${a}`,
     lookup({
@@ -513,6 +581,16 @@ module.exports = {
       minc: "min-content",
     }),
   ),
+  Mstart: mapArgs(a => `margin-__START__: ${a}`, lookup({ 0: "0", a: "auto" })),
+  Mt: mapArgs(a => `margin-top: ${a}`, lookup({ 0: "0", a: "auto" })),
+  Mx: mapArgs(
+    a => `margin-__START__: ${a}; margin-__END__: ${a}`,
+    lookup({ 0: "0", a: "auto" }),
+  ),
+  My: mapArgs(
+    a => `margin-top: ${a}; margin-bottom: ${a}`,
+    lookup({ 0: "0", a: "auto" }),
+  ),
   Objf: mapArgs(
     a => `object-fit: ${a}`,
     lookup({
@@ -525,24 +603,18 @@ module.exports = {
   ),
   O: mapArgs(a => `outline: ${a}`, lookup({ 0: "0", n: "none" })),
   T: mapArgs(a => `top: ${a}`, lookup({ a: "auto" })),
-  End: mapArgs(a => `__END__: ${a}`, lookup({ a: "auto" })),
-  B: mapArgs(a => `bottom: ${a}`, lookup({ a: "auto" })),
-  Start: mapArgs(a => `__START__: ${a}`, lookup({ a: "auto" })),
   Op: mapArgs(a => `opacity: ${a}`, lookup({ 0: "0", 1: "1" })),
+  Opacity: a => `filter: opacity(${a})`,
+  Or: a => `order: ${a}`,
   Ov: mapArgs(a => `overflow: ${a}`, lookup(overflow)),
-  Ovx: mapArgs(a => `overflow-x: ${a}`, lookup(overflow)),
-  Ovy: mapArgs(a => `overflow-y: ${a}`, lookup(overflow)),
   Ovs: mapArgs(
     a => `-webkit-overflow-scrolling: ${a}`,
     lookup({ a: "auto", touch: "touch" }),
   ),
   P: a => `padding: ${a}`,
-  Px: a => `padding-__START__: ${a}; padding-__END__: ${a}`,
-  Py: a => `padding-top: ${a}; padding-bottom: ${a}`,
-  Pt: a => `padding-top: ${a}`,
-  Pend: a => `padding-__END__: ${a}`,
+  Ovx: mapArgs(a => `overflow-x: ${a}`, lookup(overflow)),
+  Ovy: mapArgs(a => `overflow-y: ${a}`, lookup(overflow)),
   Pb: a => `padding-bottom: ${a}`,
-  Pstart: a => `padding-__START__: ${a}`,
   Pe: mapArgs(
     a => `pointer-events: ${a}`,
     lookup({
@@ -558,6 +630,7 @@ module.exports = {
       vs: "visibleStroke",
     }),
   ),
+  Pend: a => `padding-__END__: ${a}`,
   Pos: mapArgs(
     a => `position: ${a}`,
     lookup({
@@ -568,11 +641,62 @@ module.exports = {
       st: "sticky",
     }),
   ),
+  Prs: mapArgs(a => `perspective: ${a}`, lookup({ n: "none" })),
+  Prso: mapArgs(
+    (a, b) => `perspective-origin: ${a} ${b}`,
+    lookup(transformOrPerspectiveOrigins),
+    lookup(transformOrPerspectiveOrigins),
+  ),
+  Pstart: a => `padding-__START__: ${a}`,
+  Pt: a => `padding-top: ${a}`,
+  Px: a => `padding-__START__: ${a}; padding-__END__: ${a}`,
+  Py: a => `padding-top: ${a}; padding-bottom: ${a}`,
+  Rotate: a => `transform: rotate(${a})`,
+  Rotate3d: (a, b, c, d) => `transform: rotate3d(${a},${b},${c},${d})`,
+  RotateX: a => `transform: rotateX(${a})`,
+  RotateY: a => `transform: rotateY(${a})`,
+  RotateZ: a => `transform: rotateZ(${a})`,
+  Row: `
+    clear: both;
+    display: inline-block;
+    vertical-align: top;
+    width: 100%;
+    box-sizing: border-box;
+    *display: block;
+    *width: auto;
+    zoom: 1;
+  `,
   Rsz: mapArgs(
     a => `resize: ${a}`,
     lookup({ n: "none", b: "both", h: "horizontal", v: "vertical" }),
   ),
-  Tbl: mapArgs(a => `table-layout: ${a}`, lookup({ a: "auto", f: "fixed" })),
+  Saturate: a => `filter: saturate(${a})`,
+  Scale: (a, b) => `transform: scale(${a},${b})`,
+  Scale3d: (a, b, c) => `transform: scale3d(${a},${b},${c})`,
+  ScaleX: a => `transform: scaleX(${a})`,
+  ScaleY: a => `transform: scaleY(${a})`,
+  Sepia: a => `filter: sepia(${a})`,
+  Skew: (a, b) => `transform: skew(${a},${b})`,
+  SkewX: a => `transform: skewX(${a})`,
+  SkewY: a => `transform: skewY(${a})`,
+  Start: mapArgs(a => `__START__: ${a}`, lookup({ a: "auto" })),
+  Stk: mapArgs(a => `stroke: ${a}`, color),
+  Stklc: mapArgs(
+    a => `stroke-linecap: ${a}`,
+    lookup({ i: "inherit", b: "butt", r: "round", s: "square" }),
+  ),
+  Stklj: mapArgs(
+    a => `stroke-linejoin: ${a}`,
+    lookup({ i: "inherit", b: "bevel", r: "round", m: "miter" }),
+  ),
+  Stkw: mapArgs(a => `stroke-width: ${a}`, lookup({ i: "inherit" })),
+  StretchedBox: `
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  `,
   Ta: mapArgs(
     a => `text-align: ${a}`,
     lookup({
@@ -597,6 +721,7 @@ module.exports = {
       start: "__START__",
     }),
   ),
+  Tbl: mapArgs(a => `table-layout: ${a}`, lookup({ a: "auto", f: "fixed" })),
   Td: mapArgs(
     a => `text-decoration: ${a}`,
     lookup({ lt: "line-through", n: "none", o: "overline", u: "underline" }),
@@ -606,6 +731,12 @@ module.exports = {
     a => `text-overflow: ${a}`,
     lookup({ c: "clip", e: "ellipsis" }),
   ),
+  Tr: mapArgs(a => `text-replace: ${a}`, lookup({ n: "none" })),
+  Translate: (a, b) => `transform: translate(${a},${b})`,
+  Translate3d: (a, b, c) => `transform: translate3d(${a},${b},${c})`,
+  TranslateX: a => `transform: translateX(${a})`,
+  TranslateY: a => `transform: translateY(${a})`,
+  TranslateZ: a => `transform: translateZ(${a})`,
   Tren: mapArgs(
     a => `text-rendering: ${a}`,
     lookup({
@@ -615,12 +746,6 @@ module.exports = {
       gp: "geometricPrecision",
     }),
   ),
-  Tr: mapArgs(a => `text-replace: ${a}`, lookup({ n: "none" })),
-  Tt: mapArgs(
-    a => `text-transform: ${a}`,
-    lookup({ n: "none", c: "capitalize", u: "uppercase", l: "lowercase" }),
-  ),
-  Tsh: mapArgs(a => `text-shadow: ${a}`, lookup({ n: "none" })),
   Trfo: mapArgs(
     (a, b) => `transform-origin: ${a} ${b}`,
     lookup(transformOrPerspectiveOrigins),
@@ -630,35 +755,6 @@ module.exports = {
     a => `transform-style: ${a}`,
     lookup({ f: "flat", p: "preserve-3d" }),
   ),
-  Prs: mapArgs(a => `perspective: ${a}`, lookup({ n: "none" })),
-  Prso: mapArgs(
-    (a, b) => `perspective-origin: ${a} ${b}`,
-    lookup(transformOrPerspectiveOrigins),
-    lookup(transformOrPerspectiveOrigins),
-  ),
-  Bfv: mapArgs(
-    a => `backface-visibility: ${a}`,
-    lookup({ h: "hidden", v: "visible" }),
-  ),
-  Matrix: a => `transform: matrix(${a})`,
-  Matrix3d: a => `transform: matrix(${a})`,
-  Rotate: a => `transform: rotate(${a})`,
-  Rotate3d: (a, b, c, d) => `transform: rotate3d(${a},${b},${c},${d})`,
-  RotateX: a => `transform: rotateX(${a})`,
-  RotateY: a => `transform: rotateY(${a})`,
-  RotateZ: a => `transform: rotateZ(${a})`,
-  Scale: (a, b) => `transform: scale(${a},${b})`,
-  Scale3d: (a, b, c) => `transform: scale3d(${a},${b},${c})`,
-  ScaleX: a => `transform: scaleX(${a})`,
-  ScaleY: a => `transform: scaleY(${a})`,
-  Skew: (a, b) => `transform: skew(${a},${b})`,
-  SkewX: a => `transform: skewX(${a})`,
-  SkewY: a => `transform: skewY(${a})`,
-  Translate: (a, b) => `transform: translate(${a},${b})`,
-  Translate3d: (a, b, c) => `transform: translate3d(${a},${b},${c})`,
-  TranslateX: a => `transform: translateX(${a})`,
-  TranslateY: a => `transform: translateY(${a})`,
-  TranslateZ: a => `transform: translateZ(${a})`,
   Trsde: mapArgs(a => `transition-delay: ${a}`, lookup({ i: "initial" })),
   Trsdu: a => `transition-duration: ${a}`,
   Trsp: mapArgs(a => `transition-property: ${a}`, lookup({ a: "all" })),
@@ -673,6 +769,11 @@ module.exports = {
       ss: "step-start",
       se: "step-end",
     }),
+  ),
+  Tsh: mapArgs(a => `text-shadow: ${a}`, lookup({ n: "none" })),
+  Tt: mapArgs(
+    a => `text-transform: ${a}`,
+    lookup({ n: "none", c: "capitalize", u: "uppercase", l: "lowercase" }),
   ),
   Us: mapArgs(
     a => `user-select: ${a}`,
@@ -744,106 +845,5 @@ module.exports = {
     lookup({ bw: "break-word", n: "normal" }),
   ),
   Z: mapArgs(a => `z-index: ${a}`, lookup({ a: "auto" })),
-  Fill: mapArgs(a => `fill: ${a}`, color),
-  Stk: mapArgs(a => `stroke: ${a}`, color),
-  Stkw: mapArgs(a => `stroke-width: ${a}`, lookup({ i: "inherit" })),
-  Stklc: mapArgs(
-    a => `stroke-linecap: ${a}`,
-    lookup({ i: "inherit", b: "butt", r: "round", s: "square" }),
-  ),
-  Stklj: mapArgs(
-    a => `stroke-linejoin: ${a}`,
-    lookup({ i: "inherit", b: "bevel", r: "round", m: "miter" }),
-  ),
-  BfcHack: `
-    display: table-cell;
-    width: 1600px;
-    *width: auto;
-    zoom: 1;
-  `,
-  Cf: `
-    zoom: 1;
-    &::before, &::after {
-      content: " ";
-      display: table;
-    }
-    &::after: {
-      clear: both;
-    }
-  `,
-  Ell: `
-    max-width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    hyphens: none;
-    &::after {
-      content: ".";
-      font-size: 0;
-      visibility: hidden;
-      display: inline-block;
-      overflow: hidden;
-      height: 0;
-      width: 0;
-    }
-  `,
-  Hidden: `
-    position: absolute !important;
-    *clip: rect(1px 1px 1px 1px);
-    clip: rect(1px,1px,1px,1px);
-    padding: 0 !important;
-    border: 0 !important;
-    height: 1px !important;
-    width: 1px !important;
-    overflow: hidden;
-  `,
-  IbBox: `
-    display: inline-block;
-    *display: inline;
-    zoom: 1;
-    vertical-align: top;
-  `,
-  LineClamp: (a, b) => `
-    -webkit-line-clamp: ${a};
-    -webkit-box-orient: vertical;
-    max-height: ${b};
-    display: -webkit-box;
-    overflow: hidden;
-    @supports (display:-moz-box): {
-      display: block;
-    }
-    &:not(:not(a)) {
-      display: inline-block;
-      display : -webkit-box;
-      *display: inline;
-      zoom: 1;
-      &::after {
-        content: ".";
-        font-size: 0;
-        visibility: hidden;
-        display: inline-block;
-        overflow: hidden;
-        height: 0;
-        width: 0;
-      }
-    }
-  `,
-  Row: `
-    clear: both;
-    display: inline-block;
-    vertical-align: top;
-    width: 100%;
-    box-sizing: border-box;
-    *display: block;
-    *width: auto;
-    zoom: 1;
-  `,
-  StretchedBox: `
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  `,
   Zoom: `zoom: 1`,
 };
