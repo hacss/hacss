@@ -87,8 +87,8 @@ const selector = ({ className, context }) => {
 const hacss = ({ scopes, rules, direction }, code) => {
   const scopePattern = `\\-\\-(${Object.keys(scopes).join("|")})`;
 
-  const styles = code
-    .match(
+  const styles = (
+    code.match(
       new RegExp(
         `(?<=\\W)(${contextPattern})?(${Object.entries(rules)
           .map(function mkPattern([k, v]) {
@@ -115,7 +115,8 @@ const hacss = ({ scopes, rules, direction }, code) => {
           )})(${scopePattern})?`,
         "g",
       ),
-    )
+    ) || []
+  )
     .reduce((xs, x) => (xs.includes(x) ? xs : xs.concat(x)), [])
     .map(className => {
       const ruleName = className.match(
@@ -149,7 +150,8 @@ const hacss = ({ scopes, rules, direction }, code) => {
     })
     .map(styleDef => [
       styleDef.scope,
-      postcss([nested]).process(`${selector(styleDef)} { ${styleDef.css} }`).css,
+      postcss([nested]).process(`${selector(styleDef)} { ${styleDef.css} }`)
+        .css,
     ]);
 
   const stylesheet = Object.entries(
