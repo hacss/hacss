@@ -1,10 +1,34 @@
-const {
-  borderStyles,
-  borderWidths,
-  overflow,
-  transformOrPerspectiveOrigins,
-} = require("./common-maps.js");
 const { color, lookup, mapArgs } = require("./utils.js");
+
+const borderStyles = {
+  d: "dotted",
+  da: "dashed",
+  do: "double",
+  g: "groove",
+  h: "hidden",
+  i: "inset",
+  n: "none",
+  o: "outset",
+  r: "ridge",
+  s: "solid",
+};
+
+const borderWidths = { m: "medium", t: "thin", th: "thick" };
+
+const overflow = {
+  a: "auto",
+  h: "hidden",
+  s: "scroll",
+  v: "visible",
+};
+
+const transformOrPerspectiveOrigins = {
+  t: "top",
+  end: "__END__",
+  bottom: "bottom",
+  start: "__START__",
+  c: "center",
+};
 
 module.exports = {
   Animdel: a => `animation-delay: ${a}`,
