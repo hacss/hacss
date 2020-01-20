@@ -29,7 +29,7 @@ if (!validArgs) {
   );
 } else {
   const options = {
-    config: path.join(__dirname, "hacss.config.js"),
+    config: path.join(process.cwd(), "hacss.config.js"),
     output: null,
     sources: a[a.length - 1],
   };
