@@ -15,3 +15,11 @@ embedding its own styling DSL within HTML `class` attributes. At build time,
 Hacss automatically generates a stylesheet from the CSS classes used throughout
 the project: `<h1 class="C(red)">Hello World</h1>`, for example, yields a CSS
 block `.C\(red\) { color: red; }`.
+
+Hacss is a drop-in replacement for
+[Atomizer](https://github.com/acss-io/atomizer) for the majority of use cases.
+In general, the "Atomic" and "Helper" classes listed on the
+[acss.io Reference page](http://acss.io/reference.html) are applicable to Hacss
+as well.
+
+The differences between Hacss and Atomizer emerge when...
