@@ -46,12 +46,16 @@ if (!validArgs) {
     options.output = path.join(process.cwd(), a[outputIx + 1]);
   }
 
-  const config = require("./config/index.js");
+  let config = require("./config/index.js");
   if (fs.existsSync(options.config)) {
-    const custom = require(options.config);
-    config.rules = { ...config.rules, ...custom.rules };
-    config.scopes = { ...config.scopes, ...custom.scopes };
-    config.direction = custom.direction || config.direction;
+    const customSpec = require(options.config);
+    const custom = typeof customSpec === "function" ? customSpec(config) : customSpec;
+    config = {
+      globalMapArg: custom.globalMapArg || config.globalMapArg,
+      direction: custom.direction || config.direction,
+      scopes: { ...config.scopes, ...custom.scopes },
+      rules: { ...config.rules, ...custom.rules },
+    };
   }
 
   globP(options.sources)
