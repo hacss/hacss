@@ -12,6 +12,6 @@ changing the color of a button on hover) or responsive designs.
 Hacss, inspired by [acss.io](https://acss.io), captures the maintainability
 benefits of inline styles as well as the capabilities of external stylesheets by
 embedding its own styling DSL within HTML `class` attributes. At build time,
-Hacss automatically generates a stylesheet from all of the CSS classes used
-within the project: `<h1 class="C(red)">Hello World</h1>`, for example, yields
-a CSS block `.C\(red\) { color: red; }`.
+Hacss automatically generates a stylesheet from the CSS classes used throughout
+the project: `<h1 class="C(red)">Hello World</h1>`, for example, yields a CSS
+block `.C\(red\) { color: red; }`.
