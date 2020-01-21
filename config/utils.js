@@ -24,10 +24,27 @@ exports.color = c => {
   return c;
 };
 
+exports.fractionToPercentage = value =>
+  [value]
+    .map(f => f.match(/(?<num>([0-9]+))\/(?<den>([0-9]+))/))
+    .filter(x => x)
+    .map(({ groups }) => groups)
+    .map(({ num, den }) => `${Math.round((num / den) * 10000) / 100}%`)
+    .concat(value)[0];
+
 exports.lookup = map => key => map[key] || key;
 
 exports.mapArgs = (f, ...fs) => (...args) =>
   f.apply(
     null,
-    args.map((a, i) => fs[i](a)),
+    args.map((a, i) => {
+      const fn = fs[i];
+      if (typeof fn === "function") {
+        return fs[i](a);
+      }
+      if (fn.reduce) {
+        return fn.reverse().reduce((x, f) => f(x), a);
+      }
+      return a;
+    }),
   );

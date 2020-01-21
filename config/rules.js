@@ -1,4 +1,4 @@
-const { color, lookup, mapArgs } = require("./utils.js");
+const { color, fractionToPercentage, lookup, mapArgs } = require("./utils.js");
 
 const borderStyles = {
   d: "dotted",
@@ -100,6 +100,10 @@ module.exports = {
       st: "stretch",
     }),
   ),
+  B: mapArgs(a => `bottom: ${a}`, [
+    fractionToPercentage,
+    lookup({ a: "auto" }),
+  ]),
   Bd: [
     "border-width: 1px; border-style: solid",
     mapArgs(a => `border: ${a}`, lookup({ 0: 0, n: "none" })),
@@ -366,8 +370,10 @@ module.exports = {
       width: 0;
     }
   `,
-  End: mapArgs(a => `__END__: ${a}`, lookup({ a: "auto" })),
-  B: mapArgs(a => `bottom: ${a}`, lookup({ a: "auto" })),
+  End: mapArgs(a => `__END__: ${a}`, [
+    fractionToPercentage,
+    lookup({ a: "auto" }),
+  ]),
   Ff: mapArgs(
     a => `font-family: ${a}`,
     lookup({
@@ -392,8 +398,8 @@ module.exports = {
     a => `font-variant: ${a}`,
     lookup({ n: "normal", sc: "small-caps" }),
   ),
-  H: mapArgs(
-    a => `height: ${a}`,
+  H: mapArgs(a => `height: ${a}`, [
+    fractionToPercentage,
     lookup({
       0: "0",
       a: "auto",
@@ -404,7 +410,7 @@ module.exports = {
       maxc: "max-content",
       minc: "min-content",
     }),
-  ),
+  ]),
   Fw: mapArgs(
     a => `font-weight: ${a}`,
     lookup({
@@ -423,8 +429,14 @@ module.exports = {
       n: "normal",
     }),
   ),
-  Fx: mapArgs(a => `flex: ${a}`, lookup({ a: "auto", n: "none" })),
-  Fxb: mapArgs(a => `flex-basis: ${a}`, lookup({ a: "auto", n: "none" })),
+  Fx: mapArgs(a => `flex: ${a}`, [
+    fractionToPercentage,
+    lookup({ a: "auto", n: "none" }),
+  ]),
+  Fxb: mapArgs(a => `flex-basis: ${a}`, [
+    fractionToPercentage,
+    lookup({ a: "auto", n: "none" }),
+  ]),
   Fxd: mapArgs(
     a => `flex-direction: ${a}`,
     lookup({ r: "row", rr: "row-reverse", c: "column", cr: "column-reverse" }),
@@ -560,8 +572,8 @@ module.exports = {
   ),
   Mb: mapArgs(a => `margin-bottom: ${a}`, lookup({ 0: "0", a: "auto" })),
   Mend: mapArgs(a => `margin-__END__: ${a}`, lookup({ 0: "0", a: "auto" })),
-  Mih: mapArgs(
-    a => `min-height: ${a}`,
+  Mih: mapArgs(a => `min-height: ${a}`, [
+    fractionToPercentage,
     lookup({
       a: "auto",
       fa: "fill-available",
@@ -569,9 +581,9 @@ module.exports = {
       maxc: "max-content",
       minc: "min-content",
     }),
-  ),
-  Miw: mapArgs(
-    a => `min-width: ${a}`,
+  ]),
+  Miw: mapArgs(a => `min-width: ${a}`, [
+    fractionToPercentage,
     lookup({
       a: "auto",
       fa: "fill-available",
@@ -580,7 +592,7 @@ module.exports = {
       maxc: "max-content",
       minc: "min-content",
     }),
-  ),
+  ]),
   Mstart: mapArgs(a => `margin-__START__: ${a}`, lookup({ 0: "0", a: "auto" })),
   Mt: mapArgs(a => `margin-top: ${a}`, lookup({ 0: "0", a: "auto" })),
   Mx: mapArgs(
@@ -602,7 +614,6 @@ module.exports = {
     }),
   ),
   O: mapArgs(a => `outline: ${a}`, lookup({ 0: "0", n: "none" })),
-  T: mapArgs(a => `top: ${a}`, lookup({ a: "auto" })),
   Op: mapArgs(a => `opacity: ${a}`, lookup({ 0: "0", 1: "1" })),
   Opacity: a => `filter: opacity(${a})`,
   Or: a => `order: ${a}`,
@@ -679,7 +690,10 @@ module.exports = {
   Skew: (a, b) => `transform: skew(${a},${b})`,
   SkewX: a => `transform: skewX(${a})`,
   SkewY: a => `transform: skewY(${a})`,
-  Start: mapArgs(a => `__START__: ${a}`, lookup({ a: "auto" })),
+  Start: mapArgs(a => `__START__: ${a}`, [
+    fractionToPercentage,
+    lookup({ a: "auto" }),
+  ]),
   Stk: mapArgs(a => `stroke: ${a}`, color),
   Stklc: mapArgs(
     a => `stroke-linecap: ${a}`,
@@ -697,6 +711,7 @@ module.exports = {
     bottom: 0;
     left: 0;
   `,
+  T: mapArgs(a => `top: ${a}`, [fractionToPercentage, lookup({ a: "auto" })]),
   Ta: mapArgs(
     a => `text-align: ${a}`,
     lookup({
@@ -803,6 +818,19 @@ module.exports = {
     a => `visibility: ${a}`,
     lookup({ v: "visible", h: "hidden", c: "collapse" }),
   ),
+  W: mapArgs(a => `width: ${a}`, [
+    fractionToPercentage,
+    lookup({
+      0: "0",
+      a: "auto",
+      bb: "border-box",
+      cb: "content-box",
+      av: "available",
+      minc: "min-content",
+      maxc: "max-content",
+      fc: "fit-content",
+    }),
+  ]),
   Whs: mapArgs(
     a => `white-space: ${a}`,
     lookup({
@@ -821,19 +849,6 @@ module.exports = {
       l: "loose",
       bs: "break-strict",
       ba: "break-all",
-    }),
-  ),
-  W: mapArgs(
-    a => `width: ${a}`,
-    lookup({
-      0: "0",
-      a: "auto",
-      bb: "border-box",
-      cb: "content-box",
-      av: "available",
-      minc: "min-content",
-      maxc: "max-content",
-      fc: "fit-content",
     }),
   ),
   Wob: mapArgs(
