@@ -49,7 +49,8 @@ if (!validArgs) {
   let config = require("./config/index.js");
   if (fs.existsSync(options.config)) {
     const customSpec = require(options.config);
-    const custom = typeof customSpec === "function" ? customSpec(config) : customSpec;
+    const custom =
+      typeof customSpec === "function" ? customSpec(config) : customSpec;
     config = {
       globalMapArg: custom.globalMapArg || config.globalMapArg,
       direction: custom.direction || config.direction,

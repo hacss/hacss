@@ -4,154 +4,117 @@ const prettier = require("prettier");
 const postcss = require("postcss");
 const nested = require("postcss-nested");
 
-const pseudoClasses = {
-  a: "active",
-  c: "checked",
-  d: "default",
-  di: "disabled",
-  e: "empty",
-  en: "enabled",
-  f: "focus",
-  fc: "first-child",
-  fi: "first",
-  fot: "first-of-type",
-  fs: "fullscreen",
-  fw: "focus-within",
-  h: "hover",
-  ind: "indeterminate",
-  inv: "invalid",
-  ir: "in-range",
-  l: "left",
-  lc: "last-child",
-  li: "link",
-  lot: "last-of-type",
-  o: "optional",
-  oc: "only-child",
-  oor: "out-of-range",
-  oot: "only-of-type",
-  r: "right",
-  req: "required",
-  ro: "read-only",
-  rt: "root",
-  rw: "read-write",
-  s: "scope",
-  t: "target",
-  va: "valid",
-  vi: "visited",
+const pseudoMap = {
+  ":a": ":active",
+  ":c": ":checked",
+  ":d": ":default",
+  ":di": ":disabled",
+  ":e": ":empty",
+  ":en": ":enabled",
+  ":f": ":focus",
+  ":fc": ":first-child",
+  ":fi": ":first",
+  ":fot": ":first-of-type",
+  ":fs": ":fullscreen",
+  ":fw": ":focus-within",
+  ":h": ":hover",
+  ":ind": ":indeterminate",
+  ":inv": ":invalid",
+  ":ir": ":in-range",
+  ":l": ":left",
+  ":lc": ":last-child",
+  ":li": ":link",
+  ":lot": ":last-of-type",
+  ":o": ":optional",
+  ":oc": ":only-child",
+  ":oor": ":out-of-range",
+  ":oot": ":only-of-type",
+  ":r": ":right",
+  ":req": ":required",
+  ":ro": ":read-only",
+  ":rt": ":root",
+  ":rw": ":read-write",
+  ":s": ":scope",
+  ":t": ":target",
+  ":va": ":valid",
+  ":vi": ":visited",
+  "::a": "::after",
+  "::b": "::before",
+  "::fl": "::first-letter",
+  "::fli": "::first-line",
+  "::ph": "::placeholder",
 };
 
-const pseudoClassPattern = `\\:(${Object.keys(pseudoClasses).join("|")})`;
-
-const pseudoElements = {
-  a: ":after",
-  b: ":before",
-  fl: ":first-letter",
-  fli: ":first-line",
-  ph: ":placeholder",
-};
-
-const pseudoElementPattern = `\\:{2}(${Object.keys(pseudoElements).join("|")})`;
-
-const pseudos = className =>
-  (
-    className.match(
-      new RegExp(
-        `((${pseudoClassPattern})|(${pseudoElementPattern}))(?!(.*[_>+].*))`,
-        "g",
-      ),
-    ) || []
-  ).map(pseudo =>
-    pseudo.startsWith("::")
-      ? `::${pseudoElements[pseudo.substring(2)]}`
-      : `:${pseudoClasses[pseudo.substring(1)]}`,
+const extract = code => {
+  const match = code.match(
+    /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<rule>[A-Z][A-Za-z]*)(\((?<args>[^\(\)]+)\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s])|$)/,
   );
+  return match
+    ? [
+        {
+          className: match[0],
+          ...match.groups,
+        },
+      ]
+        .map(props => ({
+          ...props,
+          scope: props.scope || "default",
+          context: props.context
+            ? {
+                className: props.context.match(/[\w]+/)[0],
+                operator: props.context[props.context.length - 1],
+                pseudos: props.context.match(/\:{1,2}[a-z]+/g),
+              }
+            : null,
+          args: props.args ? props.args.split(",") : null,
+          pseudos: props.pseudos
+            ? props.pseudos.match(/(\:{1,2}[a-z]+)/g)
+            : null,
+        }))
+        .concat(extract(code.substring(match.index + match[0].length)))
+    : [];
+};
 
-const contextPattern = `[\\w\\-]+(${pseudoClassPattern})?[_>+]`;
-
-const selector = ({ className, context }) => {
-  const self = [`.${CSS.escape(className)}`]
-    .concat(pseudos(className))
-    .join("");
-  if (context) {
-    const { operator } = context;
-    return [
-      [`.${context.className.split(":")[0]}`]
-        .concat(pseudos(context.className))
-        .join(""),
-      self,
-    ].join(operator === "_" ? " " : ` ${operator} `);
-  }
-  return self;
+const selector = (className, pseudos, ctx) => {
+  const classSel = `.${CSS.escape(className)}${(pseudos || [])
+    .map(p => pseudoMap[p])
+    .join("")}`;
+  return ctx
+    ? [
+        `.${CSS.escape(ctx.className)}`,
+        (ctx.pseudos || []).map(p => pseudoMap[p]).join(""),
+        ctx.operator === "_" ? " " : ` ${ctx.operator} `,
+        classSel,
+      ].join("")
+    : classSel;
 };
 
 const hacss = ({ scopes, rules, direction }, code) => {
-  const scopePattern = `\\-\\-(${Object.keys(scopes).join("|")})`;
-
-  const styles = (
-    code.match(
-      new RegExp(
-        `(?<=\\W)(${contextPattern})?(${Object.entries(rules)
-          .map(function mkPattern([k, v]) {
-            switch (typeof v) {
-              case "string":
-                return `${k}(?!\\()(?=\\W)`;
-              case "function":
-                return `${k}\\([^\\)]+\\)`;
-              case "object":
-                return v.map(item => mkPattern([k, item]));
-                return null;
-            }
-          })
-          .filter(x => x)
-          .reduce((patterns, x) => patterns.concat(x), [])
-          .map(
-            pattern =>
-              `(${pattern}((${pseudoClassPattern}|${pseudoElementPattern})*))`,
-          )
-          .reduce(
-            (pattern, subpattern) =>
-              pattern ? `${pattern}|${subpattern}` : subpattern,
-            "",
-          )})(${scopePattern})?`,
-        "g",
-      ),
-    ) || []
-  )
-    .reduce((xs, x) => (xs.includes(x) ? xs : xs.concat(x)), [])
-    .map(className => {
-      const ruleName = className.match(
-        new RegExp(`(${Object.keys(rules).join("|")})((?=\\W)|$)`),
-      )[0];
-      const namedRule = rules[ruleName];
-      const args = className.match(/(?<=[\(,])([^\),]+)/g);
+  const styles = extract(code)
+    .filter(({ rule }) => rule in rules)
+    .reduce(
+      (xs, x) =>
+        xs.some(xs => xs.className === x.className) ? xs : xs.concat(x),
+      [],
+    )
+    .map(spec => {
+      const namedRule = rules[spec.rule];
       const rule =
         typeof namedRule !== "object"
           ? namedRule
-          : !args
+          : !spec.args
           ? namedRule[0]
-          : namedRule[args.length] || namedRule[1];
-
-      const css =
-        typeof rule === "function" ? rule.apply(null, args || []) : rule;
-
-      const context =
-        (className.match(new RegExp(`^(${contextPattern})`, "g")) || []).map(
-          c => ({
-            className: c.substring(0, c.length - 1),
-            operator: c.substring(c.length - 1),
-          }),
-        )[0] || null;
-
-      const scope = (
-        className.match(new RegExp(`(${scopePattern})$`, "g")) || ["--default"]
-      ).map(x => x.substring(2))[0];
-
-      return { scope, context, className, css };
+          : namedRule[spec.args.length] || namedRule[1];
+      return { ...spec, rule };
     })
-    .map(styleDef => [
-      styleDef.scope,
-      postcss([nested]).process(`${selector(styleDef)} { ${styleDef.css} }`)
-        .css,
+    .map(({ scope, rule, args, context, pseudos, className }) => [
+      scope,
+      postcss([nested]).process(
+        `
+        ${selector(className, pseudos, context, scope)}
+        { ${typeof rule === "function" ? rule.apply(null, args || []) : rule} }
+      `.trim(),
+      ).css,
     ]);
 
   const stylesheet = Object.entries(
