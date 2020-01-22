@@ -89,7 +89,7 @@ const selector = (className, pseudos, ctx) => {
     : classSel;
 };
 
-const hacss = ({ scopes, rules, direction }, code) => {
+const hacss = ({ globalMapArg, scopes, rules, direction }, code) => {
   const styles = extract(code)
     .filter(({ rule }) => rule in rules)
     .reduce(
@@ -112,7 +112,7 @@ const hacss = ({ scopes, rules, direction }, code) => {
       postcss([nested]).process(
         `
         ${selector(className, pseudos, context, scope)}
-        { ${typeof rule === "function" ? rule.apply(null, args || []) : rule} }
+        { ${typeof rule === "function" ? rule.apply(null, (args || []).map(globalMapArg)) : rule} }
       `.trim(),
       ).css,
     ]);
