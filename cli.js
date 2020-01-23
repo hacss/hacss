@@ -7,7 +7,8 @@ const path = require("path");
 const util = require("util");
 
 const { name } = require("./package.json");
-const buildCSS = require("./index.js");
+const hacss = require("./index.js");
+const config = require("./config/index.js");
 
 const [globP, mkdirpP, readFileP, writeFileP] = [
   glob,
@@ -46,23 +47,10 @@ if (!validArgs) {
     options.output = path.join(process.cwd(), a[outputIx + 1]);
   }
 
-  let config = require("./config/index.js");
-  if (fs.existsSync(options.config)) {
-    const customSpec = require(options.config);
-    const custom =
-      typeof customSpec === "function" ? customSpec(config) : customSpec;
-    config = {
-      globalMapArg: custom.globalMapArg || config.globalMapArg,
-      direction: custom.direction || config.direction,
-      scopes: { ...config.scopes, ...custom.scopes },
-      rules: { ...config.rules, ...custom.rules },
-    };
-  }
-
   globP(options.sources)
     .then(sources => Promise.all(sources.map(s => readFileP(s, "utf8"))))
     .then(sources => sources.join("\n"))
-    .then(code => buildCSS(config, code))
+    .then(code => hacss(config(options.config), code))
     .then(css =>
       options.output
         ? mkdirpP(path.dirname(options.output)).then(() =>

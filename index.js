@@ -112,7 +112,11 @@ const hacss = ({ globalMapArg, scopes, rules, direction }, code) => {
       postcss([nested]).process(
         `
         ${selector(className, pseudos, context, scope)}
-        { ${typeof rule === "function" ? rule.apply(null, (args || []).map(globalMapArg)) : rule} }
+        { ${
+          typeof rule === "function"
+            ? rule.apply(null, (args || []).map(globalMapArg))
+            : rule
+        } }
       `.trim(),
       ).css,
     ]);
