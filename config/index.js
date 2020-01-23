@@ -5,9 +5,12 @@ const scopes = require("./scopes.js");
 module.exports = configPath => {
   const defaults = {
     globalMapArg: x => x,
+    globalMapOutput: x =>
+      x
+        .replace(/__START__/g, "left")
+        .replace(/__END__/g, "right"),
     rules,
     scopes,
-    direction: "LTR",
   };
 
   if (fs.existsSync(configPath)) {

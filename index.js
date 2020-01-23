@@ -89,7 +89,7 @@ const selector = (className, pseudos, ctx) => {
     : classSel;
 };
 
-const hacss = ({ globalMapArg, scopes, rules, direction }, code) => {
+const hacss = ({ globalMapArg, globalMapOutput, scopes, rules }, code) => {
   const styles = extract(code)
     .filter(({ rule }) => rule in rules)
     .reduce(
@@ -97,8 +97,9 @@ const hacss = ({ globalMapArg, scopes, rules, direction }, code) => {
         xs.some(xs => xs.className === x.className) ? xs : xs.concat(x),
       [],
     )
+    .map(spec => ({ ...spec, ruleName: spec.rule }))
     .map(spec => {
-      const namedRule = rules[spec.rule];
+      const namedRule = rules[spec.ruleName];
       const rule =
         typeof namedRule !== "object"
           ? namedRule
@@ -107,16 +108,21 @@ const hacss = ({ globalMapArg, scopes, rules, direction }, code) => {
           : namedRule[spec.args.length] || namedRule[1];
       return { ...spec, rule };
     })
-    .map(({ scope, rule, args, context, pseudos, className }) => [
+    .map(({ scope, rule, ruleName, args, context, pseudos, className }) => [
       scope,
       postcss([nested]).process(
         `
         ${selector(className, pseudos, context, scope)}
-        { ${
-          typeof rule === "function"
-            ? rule.apply(null, (args || []).map(globalMapArg))
-            : rule
-        } }
+        {
+          ${
+            globalMapOutput(
+              typeof rule === "function"
+                ? rule.apply(null, (args || []).map((a, i) => globalMapArg(a, ruleName, i)))
+                : rule,
+              ruleName
+            )
+          }
+        }
       `.trim(),
       ).css,
     ]);
@@ -132,9 +138,7 @@ const hacss = ({ globalMapArg, scopes, rules, direction }, code) => {
   )
     .sort(([a], [b]) => (a === "default" ? -1 : b === "default" ? 1 : 0))
     .map(([scope, styles]) => scopes[scope](styles.join(" ")))
-    .join(" ")
-    .replace(/__START__/g, direction === "RTL" ? "right" : "left")
-    .replace(/__END__/g, direction === "RTL" ? "left" : "right");
+    .join(" ");
 
   return prettier.format(stylesheet, { parser: "css" });
 };
