@@ -3,14 +3,8 @@
 The [`hacss`](http://npmjs.com/package/hacss) package is bundled with a CLI.
 
 ## Installation
-
-### Global
 ```bash
 npm install -g hacss
-```
-### Local
-```bash
-npm install hacss
 ```
 
 ## Usage
