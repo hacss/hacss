@@ -30,10 +30,9 @@ value can be one of:
    The remaining indexes should correspond to the arity of the rule as used in
    code. (For example, when evaluating a class `Tsh(2px,#666)`, Hacss would
    look for a function at index 2 of this array.)
-   
-   ## `scopes`
-   The `scopes` object maps a scope name to a function used to construct the
-   corresponding CSS block. Typically, this would be used for media queries.
-   A scope function is called with the corresponding block of CSS and
-   returns a new block. See the [default scopes](../config/scopes.js) for
-   examples.
+
+## `scopes`
+The `scopes` object maps a scope name to a function used to construct the
+corresponding CSS block. Typically, this would be used for media queries. A
+scope function is called with the corresponding block of CSS and returns a new
+block. See the [default scopes](../config/scopes.js) for examples.
