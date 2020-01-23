@@ -6,8 +6,8 @@ Hackable inline style language embedded in HTML classes
 While many consider inline styles to be, in essence, more maintainable than
 external stylesheets, the limited capabilities of vanilla inline styles (e. g.
 no media queries or pseudo-selectors) often force a project to use external
-stylesheets or to resort to JavaScript for even trivial state changes (e. g.
-changing the color of a button on hover) or responsive designs.
+stylesheets or to resort to JavaScript for responsive designs or even trivial
+state changes (e. g. changing the color of a button on hover).
 
 Hacss, inspired by [acss.io](https://acss.io), captures the maintainability
 benefits of inline styles as well as the capabilities of external stylesheets by
@@ -22,7 +22,7 @@ In general, the "Atomic" and "Helper" classes listed on the
 [acss.io Reference page](http://acss.io/reference.html) are applicable to Hacss
 as well.
 
-Hacss may be a better option than Atomizer for advanced use cases:
+Hacss may be a better option than Atomizer for non-basic use cases:
 
 1. Simpler configuration model. Hacss combines
    ["rules"](https://github.com/acss-io/atomizer/blob/master/src/rules.js)
