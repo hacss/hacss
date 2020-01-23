@@ -23,12 +23,13 @@ hacss [--config <config-file>] [--output <output-file>] <sources>
 #### ```[--config <config-file>]```
 When specified, Hacss will look for `<config-file>` instead of its default
 `hacss.config.js`. It is not strictly necessary to have a configuration file, as
-Hacss is bundled with default rules.
+Hacss is bundled with default rules. See the [configuration guide](config.md)
+for more details.
 
 #### ```[--output <output-file>]```
 When specified, Hacss will write its output to the specified file. When not
 specified, Hacss output will be written to the standard output.
 
 #### <sources>
-The glob pattern specified here will be used to search for source files from
+The [glob](https://www.npmjs.com/package/glob) pattern specified here will be used to search for source files from
 which to produce the stylesheet.
