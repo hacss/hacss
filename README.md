@@ -1,8 +1,6 @@
 # hacss
 Hackable inline style language embedded in HTML classes
 
-## Overview
-
 While many consider inline styles to be, in essence, more maintainable than
 external stylesheets, the limited capabilities of vanilla inline styles (e. g.
 no media queries or pseudo-selectors) often force a project to use external
@@ -28,8 +26,8 @@ Hacss may be a better option than Atomizer for non-basic use cases:
    ["rules"](https://github.com/acss-io/atomizer/blob/master/src/rules.js)
    (aka "atomic classes") and
    ["helpers"](https://github.com/acss-io/atomizer/blob/master/src/helpers.js)
-   into a single concept of a [rule](config/rules.js). A verbose schema for
-   defining "rules" and "helpers" is replaced with a simple map between a rule
+   into a single concept of a [rule](guides/config.md#rules). Verbose schemas for
+   defining "rules" and "helpers" are replaced with a simple map between a rule
    name and, typically, the function used to generate the corresponding styles.
 2. Where Atomizer
    [prevents changing of the rules](https://github.com/acss-io/atomizer/search?q=already+exists+with+a+different&unscoped_q=already+exists+with+a+different),
@@ -41,10 +39,12 @@ Hacss may be a better option than Atomizer for non-basic use cases:
 3. Hacss configuration is function-oriented, offering greater control and
    flexibility. Instead of
    [`breakPoints`](https://github.com/acss-io/atomizer/blob/fc0d460e2e0f82acaa3d626da03193b9895c8010/examples/example-config.js#L15),
-   for example, Hacss has [`scopes`](config/scopes.js) which can be used for media
-   queries; however, when combined with another CSS preprocessor such as Less,
-   Sass, or PostCSS, `scopes` enable additional use cases such as nesting under a
-   parent selector for namespacing, etc. Instead of a
+   for example, Hacss has [`scopes`](guides/config.md#scopes) which can be used
+   for media queries; however, when combined with another CSS preprocessor such
+   as Less, Sass, or PostCSS, `scopes` enable additional use cases such as
+   nesting under a parent selector for namespacing, etc. Instead of a
    [map of global variables](https://github.com/acss-io/atomizer/blob/fc0d460e2e0f82acaa3d626da03193b9895c8010/examples/example-config.js#L6),
-   Hacss uses [`globalMapArg`](config/index.js) to allow global variable lookups
-   as well as other transformations.
+   Hacss uses [`globalMapArg`](guides/config.md#globalMapArg) to allow global
+   variable lookups as well as other transformations.
+
+For more, see the [guides](./guides).
