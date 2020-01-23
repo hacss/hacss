@@ -41,4 +41,5 @@ module.exports = {
 A Hacss-generated stylesheet will now be added to the page automatically. At this
 point, you can add a `hacss.config.js` file alongside `webpack.config.js` if
 necessary; or, you can specify an additional `val-loader` option `config` which
-contains the path to your Hacss configuration file.
+contains the path to your Hacss configuration file. See the
+[configuration guide](config.md) for more details.
