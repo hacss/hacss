@@ -12,3 +12,28 @@ rules, scopes, and other configuration easily on the basis of defaults. In
 either case, custom configuration is applied on top of the default
 configuration, so it is possible and even preferable to export a partial
 configuration object reflecting only differences from the default configuration.
+
+## `rules`
+The `rules` object maps a rule name to the CSS required to support the rule. The
+value can be one of:
+1. A function that returns the string of CSS required to support the rule. The
+   signature of this function would essentially reflect how the rule is used
+   in your code. For example, `Tsh: (size, color) => "/* css code */"` would
+   appear in markup something like `<h1 class="Tsh(2px,#666)">Hello</h1>`.
+   The [default rules](../config/rules.js) use some utility functions to
+   simplify their implementation, but avoid being distracted: They are
+   fundamentally just plain functions.
+2. A string that represents the CSS required to support the rule. You would, of
+   course, use this when no parameters are required.
+3. An array containing a combination of the above. In this case, the value at
+   index 0 should be a string (assuming no parameters are required) or `null`.
+   The remaining indexes should correspond to the arity of the rule as used in
+   code. (For example, when evaluating a class `Tsh(2px,#666)`, Hacss would
+   look for a function at index 2 of this array.)
+   
+   ## `scopes`
+   The `scopes` object maps a scope name to a function used to construct the
+   corresponding CSS block. Typically, this would be used for media queries.
+   A scope function is called with the corresponding block of CSS and
+   returns a new block. See the [default scopes](../config/scopes.js) for
+   examples.
