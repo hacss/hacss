@@ -30,7 +30,7 @@ module.exports = {
         use: [
           "style-loader",
           "css-loader",
-          { loader:"val-loader", options: { sources: "src/*.jsx" } },
+          { loader: "val-loader", options: { sources: "src/*.jsx" } },
         ],
       }
     ],
