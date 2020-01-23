@@ -3,15 +3,12 @@ const rules = require("./rules.js");
 const scopes = require("./scopes.js");
 
 module.exports = configPath => {
-  const defaults = {
-    globalMapArg: x => x,
-    globalMapOutput: x =>
-      x
-        .replace(/__START__/g, "left")
-        .replace(/__END__/g, "right"),
-    rules,
-    scopes,
-  };
+  const globalMapOutput = f => (x, r) => f(
+    x
+      .replace(/__START__/g, "left")
+      .replace(/__END__/g, "right"),
+    r
+  );
 
   if (fs.existsSync(configPath)) {
     const custom = (c => (typeof c === "function" ? c(defaults) : c))(
@@ -19,14 +16,14 @@ module.exports = configPath => {
     );
 
     return {
-      ...defaults,
-      ...custom,
+      globalMapArg: custom.globalMapArg || (x => x),
+      globalMapOutput: globalMapOutput(custom.globalMapOutput || (x => x)),
       scopes: {
-        ...defaults.scopes,
+        ...scopes,
         ...custom.scopes,
       },
       rules: {
-        ...defaults.rules,
+        ...rules,
         ...custom.rules,
       },
     };
