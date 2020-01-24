@@ -13,6 +13,24 @@ either case, custom configuration is applied on top of the default
 configuration, so it is possible and even preferable to export a partial
 configuration object reflecting only differences from the default configuration.
 
+## Structure
+
+```typescript
+type RuleFn = (...args: any) => string;
+
+type RuleSpec = RuleFn | Array<string | RuleFn>;
+
+type ConfigSpec = {
+    rules: { [ruleName: string]: RuleSpec },
+    scopes: { [scopeName: string]: (css: string) => string },
+    globalMapArg: (value: any, ruleName: string, argIndex: number) => any,
+    globalMapOutput: (output: string, ruleName: string) => string,
+}
+
+type Config = Partial<ConfigSpec> | ((defaultConfig: ConfigSpec) => Partial<ConfigSpec>);
+```
+
+## Details
 ### `rules`
 The `rules` object maps a rule name to the CSS required to support the rule. The
 value can be one of:
@@ -31,18 +49,18 @@ value can be one of:
    code. (For example, when evaluating a class `Tsh(2px,#666)`, Hacss would
    look for a function at index 2 of this array.)
 
-### `scopes: { [scopeName: string]: (output: string, ruleName: string) => string }`
+### `scopes`
 The `scopes` object maps a scope name to a function used to construct the
 corresponding CSS block. Typically, this would be used for media queries. A
 scope function is called with the corresponding block of CSS and returns a new
 block. See the [default scopes](../config/scopes.js) for examples.
 
-### `globalMapArg: (arg: string, ruleName: string, argIndex: int) => any`
+### `globalMapArg`
 The `globalMapArg` function is applied to all arguments before they are passed
 to a rule. The typical case for this would be global variable lookups, although
 it could be used for more complicated transformations as well. Consider changing
 specific rules before using this option.
 
-### `globalMapOutput: (output: string, ruleName: string) => string`
+### `globalMapOutput`
 The `globalMapOutput` function is applied to the output of all rules. Consider
 changing specific rules before using this option.
