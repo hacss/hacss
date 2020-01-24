@@ -7,8 +7,8 @@ no media queries or pseudo-selectors) often force a project to use external
 stylesheets or to resort to JavaScript for responsive designs or even trivial
 state changes (e. g. changing the color of a button on hover).
 
-Hacss, inspired by [acss.io](https://acss.io), captures the maintainability
-benefits of inline styles as well as the capabilities of external stylesheets by
+Hacss, inspired by [acss.io](https://acss.io), combines the maintainability
+benefits of inline styles with the capabilities of external stylesheets by
 embedding its own styling DSL within HTML `class` attributes. At build time,
 Hacss automatically generates a stylesheet from the CSS classes used throughout
 the project: `<h1 class="C(red)">Hello World</h1>`, for example, yields a CSS
@@ -26,9 +26,10 @@ Hacss may be a better option than Atomizer for non-basic use cases:
    ["rules"](https://github.com/acss-io/atomizer/blob/master/src/rules.js)
    (aka "atomic classes") and
    ["helpers"](https://github.com/acss-io/atomizer/blob/master/src/helpers.js)
-   into a single concept of a [rule](guides/config.md#rules). Verbose schemas for
-   defining "rules" and "helpers" are replaced with a simple map between a rule
-   name and, typically, the function used to generate the corresponding styles.
+   into a single concept of a [rule](guides/config.md#rules). Verbose schemas
+   for defining "rules" and "helpers" are replaced by a simple map between a
+   rule name and, typically, the function used to generate the corresponding
+   styles.
 2. Where Atomizer
    [prevents changing of the rules](https://github.com/acss-io/atomizer/search?q=already+exists+with+a+different&unscoped_q=already+exists+with+a+different),
    Hacss makes redefining rules easy. A common use case for this would be to
