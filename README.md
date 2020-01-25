@@ -1,5 +1,5 @@
-# hacss
-Hackable inline style language embedded in HTML classes
+# hacss ![Build status](https://travis-ci.org/nsaunders/hacss.svg?branch=master)
+## Hackable inline style language embedded in HTML classes
 
 While many consider inline styles to be, in essence, more maintainable than
 external stylesheets, the limited capabilities of vanilla inline styles (e. g.
