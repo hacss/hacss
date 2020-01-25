@@ -1,4 +1,4 @@
-require("CSS.escape");
+require("css.escape");
 
 const prettier = require("prettier");
 const postcss = require("postcss");
