@@ -26,7 +26,7 @@ const validArgs =
 
 if (!validArgs) {
   console.log(
-    `Usage: ${name} --config <config-file> [--output <output-file>] <sources>`,
+    `Usage: ${name} [--config <config-file>] [--output <output-file>] <sources>`,
   );
 } else {
   const options = {
