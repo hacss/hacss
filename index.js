@@ -95,55 +95,104 @@ const hacss = (code, config = defaultConfig()) => {
   const { globalMapArg, globalMapOutput, scopes, rules } = config;
 
   const styles = extract(code)
-    .filter(({ ruleName }) => ruleName in rules)
     .reduce(
       (xs, x) =>
         xs.some(xs => xs.className === x.className) ? xs : xs.concat(x),
       [],
     )
     .map(spec => {
+      const mkLeftErr = e => [[spec.className, e], null];
+      const mkRightRule = rule => [null, { ...spec, rule }];
+
       const namedRule = rules[spec.ruleName];
-      const rule =
-        typeof namedRule !== "object"
-          ? namedRule
-          : !spec.args
-          ? namedRule[0]
-          : namedRule[spec.args.length] || namedRule[1];
-      return { ...spec, rule };
-    })
-    .map(({ scope, rule, ruleName, args, context, pseudos, className }) => [
-      scope,
-      postcss([nested]).process(
-        `
-        ${selector(className, pseudos, context, scope)}
-        {
-          ${
-            globalMapOutput(
-              typeof rule === "function"
-                ? rule.apply(null, (args || []).map((a, i) => globalMapArg(a, ruleName, i)))
-                : rule,
-              ruleName
-            )
+
+      if (!namedRule) {
+        return mkLeftErr(`No rule "${spec.ruleName}" found.`);
+      }
+
+      switch (typeof namedRule) {
+        case "string":
+          if (spec.args) {
+            return mkLeftErr(
+              `The rule "${spec.ruleName}" does not accept arguments.`,
+            );
           }
-        }
-      `.trim(),
-      ).css,
-    ]);
+          return mkRightRule(namedRule);
+        case "function":
+          if (!spec.args) {
+            return mkLeftErr(`The rule "${spec.ruleName}" requires arguments.`);
+          }
+          return mkRightRule(namedRule);
+        case "object":
+          const n = spec.args ? spec.args.length : 0;
+          const rule = namedRule[n];
+          if (!rule) {
+            return mkLeftErr(
+              `The rule "${spec.ruleName}" is not defined for ${n} arguments.`,
+            );
+          }
+          return mkRightRule(rule);
+        default:
+          return mkLeftErr("The rule configuration is invalid.");
+      }
+    })
+    .map(([l, r]) => {
+      if (l) {
+        return [l];
+      }
 
-  const stylesheet = Object.entries(
-    styles.reduce(
-      (groups, [g, s]) => ({
-        ...groups,
-        [g]: (groups[g] || []).concat(s),
-      }),
-      {},
-    ),
-  )
-    .sort(([a], [b]) => (a === "default" ? -1 : b === "default" ? 1 : 0))
-    .map(([scope, styles]) => scopes[scope](styles.join(" ")))
-    .join(" ");
+      const { scope, rule, ruleName, args, context, pseudos, className } = r;
 
-  return prettier.format(stylesheet, { parser: "css" });
+      return [
+        null,
+        [
+          scope,
+          postcss([nested]).process(
+            `
+          ${selector(className, pseudos, context, scope)}
+          {
+            ${globalMapOutput(
+              typeof rule === "function"
+                ? rule.apply(
+                    null,
+                    (args || []).map((a, i) => globalMapArg(a, ruleName, i)),
+                  )
+                : rule,
+              ruleName,
+            )}
+          }
+        `.trim(),
+          ).css,
+        ],
+      ];
+    });
+
+  const css = prettier.format(
+    Object.entries(
+      styles
+        .filter(([l]) => !l)
+        .map(([l, r]) => r)
+        .reduce(
+          (groups, [g, s]) => ({
+            ...groups,
+            [g]: (groups[g] || []).concat(s),
+          }),
+          {},
+        ),
+    )
+      .sort(([a], [b]) => (a === "default" ? -1 : b === "default" ? 1 : 0))
+      .map(([scope, styles]) => scopes[scope](styles.join(" ")))
+      .join(" "),
+    { parser: "css" },
+  );
+
+  const errors = styles
+    .filter(([l]) => l)
+    .map(([ [ className, message ] ]) =>
+      `Error processing "${className}": ${message}`
+    );
+
+  return { css, errors };
 };
 
 module.exports = hacss;

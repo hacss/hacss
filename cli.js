@@ -51,12 +51,21 @@ if (!validArgs) {
     .then(sources => Promise.all(sources.map(s => readFileP(s, "utf8"))))
     .then(sources => sources.join("\n"))
     .then(code => hacss(code, config(options.config)))
-    .then(css =>
-      options.output
-        ? mkdirpP(path.dirname(options.output)).then(() =>
-            writeFileP(options.output, css),
-          )
-        : process.stdout.write(css),
-    )
-    .catch(err => console.error(err));
+    .then(({ css, errors }) => {
+      if (errors.length) {
+        return Promise.reject(errors.join("\n\n"));
+      }
+
+      return Promise.resolve(
+        options.output
+          ? mkdirpP(path.dirname(options.output)).then(() =>
+              writeFileP(options.output, css),
+            )
+          : process.stdout.write(css)
+      );
+    })
+    .catch(err => {
+      console.error("\x1b[31m%s\x1b[0m", err);
+      return process.exit(1);
+    });
 }
