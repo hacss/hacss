@@ -2,6 +2,13 @@ const fs = require("fs");
 const rules = require("./rules.js");
 const scopes = require("./scopes.js");
 
+const defaults = {
+  globalMapArg: x => x,
+  globalMapOutput: x => x,
+  rules,
+  scopes,
+};
+
 module.exports = configPath => {
   const globalMapOutput = f => (x, r) => f(
     x
@@ -16,14 +23,15 @@ module.exports = configPath => {
     );
 
     return {
-      globalMapArg: custom.globalMapArg || (x => x),
-      globalMapOutput: globalMapOutput(custom.globalMapOutput || (x => x)),
+      ...defaults,
+      globalMapArg: custom.globalMapArg || defaults.globalMapArg,
+      globalMapOutput: globalMapOutput(custom.globalMapOutput || defaults.globalMapOutput),
       scopes: {
-        ...scopes,
+        ...defaults.scopes,
         ...custom.scopes,
       },
       rules: {
-        ...rules,
+        ...defaults.rules,
         ...custom.rules,
       },
     };
