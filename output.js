@@ -14,5 +14,5 @@ module.exports = options => {
   return globP(options.sources)
     .then(sources => Promise.all(sources.map(s => readFileP(s, "utf8"))))
     .then(sources => sources.join("\n"))
-    .then(code => ({ code: hacss(config(options.config), code) }));
+    .then(code => ({ code: hacss(code, config(options.config)) }));
 };

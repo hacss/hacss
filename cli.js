@@ -50,7 +50,7 @@ if (!validArgs) {
   globP(options.sources)
     .then(sources => Promise.all(sources.map(s => readFileP(s, "utf8"))))
     .then(sources => sources.join("\n"))
-    .then(code => hacss(config(options.config), code))
+    .then(code => hacss(code, config(options.config)))
     .then(css =>
       options.output
         ? mkdirpP(path.dirname(options.output)).then(() =>

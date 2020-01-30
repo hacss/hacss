@@ -4,6 +4,8 @@ const prettier = require("prettier");
 const postcss = require("postcss");
 const nested = require("postcss-nested");
 
+const defaultConfig = require("./config/index.js");
+
 const pseudoMap = {
   ":a": ":active",
   ":c": ":checked",
@@ -89,7 +91,9 @@ const selector = (className, pseudos, ctx) => {
     : classSel;
 };
 
-const hacss = ({ globalMapArg, globalMapOutput, scopes, rules }, code) => {
+const hacss = (code, config = defaultConfig()) => {
+  const { globalMapArg, globalMapOutput, scopes, rules } = config;
+
   const styles = extract(code)
     .filter(({ rule }) => rule in rules)
     .reduce(

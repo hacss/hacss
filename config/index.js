@@ -17,7 +17,7 @@ module.exports = configPath => {
     r
   );
 
-  if (fs.existsSync(configPath)) {
+  if (configPath && fs.existsSync(configPath)) {
     const custom = (c => (typeof c === "function" ? c(defaults) : c))(
       require(configPath),
     );
