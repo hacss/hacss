@@ -49,7 +49,7 @@ const pseudoMap = {
 
 const extract = code => {
   const match = code.match(
-    /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<rule>[A-Z][A-Za-z]*)(\((?<args>[^\(\)]+)\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s\\])|$)/,
+    /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<ruleName>[A-Z][A-Za-z]*)(\((?<args>[^\(\)]+)\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s\\])|$)/,
   );
   return match
     ? [
@@ -95,13 +95,12 @@ const hacss = (code, config = defaultConfig()) => {
   const { globalMapArg, globalMapOutput, scopes, rules } = config;
 
   const styles = extract(code)
-    .filter(({ rule }) => rule in rules)
+    .filter(({ ruleName }) => ruleName in rules)
     .reduce(
       (xs, x) =>
         xs.some(xs => xs.className === x.className) ? xs : xs.concat(x),
       [],
     )
-    .map(spec => ({ ...spec, ruleName: spec.rule }))
     .map(spec => {
       const namedRule = rules[spec.ruleName];
       const rule =
