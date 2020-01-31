@@ -31,7 +31,7 @@ Hacss may be a better option than Atomizer for non-basic use cases:
    rule name and, typically, the function used to generate the corresponding
    styles.
 2. Where Atomizer
-   [prevents changing of the rules](https://github.com/acss-io/atomizer/search?q=already+exists+with+a+different&unscoped_q=already+exists+with+a+different),
+   [blocks attempts to change rules](https://github.com/acss-io/atomizer/search?q=already+exists+with+a+different&unscoped_q=already+exists+with+a+different),
    Hacss makes redefining rules easy. A common use case for this would be to
    re-implement
    [`O` (outline)](https://github.com/nsaunders/hacss/search?q=outline&unscoped_q=outline)
