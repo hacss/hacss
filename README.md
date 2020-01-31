@@ -28,8 +28,8 @@ Hacss may be a better option than Atomizer for non-basic use cases:
    ["helpers"](https://github.com/acss-io/atomizer/blob/master/src/helpers.js)
    into a single concept of a [rule](guides/config.md#rules). Verbose schemas
    for defining "rules" and "helpers" are replaced by a simple map between a
-   rule name and, typically, the function used to generate the corresponding
-   styles.
+   rule name and its definition (typically a function used to generate the
+   corresponding styles).
 2. Where Atomizer
    [blocks attempts to change rules](https://github.com/acss-io/atomizer/search?q=already+exists+with+a+different&unscoped_q=already+exists+with+a+different),
    Hacss makes redefining rules easy. A common use case for this would be to
