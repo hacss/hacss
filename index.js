@@ -54,6 +54,7 @@ const extract = code => {
     ),
   );
   return matches
+    .reduce((ms, m) => (ms.some(n => n[0] === m[0]) ? ms : ms.concat([m])), [])
     .map(match => ({
       className: match[0],
       ...match.groups,
@@ -92,11 +93,6 @@ const hacss = (code, config = defaultConfig()) => {
 
   const styles = extract(code)
     .filter(({ ruleName }) => ruleName in rules)
-    .reduce(
-      (xs, x) =>
-        xs.some(xs => xs.className === x.className) ? xs : xs.concat(x),
-      [],
-    )
     .map(spec => {
       const namedRule = rules[spec.ruleName];
       const rule =
