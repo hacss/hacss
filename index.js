@@ -50,7 +50,7 @@ const pseudoMap = {
 const extract = code =>
   Array.from(
     code.matchAll(
-      /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<ruleName>[A-Z][A-Za-z]*)(\((?<args>[^\(\)]+)\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s\\])|$)/gm,
+      /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<rule>[A-Z][A-Za-z]*)(\((?<args>[^\(\)]+)\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s\\])|$)/gm,
     ),
   )
     .reduce((ms, m) => (ms.some(n => n[0] === m[0]) ? ms : ms.concat([m])), [])
@@ -68,7 +68,7 @@ const extract = code =>
             pseudos: props.context.match(/\:{1,2}[a-z]+/g),
           }
         : null,
-      args: props.args ? props.args.split(",") : null,
+      args: props.args ? props.args.split(",") : [],
       pseudos: props.pseudos ? props.pseudos.match(/(\:{1,2}[a-z]+)/g) : null,
     }));
 
@@ -90,31 +90,56 @@ const hacss = (code, config = defaultConfig()) => {
   const { globalMapArg, globalMapOutput, scopes, rules } = config;
 
   const styles = extract(code)
-    .filter(({ ruleName }) => ruleName in rules)
     .map(spec => {
-      const namedRule = rules[spec.ruleName];
-      const rule =
-        typeof namedRule !== "object"
-          ? namedRule
-          : !spec.args
-          ? namedRule[0]
-          : namedRule[spec.args.length] || namedRule[1];
-      return { ...spec, rule };
+      const { rule, args } = spec;
+      const ruleDef = rules[rule];
+      switch (typeof ruleDef) {
+        case "function":
+          if (!args.length) {
+            return spec;
+          }
+          return { ...spec, f: ruleDef };
+        case "string":
+          if (args.length) {
+            return spec;
+          }
+          return { ...spec, f: () => ruleDef };
+        case "object":
+          const ruleDefSub = ruleDef[args.length];
+          if (!ruleDefSub) {
+            return spec;
+          }
+          switch (typeof ruleDefSub) {
+            case "function":
+              if (!args.length) {
+                return spec;
+              }
+              return { ...spec, f: ruleDef };
+            case "string":
+              if (args.length) {
+                return spec;
+              }
+              return { ...spec, f: () => ruleDefSub };
+            default:
+              return spec;
+          }
+        default:
+          return spec;
+      }
     })
-    .map(({ scope, rule, ruleName, args, context, pseudos, className }) => [
+    .filter(({ f }) => f)
+    .map(({ scope, rule, f, args, context, pseudos, className }) => [
       scope,
       postcss([nested]).process(
         `
         ${selector(className, pseudos, context, scope)}
         {
           ${globalMapOutput(
-            typeof rule === "function"
-              ? rule.apply(
-                  null,
-                  (args || []).map((a, i) => globalMapArg(a, ruleName, i)),
-                )
-              : rule,
-            ruleName,
+            f.apply(
+              null,
+              (args || []).map((a, i) => globalMapArg(a, rule, i)),
+            ),
+            rule,
           )}
         }
       `.trim(),
