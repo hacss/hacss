@@ -48,33 +48,29 @@ const pseudoMap = {
 };
 
 const extract = code => {
-  const match = code.match(
-    /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<ruleName>[A-Z][A-Za-z]*)(\((?<args>[^\(\)]+)\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s\\])|$)/,
+  const matches = Array.from(
+    code.matchAll(
+      /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<ruleName>[A-Z][A-Za-z]*)(\((?<args>[^\(\)]+)\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s\\])|$)/gm,
+    ),
   );
-  return match
-    ? [
-        {
-          className: match[0],
-          ...match.groups,
-        },
-      ]
-        .map(props => ({
-          ...props,
-          scope: props.scope || "default",
-          context: props.context
-            ? {
-                className: props.context.match(/[\w]+/)[0],
-                operator: props.context[props.context.length - 1],
-                pseudos: props.context.match(/\:{1,2}[a-z]+/g),
-              }
-            : null,
-          args: props.args ? props.args.split(",") : null,
-          pseudos: props.pseudos
-            ? props.pseudos.match(/(\:{1,2}[a-z]+)/g)
-            : null,
-        }))
-        .concat(extract(code.substring(match.index + match[0].length)))
-    : [];
+  return matches
+    .map(match => ({
+      className: match[0],
+      ...match.groups,
+    }))
+    .map(props => ({
+      ...props,
+      scope: props.scope || "default",
+      context: props.context
+        ? {
+            className: props.context.match(/[\w]+/)[0],
+            operator: props.context[props.context.length - 1],
+            pseudos: props.context.match(/\:{1,2}[a-z]+/g),
+          }
+        : null,
+      args: props.args ? props.args.split(",") : null,
+      pseudos: props.pseudos ? props.pseudos.match(/(\:{1,2}[a-z]+)/g) : null,
+    }));
 };
 
 const selector = (className, pseudos, ctx) => {
@@ -117,14 +113,15 @@ const hacss = (code, config = defaultConfig()) => {
         `
         ${selector(className, pseudos, context, scope)}
         {
-          ${
-            globalMapOutput(
-              typeof rule === "function"
-                ? rule.apply(null, (args || []).map((a, i) => globalMapArg(a, ruleName, i)))
-                : rule,
-              ruleName
-            )
-          }
+          ${globalMapOutput(
+            typeof rule === "function"
+              ? rule.apply(
+                  null,
+                  (args || []).map((a, i) => globalMapArg(a, ruleName, i)),
+                )
+              : rule,
+            ruleName,
+          )}
         }
       `.trim(),
       ).css,
