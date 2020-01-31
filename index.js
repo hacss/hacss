@@ -47,13 +47,12 @@ const pseudoMap = {
   "::ph": "::placeholder",
 };
 
-const extract = code => {
-  const matches = Array.from(
+const extract = code =>
+  Array.from(
     code.matchAll(
       /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<ruleName>[A-Z][A-Za-z]*)(\((?<args>[^\(\)]+)\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s\\])|$)/gm,
     ),
-  );
-  return matches
+  )
     .reduce((ms, m) => (ms.some(n => n[0] === m[0]) ? ms : ms.concat([m])), [])
     .map(match => ({
       className: match[0],
@@ -72,7 +71,6 @@ const extract = code => {
       args: props.args ? props.args.split(",") : null,
       pseudos: props.pseudos ? props.pseudos.match(/(\:{1,2}[a-z]+)/g) : null,
     }));
-};
 
 const selector = (className, pseudos, ctx) => {
   const classSel = `.${CSS.escape(className)}${(pseudos || [])
