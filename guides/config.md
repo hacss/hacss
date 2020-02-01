@@ -47,7 +47,9 @@ value can be one of:
    index 0 should be a string (assuming no parameters are required) or `null`.
    The remaining indexes should correspond to the arity of the rule as used in
    code. (For example, when evaluating a class `Tsh(2px,#666)`, Hacss would
-   look for a function at index 2 of this array.)
+   look for a function at index 2 of this array.) _Note: You can also use a map
+   like `{ 0: "property: value", 2: (a, b) => "/* insert css here */" }` instead
+   of an array if you feel it provides better lookup performance or clarity._
 
 ### `scopes`
 The `scopes` object maps a scope name to a function used to construct the
