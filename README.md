@@ -20,7 +20,8 @@ In general, the "Atomic" and "Helper" classes listed on the
 [acss.io Reference page](http://acss.io/reference.html) are applicable to Hacss
 as well.
 
-Hacss may be a better option than Atomizer for non-basic use cases:
+Hacss may be a better option than Atomizer for non-basic use cases for a few
+reasons:
 
 1. Simpler configuration model. Hacss combines
    ["rules"](https://github.com/acss-io/atomizer/blob/master/src/rules.js)
