@@ -17,7 +17,7 @@ module.exports = {
 };
 ```
 
-Next, add a rule, making sure to replace `src/*.jsx` with a glob pattern that
+Next, add a rule, making sure to replace `src/*.js` with a glob pattern that
 captures any source files that may contain Hacss classes.
 
 ```javascript
@@ -30,7 +30,7 @@ module.exports = {
         use: [
           "style-loader",
           "css-loader",
-          { loader: "val-loader", options: { sources: "src/*.jsx" } },
+          { loader: "val-loader", options: { sources: "src/*.js" } },
         ],
       }
     ],
