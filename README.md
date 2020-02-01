@@ -41,7 +41,7 @@ reasons:
 3. Hacss configuration is function-oriented, offering greater control and
    flexibility. Instead of
    [`breakPoints`](https://github.com/acss-io/atomizer/blob/fc0d460e2e0f82acaa3d626da03193b9895c8010/examples/example-config.js#L15),
-   for example, Hacss has [`scopes`](guides/config.md#scopes) which can be used
+   for example, Hacss has [`scopes`](guides/config.md#scopes). These can be used
    for media queries; however, when combined with another CSS preprocessor such
    as Less, Sass, or PostCSS, `scopes` enable additional use cases such as
    nesting under a parent selector for namespacing, etc. Instead of a
