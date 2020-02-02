@@ -9,7 +9,6 @@ changing the color of a button on hover) or responsive designs. Moreover,
 JavaScript cannot replace stylesheets completely, as it offers no direct way
 to style pseudo-elements such as input placeholders.
 
---------------------------------------------------------------------------------
 Hacss combines the maintainability benefits of inline styles with the
 capabilities of external stylesheets by embedding its own styling DSL within
 HTML `class` attributes. At build time, Hacss automatically generates a
