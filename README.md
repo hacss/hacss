@@ -9,21 +9,20 @@ changing the color of a button on hover) or responsive designs. Moreover,
 JavaScript cannot replace stylesheets completely, as it offers no direct way
 to style pseudo-elements such as input placeholders.
 
-Hacss, inspired by [acss.io](https://acss.io), combines the maintainability
-benefits of inline styles with the capabilities of external stylesheets by
-embedding its own styling DSL within HTML `class` attributes. At build time,
-Hacss automatically generates a stylesheet from the CSS classes used throughout
-the project: `<h1 class="C(red)">Hello World</h1>`, for example, yields a CSS
-block `.C\(red\) { color: red; }`.
+--------------------------------------------------------------------------------
+Hacss combines the maintainability benefits of inline styles with the
+capabilities of external stylesheets by embedding its own styling DSL within
+HTML `class` attributes. At build time, Hacss automatically generates a
+stylesheet from the CSS classes used throughout the project:
+`<h1 class="C(red)">Hello World</h1>`, for example, yields a CSS block
+`.C\(red\) { color: red; }`.
 
-Hacss is a drop-in replacement for
-[Atomizer](https://github.com/acss-io/atomizer) for the majority of use cases.
-In general, the "Atomic" and "Helper" classes listed on the
+Hacss, inspired by [acss.io](https://acss.io), is a drop-in replacement for its
+[Atomizer](https://github.com/acss-io/atomizer) tool for the majority of use
+cases. In general, the "Atomic" and "Helper" classes listed on the
 [acss.io Reference page](http://acss.io/reference.html) are applicable to Hacss
-as well.
-
-Hacss may be a better option than Atomizer for non-basic use cases for a few
-reasons:
+as well. Hacss may be a better option than Atomizer for non-basic use cases for
+a few reasons:
 
 1. Simpler configuration model. Hacss combines
    ["rules"](https://github.com/acss-io/atomizer/blob/master/src/rules.js)
