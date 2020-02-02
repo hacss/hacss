@@ -4,8 +4,10 @@
 While many consider inline styles to be, in essence, more maintainable than
 external stylesheets, the limited capabilities of vanilla inline styles (e. g.
 no media queries or pseudo-selectors) often force a project to use external
-stylesheets or to resort to JavaScript for responsive designs or even trivial
-state changes (e. g. changing the color of a button on hover).
+stylesheets or to resort to JavaScript for even trivial state changes (like
+changing the color of a button on hover) or responsive designs. Moreover,
+JavaScript cannot replace stylesheets completely, as it offers no direct way
+to style pseudo-elements such as input placeholders.
 
 Hacss, inspired by [acss.io](https://acss.io), combines the maintainability
 benefits of inline styles with the capabilities of external stylesheets by
