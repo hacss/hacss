@@ -132,17 +132,17 @@ const hacss = (code, config = defaultConfig()) => {
       scope,
       postcss([nested]).process(
         `
-        ${selector(className, pseudos, context, scope)}
-        {
-          ${globalMapOutput(
-            f.apply(
-              null,
-              (args || []).map((a, i) => globalMapArg(a, rule, i)),
-            ),
-            rule,
-          )}
-        }
-      `.trim(),
+          ${selector(className, pseudos, context, scope)}
+          {
+            ${globalMapOutput(
+              f.apply(
+                null,
+                (args || []).map((a, i) => globalMapArg(a, rule, i)),
+              ),
+              rule,
+            )}
+          }
+        `.trim(),
       ).css,
     ]);
 
