@@ -10,9 +10,6 @@
 .Bgc\(\#ccc\) {
   background-color: #ccc;
 }
-.Bgc\(\#cdc\)\:h:hover {
-  background-color: #cdc;
-}
 .Ta\(c\) {
   text-align: center;
 }
@@ -62,4 +59,7 @@
   overflow: hidden;
   height: 0;
   width: 0;
+}
+.Bgc\(\#cdc\)\:h:hover {
+  background-color: #cdc;
 }
