@@ -63,7 +63,7 @@ const extract = code =>
       scope: props.scope || "default",
       context: props.context
         ? {
-            className: props.context.match(/[\w]+/)[0],
+            className: props.context.match(/[^\:_\+\>]+/)[0],
             operator: props.context[props.context.length - 1],
             pseudos: props.context.match(/\:{1,2}[a-z]+/g),
           }
