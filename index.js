@@ -47,6 +47,33 @@ const pseudoMap = {
   "::ph": "::placeholder",
 };
 
+const comparePseudos = (a, b) => {
+  if (a && b) {
+    const [ap, bp] = [a, b].map(({ pseudos }) => pseudos);
+    if (ap && !bp) {
+      return 1;
+    }
+    if (!ap && bp) {
+      return -1;
+    }
+    if (ap && bp) {
+      const [aix, bix] = [ap, bp].map(
+        x => Math.max.apply(
+          null,
+          x.map(p => [":li", ":vi", ":f", ":h", ":a", ":di"].indexOf(p))
+        )
+      );
+      if (aix < bix) {
+        return -1;
+      }
+      if (aix > bix) {
+        return 1;
+      }
+    }
+  }
+  return 0;
+};
+
 const extract = code =>
   Array.from(
     code.matchAll(
@@ -128,6 +155,13 @@ const hacss = (code, config = defaultConfig()) => {
       }
     })
     .filter(({ f }) => f)
+    .sort((a, b) => {
+      const contextComp = comparePseudos(a.context, b.context);
+      if (contextComp !== 0) {
+        return contextComp;
+      }
+      return comparePseudos(a, b);
+    })
     .map(({ scope, rule, f, args, context, pseudos, className }) => [
       scope,
       postcss([nested]).process(
