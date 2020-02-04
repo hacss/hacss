@@ -60,6 +60,51 @@
   height: 0;
   width: 0;
 }
+.Mt\(24px\) {
+  margin-top: 24px;
+}
+.Bds\(n\) {
+  border-style: none;
+}
+.Bdrs\(4px\) {
+  border-radius: 4px;
+}
+.P\(8px\) {
+  padding: 8px;
+}
+.Ff\(ss\) {
+  font-family: Helvetica, Arial, sans-serif;
+}
+.Fw\(n\) {
+  font-weight: normal;
+}
+.Fz\(14px\) {
+  font-size: 14px;
+}
+.Bgc\(\#009\) {
+  background-color: #009;
+}
+.bar:hover .bar\:h_C\(\#09f\) {
+  color: #09f;
+}
+.bar:active .bar\:a_C\(\#f90\) {
+  color: #f90;
+}
+.bar:disabled .bar\:di_C\(\#ccc\) {
+  color: #ccc;
+}
+.Mstart\(8px\) {
+  margin-left: 8px;
+}
 .Bgc\(\#cdc\)\:h:hover {
   background-color: #cdc;
+}
+.Bgc\(\#00c\)\:h:hover {
+  background-color: #00c;
+}
+.Bgc\(\#c00\)\:a:active {
+  background-color: #c00;
+}
+.Bgc\(\#999\)\:di:disabled {
+  background-color: #999;
 }
