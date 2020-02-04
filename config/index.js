@@ -10,9 +10,6 @@ const defaults = {
 };
 
 module.exports = configPath => {
-  const globalMapOutput = f => (x, r) =>
-    f(x.replace(/__START__/g, "left").replace(/__END__/g, "right"), r);
-
   if (configPath && fs.existsSync(configPath)) {
     const custom = (c => (typeof c === "function" ? c(defaults) : c))(
       require(configPath),
@@ -21,9 +18,7 @@ module.exports = configPath => {
     return {
       ...defaults,
       globalMapArg: custom.globalMapArg || defaults.globalMapArg,
-      globalMapOutput: globalMapOutput(
-        custom.globalMapOutput || defaults.globalMapOutput,
-      ),
+      globalMapOutput: custom.globalMapOutput || defaults.globalMapOutput,
       scopes: {
         ...defaults.scopes,
         ...custom.scopes,

@@ -134,13 +134,17 @@ const hacss = (code, config = defaultConfig()) => {
         `
           ${selector(className, pseudos, context, scope)}
           {
-            ${globalMapOutput(
-              f.apply(
-                null,
-                (args || []).map((a, i) => globalMapArg(a, rule, i)),
-              ),
-              rule,
-            )}
+            ${
+              globalMapOutput(
+                f.apply(
+                  null,
+                  (args || []).map((a, i) => globalMapArg(a, rule, i)),
+                ),
+                rule,
+              )
+                .replace(/__START__/g, "left")
+                .replace(/__END__/g, "right")
+            }
           }
         `.trim(),
       ).css,
