@@ -39,17 +39,9 @@ a few reasons:
    using `box-shadow` as described
    [here](https://dev.to/hybrid_alex/better-css-outlines-with-box-shadows-1k7j).
 3. Hacss configuration is function-oriented, offering greater control and
-   flexibility. Instead of
-   [`breakPoints`](https://github.com/acss-io/atomizer/blob/fc0d460e2e0f82acaa3d626da03193b9895c8010/examples/example-config.js#L15),
-   for example, Hacss's [`scopes`](guides/config.md#scopes) can be used not only
-   for media queries, but also for other use cases requiring grouping/nesting
-   (such as nesting a block of CSS under a parent selector<sup>1</sup> for
-   namespacing purposes). Instead of a
+   flexibility. Instead of a
    [map of global variables](https://github.com/acss-io/atomizer/blob/fc0d460e2e0f82acaa3d626da03193b9895c8010/examples/example-config.js#L6),
-   Hacss uses [`globalMapArg`](guides/config.md#globalMapArg) to allow global
+   for example, Hacss uses [`globalMapArg`](guides/config.md#globalMapArg) to allow global
    variable lookups as well as other transformations.
 
 For more, see the [guides](./guides).
-
-<sup>1</sup> This requires post-processing by a tool such as Less, Sass, or
-PostCSS that supports selector nesting.
