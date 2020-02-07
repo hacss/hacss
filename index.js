@@ -141,7 +141,7 @@ const hacss = (code, config = defaultConfig()) => {
               if (!args.length) {
                 return spec;
               }
-              return { ...spec, f: ruleDef };
+              return { ...spec, f: ruleDefSub };
             case "string":
               if (args.length) {
                 return spec;
