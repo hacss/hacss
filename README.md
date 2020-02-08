@@ -16,7 +16,7 @@ stylesheet from the CSS classes used throughout the project:
 `<h1 class="C(red)">Hello World</h1>`, for example, yields a CSS block
 `.C\(red\) { color: red; }`.
 
-Hacss, inspired by [acss.io](https://acss.io), is a drop-in replacement for its
+Hacss is a drop-in replacement for [acss.io](https://acss.io)'s
 [Atomizer](https://github.com/acss-io/atomizer) tool for the majority of use
 cases. In general, the "Atomic" and "Helper" classes listed on the
 [acss.io Reference page](http://acss.io/reference.html) are applicable to Hacss
