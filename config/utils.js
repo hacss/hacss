@@ -24,13 +24,23 @@ exports.color = c => {
   return c;
 };
 
-exports.fractionToPercentage = value =>
-  [value]
-    .map(f => f.match(/(?<num>([0-9]+))\/(?<den>([0-9]+))/))
-    .filter(x => x)
-    .map(({ groups }) => groups)
-    .map(({ num, den }) => `${Math.round((num / den) * 10000) / 100}%`)
-    .concat(value)[0];
+exports.normalizeLength = value => {
+  const fractionToPercentage = value =>
+    value
+      .replace(/(?<num>[0-9]+)\/(?<den>[0-9]+)/g, (...args) => {
+        const { num, den } = args[args.length - 1];
+        return `${Math.round((num/den)*10000) / 100}%`;
+      });
+
+  const calcFix = value =>
+    value.startsWith("calc(")
+    ? value
+        .replace(/[\+\-\*\/](?=\S)/g, op => `${op} `)
+        .replace(/(?<=\S)[\+\-\*\/]/g, op => ` ${op}`)
+    : value;
+
+  return calcFix(fractionToPercentage(value));
+};
 
 exports.lookup = map => key => map[key] || key;
 

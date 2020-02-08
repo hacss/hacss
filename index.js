@@ -77,7 +77,7 @@ const comparePseudos = (a, b) => {
 const extract = code =>
   Array.from(
     code.matchAll(
-      /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<rule>[A-Z][A-Za-z]*)(\((?<args>[^\(\)]+)\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s\\])|$)/gm,
+      /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<rule>[A-Z][A-Za-z]*)(\((?<args>(([^\(\)]+|(attr|calc|url)\([^\(\)]+\)),)*(([^\(\)]+|(attr|calc|url)\([^\(\)]+\))))\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s\\])|$)/gm,
     ),
   )
     .reduce((ms, m) => (ms.some(n => n[0] === m[0]) ? ms : ms.concat([m])), [])

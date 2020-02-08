@@ -1,4 +1,4 @@
-const { color, fractionToPercentage, lookup, mapArgs } = require("./utils.js");
+const { color, normalizeLength, lookup, mapArgs } = require("./utils.js");
 
 const borderStyles = {
   d: "dotted",
@@ -101,7 +101,7 @@ module.exports = {
     }),
   ),
   B: mapArgs(a => `bottom: ${a}`, [
-    fractionToPercentage,
+    normalizeLength,
     lookup({ a: "auto" }),
   ]),
   Bd: [
@@ -371,7 +371,7 @@ module.exports = {
     }
   `,
   End: mapArgs(a => `__END__: ${a}`, [
-    fractionToPercentage,
+    normalizeLength,
     lookup({ a: "auto" }),
   ]),
   Ff: mapArgs(
@@ -399,7 +399,7 @@ module.exports = {
     lookup({ n: "normal", sc: "small-caps" }),
   ),
   H: mapArgs(a => `height: ${a}`, [
-    fractionToPercentage,
+    normalizeLength,
     lookup({
       0: "0",
       a: "auto",
@@ -430,11 +430,11 @@ module.exports = {
     }),
   ),
   Fx: mapArgs(a => `flex: ${a}`, [
-    fractionToPercentage,
+    normalizeLength,
     lookup({ a: "auto", n: "none" }),
   ]),
   Fxb: mapArgs(a => `flex-basis: ${a}`, [
-    fractionToPercentage,
+    normalizeLength,
     lookup({ a: "auto", n: "none" }),
   ]),
   Fxd: mapArgs(
@@ -573,7 +573,7 @@ module.exports = {
   Mb: mapArgs(a => `margin-bottom: ${a}`, lookup({ 0: "0", a: "auto" })),
   Mend: mapArgs(a => `margin-__END__: ${a}`, lookup({ 0: "0", a: "auto" })),
   Mih: mapArgs(a => `min-height: ${a}`, [
-    fractionToPercentage,
+    normalizeLength,
     lookup({
       a: "auto",
       fa: "fill-available",
@@ -583,7 +583,7 @@ module.exports = {
     }),
   ]),
   Miw: mapArgs(a => `min-width: ${a}`, [
-    fractionToPercentage,
+    normalizeLength,
     lookup({
       a: "auto",
       fa: "fill-available",
@@ -691,7 +691,7 @@ module.exports = {
   SkewX: a => `transform: skewX(${a})`,
   SkewY: a => `transform: skewY(${a})`,
   Start: mapArgs(a => `__START__: ${a}`, [
-    fractionToPercentage,
+    normalizeLength,
     lookup({ a: "auto" }),
   ]),
   Stk: mapArgs(a => `stroke: ${a}`, color),
@@ -711,7 +711,7 @@ module.exports = {
     bottom: 0;
     left: 0;
   `,
-  T: mapArgs(a => `top: ${a}`, [fractionToPercentage, lookup({ a: "auto" })]),
+  T: mapArgs(a => `top: ${a}`, [normalizeLength, lookup({ a: "auto" })]),
   Ta: mapArgs(
     a => `text-align: ${a}`,
     lookup({
@@ -819,7 +819,7 @@ module.exports = {
     lookup({ v: "visible", h: "hidden", c: "collapse" }),
   ),
   W: mapArgs(a => `width: ${a}`, [
-    fractionToPercentage,
+    normalizeLength,
     lookup({
       0: "0",
       a: "auto",
