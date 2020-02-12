@@ -77,7 +77,7 @@ const comparePseudos = (a, b) => {
 const extract = code =>
   Array.from(
     code.matchAll(
-      /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<rule>[A-Z][A-Za-z]*)(\((?<args>(([^\(\)]+|(attr|calc|url)\([^\(\)]+\)),)*(([^\(\)]+|(attr|calc|url)\([^\(\)]+\))))\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s\\])|$)/gm,
+      /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<rule>[A-Z][A-Za-z]*)(\((?<args>(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\)),)*(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\))))\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s\\])|$)/gm,
     ),
   )
     .reduce((ms, m) => (ms.some(n => n[0] === m[0]) ? ms : ms.concat([m])), [])
@@ -95,7 +95,9 @@ const extract = code =>
             pseudos: props.context.match(/\:{1,2}[a-z]+/g),
           }
         : null,
-      args: props.args ? props.args.split(",") : [],
+      args: props.args
+        ? Array.from(props.args.matchAll(/(?:[^,]+\([^\)]+\)|[^,]+)/g)).map(([x]) => x)
+        : [],
       pseudos: props.pseudos ? props.pseudos.match(/(\:{1,2}[a-z]+)/g) : null,
     }));
 
