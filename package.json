@@ -21,5 +21,10 @@
   "scripts": {
     "format": "prettier --trailing-comma all --parser babel --write cli.js index.js output.js config/*.js",
     "test": "./cli.js --output test/styles.css --config test/config.js test/index.html && git diff --exit-code test/styles.css"
+  },
+  "devDependencies": {
+    "@types/node": "^13.7.1",
+    "fp-ts": "^2.4.4",
+    "typescript": "^3.7.5"
   }
 }

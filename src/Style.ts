@@ -1,0 +1,60 @@
+import { array, uniq } from "fp-ts/lib/Array";
+import { fromEquals } from "fp-ts/lib/Eq";
+import { Option, getOrElse, option, none, some } from "fp-ts/lib/Option";
+import * as O from "fp-ts/lib/Option";
+import { pipe } from "fp-ts/lib/pipeable";
+import { Context, mkContext } from "./Context";
+import { Pseudo, mkPseudo } from "./Pseudo";
+
+export type Style = {
+  className: string,
+  context: Option<Context>,
+  ruleName: string,
+  args: string[],
+  pseudos: Pseudo[],
+  scope: string,
+};
+
+export const stylesFromCode = (code: string): Style[] => {
+  const matchEq = fromEquals(
+    (a: RegExpMatchArray, b: RegExpMatchArray): boolean => a[0] === b[0]
+  );
+
+  const matches: [string, { [group: string]: string }][] =
+    array.filterMap(
+      uniq(matchEq)(
+        Array.from(
+          code.matchAll(
+            /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<ruleName>[A-Z][A-Za-z]*)(\((?<args>(([^\(\)]+|(attr|calc|url)\([^\(\)]+\)),)*(([^\(\)]+|(attr|calc|url)\([^\(\)]+\))))\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s\\])|$)/gm
+          )
+        )
+      ),
+      match => match.groups
+        ? some([match[0], match.groups])
+        : none
+    );
+
+  return array.map(
+    matches,
+    ([ className, groups ]) => ({
+      className,
+      context: mkContext(groups["context"]),
+      ruleName: groups["ruleName"],
+      args: pipe(
+        O.fromNullable(groups["args"]),
+        O.chain(x => some(
+          Array
+            .from(x.matchAll(/(?:[^,]+\([^\)]+\)|[^,]+)/g))
+            .map(([x]) => x)
+        )),
+        getOrElse(() => <string[]>[])
+      ),
+      pseudos: pipe(
+        O.fromNullable(groups["pseudos"].match(/\:{1,2}[a-z]+/g)),
+        O.chain(x => array.traverse(option)(x, mkPseudo)),
+        getOrElse(() => <Pseudo[]>[])
+      ),
+      scope: groups["scope"] || "default"
+    })
+  );
+};
