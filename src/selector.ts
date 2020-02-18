@@ -1,3 +1,5 @@
+require("css.escape");
+
 import { array } from "fp-ts/lib/Array";
 import { Option, option } from "fp-ts/lib/Option";
 import { Context } from "./Context";
@@ -8,7 +10,11 @@ import * as Op from "./Operator";
 type Spec = { className: string, pseudos: Pseudo[] };
 
 const classWithPseudos = ({ className, pseudos }: Spec): string =>
-  array.reduce(array.map(pseudos, P.cssRep), className, (a, b) => a + b);
+  array.reduce(
+    array.map(pseudos, P.cssRep),
+    CSS.escape(className),
+    (a, b) => a + b
+  );
 
 export const selector = (x: Spec & { context: Option<Context> }) =>
   option.reduceRight(
