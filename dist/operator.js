@@ -11,3 +11,13 @@ exports.mkOperator = (s) => {
             return Option_1.none;
     }
 };
+exports.cssRep = (o) => {
+    switch (o) {
+        case "_":
+            return " ";
+        case "+":
+            return " + ";
+        case ">":
+            return " > ";
+    }
+};

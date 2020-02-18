@@ -1,25 +1,18 @@
-import { Option } from "fp-ts/lib/Option";
+import { array } from "fp-ts/lib/Array";
+import { Option, option } from "fp-ts/lib/Option";
 import { Context } from "./Context";
 import { Pseudo } from "./Pseudo";
+import * as P from "./Pseudo";
+import * as Op from "./Operator";
 
-//const pseudosToCSS = (pseudo: Pseudo[]): string = map(pseudos, pseudoMap
+type Spec = { className: string, pseudos: Pseudo[] };
 
-  /*
-const selector =
-  ({ className: string, pseudos: Pseudo[], context: Option<Context> }): string =>
-  */
+const classWithPseudos = ({ className, pseudos }: Spec): string =>
+  array.reduce(array.map(pseudos, P.cssRep), className, (a, b) => a + b);
 
-
-  /*
-  const classSel = `.${CSS.escape(className)}${(pseudos || [])
-    .map(p => pseudoMap[p])
-    .join("")}`;
-  return ctx
-    ? [
-        `.${CSS.escape(ctx.className)}`,
-        (ctx.pseudos || []).map(p => pseudoMap[p]).join(""),
-        ctx.operator === "_" ? " " : ` ${ctx.operator} `,
-        classSel,
-      ].join("")
-    : classSel;
-   */
+export const selector = (x: Spec & { context: Option<Context> }) =>
+  option.reduceRight(
+    option.map(x.context, c => classWithPseudos(c) + Op.cssRep(c.operator)),
+    classWithPseudos(x),
+    (a, b) => a + b
+  );

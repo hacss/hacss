@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Option_1 = require("fp-ts/lib/Option");
-exports.pseudos = {
+const pseudos = {
     ":a": ":active",
     ":c": ":checked",
     ":d": ":default",
@@ -86,3 +86,4 @@ exports.mkPseudo = (s) => {
             return Option_1.none;
     }
 };
+exports.cssRep = (pseudo) => pseudos[pseudo];

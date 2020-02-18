@@ -12,3 +12,14 @@ export const mkOperator = (s: string): Option<Operator> => {
       return none;
   }
 };
+
+export const cssRep = (o: Operator) => {
+  switch (o) {
+    case "_":
+      return " ";
+    case "+":
+      return " + ";
+    case ">":
+      return " > ";
+  }
+};

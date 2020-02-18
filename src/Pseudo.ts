@@ -1,6 +1,6 @@
 import { Option, some, none } from "fp-ts/lib/Option";
 
-export const pseudos = <const>{
+const pseudos = <const>{
   ":a": ":active",
   ":c": ":checked",
   ":d": ":default",
@@ -88,3 +88,5 @@ export const mkPseudo = (s: string): Option<Pseudo> => {
       return none;
   }
 };
+
+export const cssRep = (pseudo: Pseudo): string => pseudos[pseudo];
