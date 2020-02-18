@@ -25,7 +25,7 @@ export const stylesFromCode = (code: string): Style[] => {
       uniq(matchEq)(
         Array.from(
           code.matchAll(
-            /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<ruleName>[A-Z][A-Za-z]*)(\((?<args>(([^\(\)]+|(attr|calc|url)\([^\(\)]+\)),)*(([^\(\)]+|(attr|calc|url)\([^\(\)]+\))))\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s\\])|$)/gm
+            /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<ruleName>[A-Z][A-Za-z]*)(\((?<args>(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\)),)*(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\))))\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s\\])|$)/gm
           )
         )
       ),
@@ -38,7 +38,10 @@ export const stylesFromCode = (code: string): Style[] => {
     matches,
     ([ className, groups ]) => ({
       className,
-      context: mkContext(groups["context"]),
+      context: pipe(
+        O.fromNullable(groups["context"]),
+        O.chain(mkContext)
+      ),
       ruleName: groups["ruleName"],
       args: pipe(
         O.fromNullable(groups["args"]),
@@ -50,11 +53,15 @@ export const stylesFromCode = (code: string): Style[] => {
         getOrElse(() => <string[]>[])
       ),
       pseudos: pipe(
-        O.fromNullable(groups["pseudos"].match(/\:{1,2}[a-z]+/g)),
+        O.fromNullable(groups["pseudos"]),
+        O.chain(pseudos => O.fromNullable(pseudos.match(/\:{1,2}[a-z]+/g))),
         O.chain(x => array.traverse(option)(x, mkPseudo)),
         getOrElse(() => <Pseudo[]>[])
       ),
-      scope: groups["scope"] || "default"
+      scope: pipe(
+        O.fromNullable(groups["scope"]),
+        O.getOrElse(() => "default")
+      )
     })
   );
 };
