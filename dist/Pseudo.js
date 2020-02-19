@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const Array_1 = require("fp-ts/lib/Array");
 const Option_1 = require("fp-ts/lib/Option");
 const pseudos = {
     ":a": ":active",
@@ -87,3 +88,40 @@ exports.mkPseudo = (s) => {
     }
 };
 exports.cssRep = (pseudo) => pseudos[pseudo];
+const priority = (p) => {
+    switch (p) {
+        case ":li":
+            return 0;
+        case ":vi":
+            return 1;
+        case ":fw":
+            return 2;
+        case ":f":
+            return 3;
+        case ":h":
+            return 4;
+        case ":a":
+            return 5;
+        case ":di":
+            return 6;
+        default:
+            return -1;
+    }
+};
+exports.comparePseudos = (a, b) => {
+    if (a.length !== 0 && b.length === 0) {
+        return 1;
+    }
+    if (a.length === 0 && b.length !== 0) {
+        return -1;
+    }
+    const aix = Math.max.apply(null, Array_1.array.map(a, ap => priority(ap)));
+    const bix = Math.max.apply(null, Array_1.array.map(b, bp => priority(bp)));
+    if (aix < bix) {
+        return -1;
+    }
+    if (aix > bix) {
+        return 1;
+    }
+    return 0;
+};

@@ -1,4 +1,6 @@
+import { array } from "fp-ts/lib/Array";
 import { Option, some, none } from "fp-ts/lib/Option";
+import { Ordering } from "fp-ts/lib/Ordering";
 
 const pseudos = <const>{
   ":a": ":active",
@@ -90,3 +92,42 @@ export const mkPseudo = (s: string): Option<Pseudo> => {
 };
 
 export const cssRep = (pseudo: Pseudo): string => pseudos[pseudo];
+
+const priority = (p: Pseudo): number => {
+  switch (p) {
+    case ":li":
+      return 0;
+    case ":vi":
+      return 1;
+    case ":fw":
+      return 2;
+    case ":f":
+      return 3;
+    case ":h":
+      return 4;
+    case ":a":
+      return 5;
+    case ":di":
+      return 6;
+    default:
+      return -1;
+  }
+};
+
+export const comparePseudos = (a: Pseudo[], b: Pseudo[]): Ordering => {
+  if (a.length !== 0 && b.length === 0) {
+    return 1;
+  }
+  if (a.length === 0 && b.length !== 0) {
+    return -1;
+  }
+  const aix = Math.max.apply(null, array.map(a, ap => priority(ap)));
+  const bix = Math.max.apply(null, array.map(b, bp => priority(bp)));
+  if (aix < bix) {
+    return -1;
+  }
+  if (aix > bix) {
+    return 1;
+  }
+  return 0;
+};
