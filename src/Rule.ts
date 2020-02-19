@@ -1,4 +1,4 @@
-type RuleFn = (...args: string[]) => string;
+export type RuleFn = (...args: string[]) => string;
 
 type O<A> = A | null;
 
