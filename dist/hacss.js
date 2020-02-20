@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Array_1 = require("fp-ts/lib/Array");
+const NonEmptyArray_1 = require("fp-ts/lib/NonEmptyArray");
+const Option_1 = require("fp-ts/lib/Option");
+const O = require("fp-ts/lib/Option");
+const R = require("fp-ts/lib/Record");
+const pipeable_1 = require("fp-ts/lib/pipeable");
+const declarations_1 = require("./declarations");
+const selector_1 = require("./selector");
+const Style_1 = require("./Style");
+const defaultConfig = require("../config/index.js");
+const hacss = (code, config) => pipeable_1.pipe(Style_1.stylesFromCode(code), Array_1.filterMap(style => pipeable_1.pipe(style, declarations_1.default(config), O.chain(decls => Option_1.some([style.scope, `${selector_1.default(style)} { ${decls} }`])))), NonEmptyArray_1.groupBy(([a, b]) => a), R.map(Array_1.map(x => x[1])), x => JSON.stringify(x, null, 2));
+const result = hacss(`<h1 class="foo:a_C(red):h Asdf(hi) Bgc(#fff) Bgc(#eee)--sm">Hello</h1>`, defaultConfig());
+console.log(result);

@@ -16,9 +16,11 @@ const classWithPseudos = ({ className, pseudos }: Spec): string =>
     (a, b) => a + b
   );
 
-export const selector = (x: Spec & { context: Option<Context> }) =>
+const selector = (x: Spec & { context: Option<Context> }) =>
   option.reduceRight(
     option.map(x.context, c => classWithPseudos(c) + Op.cssRep(c.operator)),
     classWithPseudos(x),
     (a, b) => a + b
   );
+
+export default selector;

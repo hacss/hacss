@@ -6,4 +6,5 @@ const Option_1 = require("fp-ts/lib/Option");
 const P = require("./Pseudo");
 const Op = require("./Operator");
 const classWithPseudos = ({ className, pseudos }) => Array_1.array.reduce(Array_1.array.map(pseudos, P.cssRep), CSS.escape(className), (a, b) => a + b);
-exports.selector = (x) => Option_1.option.reduceRight(Option_1.option.map(x.context, c => classWithPseudos(c) + Op.cssRep(c.operator)), classWithPseudos(x), (a, b) => a + b);
+const selector = (x) => Option_1.option.reduceRight(Option_1.option.map(x.context, c => classWithPseudos(c) + Op.cssRep(c.operator)), classWithPseudos(x), (a, b) => a + b);
+exports.default = selector;
