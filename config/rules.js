@@ -170,7 +170,8 @@ module.exports = {
   Bdrststart: a => `border-top-__START__-radius: ${a}`,
   Bds: mapArgs(a => `border-style: ${a}`, lookup(borderStyles)),
   Bdsp: mapArgs(
-    (a, b) => `border-spacing: ${a} ${b}`,
+    (a, b = "") => `border-spacing: ${a} ${b}`,
+    lookup({ i: "inherit" }),
     lookup({ i: "inherit" }),
   ),
   Bdstart: a => `border-__START__: ${a}`,
@@ -210,7 +211,7 @@ module.exports = {
     lookup({ bb: "border-box", cb: "content-box", pb: "padding-box" }),
   ),
   Bgp: mapArgs(
-    (a, b) => `background-position: ${a} ${b}`,
+    (a, b = "") => `background-position: ${a} ${b}`,
     lookup({
       start_t: "__START__ 0",
       end_t: "__END__ 0",

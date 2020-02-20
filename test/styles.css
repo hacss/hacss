@@ -114,6 +114,36 @@
 .Bgc\(\#009\) {
   background-color: #009;
 }
+.Bdsp\(1px\) {
+  border-spacing: 1px;
+}
+.Fz\(16px\) {
+  font-size: 16px;
+}
+.C\(\#333\) {
+  color: #333;
+}
+.Fw\(b\) {
+  font-weight: bold;
+}
+.Bgc\(\#f5925a\) {
+  background-color: #f5925a;
+}
+.Bgc\(\#92f55a\) {
+  background-color: #92f55a;
+}
+.Bgc\(\#5a92f5\) {
+  background-color: #5a92f5;
+}
+.Bgc\(\#ffdfa7\) {
+  background-color: #ffdfa7;
+}
+.Bgc\(\#dfffa7\) {
+  background-color: #dfffa7;
+}
+.Bgc\(\#a7dfff\) {
+  background-color: #a7dfff;
+}
 .Bgc\(\#cdc\)\:h:hover {
   background-color: #cdc;
 }

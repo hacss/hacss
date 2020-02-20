@@ -49,6 +49,9 @@ exports.mapArgs = (f, ...fs) => (...args) =>
     null,
     args.map((a, i) => {
       const fn = fs[i];
+      if (!fn) {
+        return a;
+      }
       if (typeof fn === "function") {
         return fs[i](a);
       }
