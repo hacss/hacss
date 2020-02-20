@@ -12,7 +12,7 @@ type Spec = { className: string, pseudos: Pseudo[] };
 const classWithPseudos = ({ className, pseudos }: Spec): string =>
   array.reduce(
     array.map(pseudos, P.cssRep),
-    CSS.escape(className),
+    `.${CSS.escape(className)}`,
     (a, b) => a + b
   );
 
