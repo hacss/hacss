@@ -13,8 +13,6 @@ import selector from "./selector";
 import { ConfigSpec } from "./Config";
 import { stylesFromCode } from "./Style";
 
-const defaultConfig = require("../config/index.js");
-
 const hacss = (code: string, config: ConfigSpec): string => pipe(
   stylesFromCode(code),
   filterMap(style => pipe(
@@ -38,8 +36,4 @@ const hacss = (code: string, config: ConfigSpec): string => pipe(
   x => prettier.format(x, { parser: "css" })
 );
 
-const result =
-  hacss(`<h1 class="foo:a_C(red):h Asdf(hi) Bgc(#fff) Bgc(#eee)--sm">Hello</h1>`, defaultConfig());
-
-
-console.log(result);
+export default hacss;
