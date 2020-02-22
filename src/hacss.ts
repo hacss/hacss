@@ -1,4 +1,5 @@
 import { filterMap, map, reduce, sortBy } from "fp-ts/lib/Array";
+import { flow } from "fp-ts/lib/function";
 import { groupBy } from "fp-ts/lib/NonEmptyArray";
 import { some } from "fp-ts/lib/Option";
 import * as O from "fp-ts/lib/Option";
@@ -21,7 +22,7 @@ const hacss = (code: string, config: ConfigSpec): string => pipe(
     O.chain(decls => some([style.scope, `${selector(style)} { ${decls} }`]))
   )),
   groupBy(([a, b]) => a),
-  R.map(x => pipe(x, map(x => x[1]), reduce("", (a, b) => a + "\n" + b))),
+  R.map(flow(map(x => x[1]), reduce("", (a, b) => a + "\n" + b))),
   R.toArray,
   sortBy([
     fromCompare(([a], [b]) => a === "default" ? -1 : b === "default" ? 1 : 0)
