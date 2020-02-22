@@ -1,4 +1,4 @@
-import { Option, some, none } from "fp-ts/lib/Option";
+import { Option, none, some } from "fp-ts/lib/Option";
 
 export type Operator = "_" | "+" | ">";
 
