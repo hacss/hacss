@@ -19,9 +19,9 @@ const path = require("path");
 const Config_1 = require("./Config");
 const hacss_1 = require("./hacss");
 const localPath = (p) => pipeable_1.pipe(IOE.tryCatch(() => process.cwd(), Either_1.toError), IOE.map(d => path.join(d, p)));
-const lookupArg = (names) => pipeable_1.pipe(() => process.argv, IO_1.map(args => pipeable_1.pipe(args, Array_1.findIndex((a) => Array_1.elem(Eq_1.eqString)(a, names)), O.chain(i => Array_1.lookup(i + 1, args)), E.fromOption(() => new Error(`Argument not specified: ${names.join(", ")}`)))));
+const lookupArg = (names) => pipeable_1.pipe(() => process.argv, IO_1.map(args => pipeable_1.pipe(args, Array_1.findIndex((a) => Array_1.elem(Eq_1.eqString)(a, names)), O.chain(i => Array_1.lookup(i + 1, args)))));
 const loadConfig = function_1.flow(localPath, IOE.chain(p => IOE.tryCatch(() => require(p), Either_1.toError)), IOE.chain(function_1.flow(Config_1.customConfig, E.mapLeft(Either_1.toError), IOE.fromEither)));
-const config = IOE.alt(() => IOE.right(Config_1.defaultConfig))(IOE.alt(() => loadConfig("hacss.config.js"))(pipeable_1.pipe(lookupArg(["-c", "--config"]), IOE.chain(loadConfig))));
+const config = IOE.alt(() => IOE.right(Config_1.defaultConfig))(IOE.alt(() => loadConfig("hacss.config.js"))(pipeable_1.pipe(lookupArg(["-c", "--config"]), IO_1.map(E.fromOption(() => new Error("Config not specified."))), IOE.chain(loadConfig))));
 const logUsage = Console_1.log(`
   Usage: hacss [--config <config-file>] [--output <output-file>] <sources>
 `.trim());

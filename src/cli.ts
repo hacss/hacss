@@ -7,6 +7,7 @@ import { eqString } from "fp-ts/lib/Eq";
 import { IO, map as mapIO } from "fp-ts/lib/IO";
 import { IOEither } from "fp-ts/lib/IOEither";
 import * as IOE from "fp-ts/lib/IOEither";
+import { Option } from "fp-ts/lib/Option";
 import * as O from "fp-ts/lib/Option";
 import { TaskEither, taskEither } from "fp-ts/lib/TaskEither";
 import * as TE from "fp-ts/lib/TaskEither";
@@ -24,17 +25,14 @@ const localPath = (p: string): IOEither<Error, string> => pipe(
   IOE.map(d => path.join(d, p))
 );
 
-const lookupArg = (names: string[]): IOEither<Error, string> => pipe(
+const lookupArg = (names: string[]): IO<Option<string>> => pipe(
   () => process.argv,
   mapIO(
     args =>
       pipe(
         args,
         findIndex((a: string) => elem(eqString)(a, names)),
-        O.chain(i => lookup(i + 1, args)),
-        E.fromOption(
-          () => new Error(`Argument not specified: ${names.join(", ")}`)
-        )
+        O.chain(i => lookup(i + 1, args))
       )
   )
 );
@@ -49,6 +47,7 @@ const config: IOEither<Error, ConfigSpec> =
   IOE.alt(() => IOE.right<Error, ConfigSpec>(defaultConfig))(
     IOE.alt(() => loadConfig("hacss.config.js"))(pipe(
       lookupArg(["-c", "--config"]),
+      mapIO(E.fromOption(() => new Error("Config not specified."))),
       IOE.chain(loadConfig)
     ))
   );
@@ -79,7 +78,10 @@ const sources: TaskEither<Error, string> = pipe(
 );
 
 pipe(
-  sequenceT(taskEither)(sources, TE.fromIOEither(config)),
+  sequenceT(taskEither)(
+    sources,
+    TE.fromIOEither(config)
+  ),
   TE.map(([ sources, config ]) => console.log(hacss(sources, config))),
   TE.mapLeft(console.error)
 )();
