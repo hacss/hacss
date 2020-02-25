@@ -1,3 +1,7 @@
+import { Either, left, right } from "fp-ts/lib/Either";
+import * as E from "fp-ts/lib/Either";
+import { keys } from "fp-ts/lib/Record";
+import { flow } from "fp-ts/lib/function";
 import { RuleSpec } from "../Rule";
 import rules from "./rules";
 import scopes from "./scopes";
@@ -14,35 +18,38 @@ export type Config
   | ((defaultConfig: ConfigSpec) => Partial<ConfigSpec>)
   ;
 
-const defaultConfig: ConfigSpec = <const>{
+export const defaultConfig: ConfigSpec = {
   rules,
   scopes,
   globalMapArg: (x: string) => x,
   globalMapOutput: (x: string) => x
 };
 
-export const customConfig = (config: Config): ConfigSpec => {
-  let custom;
-  switch (typeof config) {
-    case "function":
-      custom = config(defaultConfig);
-      break;
-    case "object":
-      custom = config;
-      break;
-    default:
-      throw new Error("Invalid config type.");
+const mergeConfigWithDefault = (config: Partial<ConfigSpec>): ConfigSpec => ({
+  globalMapArg: config.globalMapArg || defaultConfig.globalMapArg,
+  globalMapOutput: config.globalMapOutput || defaultConfig.globalMapOutput,
+  rules: {
+    ...defaultConfig.rules,
+    ...config.rules
+  },
+  scopes: {
+    ...defaultConfig.scopes,
+    ...config.scopes
   }
-  return {
-    globalMapArg: custom.globalMapArg || defaultConfig.globalMapArg,
-    globalMapOutput: custom.globalMapOutput || defaultConfig.globalMapOutput,
-    scopes: {
-      ...defaultConfig.scopes,
-      ...custom.scopes
-    },
-    rules: {
-      ...defaultConfig.rules,
-      ...custom.rules
-    }
-  };
-};
+});
+
+export const customConfig: ((config: Config) => Either<string, ConfigSpec>) =
+  flow(
+    E.fromNullable("Configuration cannot be null."),
+    E.chain(c => {
+      switch (typeof c) {
+        case "object":
+          return right(c);
+        case "function":
+          return right(c(defaultConfig));
+        default:
+          return left("Configuration must be either an object or a function.");
+      }
+    }),
+    E.map(mergeConfigWithDefault)
+  );

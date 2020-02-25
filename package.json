@@ -24,6 +24,7 @@
     "test": "./cli.js --output test/styles.css --config test/config.js test/index.html && git diff --exit-code test/styles.css"
   },
   "devDependencies": {
+    "@types/glob": "^7.1.1",
     "@types/node": "^13.7.1",
     "@types/prettier": "^1.19.0",
     "typescript": "^3.7.5"

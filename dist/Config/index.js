@@ -1,35 +1,35 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const Either_1 = require("fp-ts/lib/Either");
+const E = require("fp-ts/lib/Either");
+const function_1 = require("fp-ts/lib/function");
 const rules_1 = require("./rules");
 const scopes_1 = require("./scopes");
-const defaultConfig = {
+exports.defaultConfig = {
     rules: rules_1.default,
     scopes: scopes_1.default,
     globalMapArg: (x) => x,
     globalMapOutput: (x) => x
 };
-exports.customConfig = (config) => {
-    let custom;
-    switch (typeof config) {
-        case "function":
-            custom = config(defaultConfig);
-            break;
-        case "object":
-            custom = config;
-            break;
-        default:
-            throw new Error("Invalid config type.");
+const mergeConfigWithDefault = (config) => ({
+    globalMapArg: config.globalMapArg || exports.defaultConfig.globalMapArg,
+    globalMapOutput: config.globalMapOutput || exports.defaultConfig.globalMapOutput,
+    rules: {
+        ...exports.defaultConfig.rules,
+        ...config.rules
+    },
+    scopes: {
+        ...exports.defaultConfig.scopes,
+        ...config.scopes
     }
-    return {
-        globalMapArg: custom.globalMapArg || defaultConfig.globalMapArg,
-        globalMapOutput: custom.globalMapOutput || defaultConfig.globalMapOutput,
-        scopes: {
-            ...defaultConfig.scopes,
-            ...custom.scopes
-        },
-        rules: {
-            ...defaultConfig.rules,
-            ...custom.rules
-        }
-    };
-};
+});
+exports.customConfig = function_1.flow(E.fromNullable("Configuration cannot be null."), E.chain(c => {
+    switch (typeof c) {
+        case "object":
+            return Either_1.right(c);
+        case "function":
+            return Either_1.right(c(exports.defaultConfig));
+        default:
+            return Either_1.left("Configuration must be either an object or a function.");
+    }
+}), E.map(mergeConfigWithDefault));
