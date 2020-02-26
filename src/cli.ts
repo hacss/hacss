@@ -13,9 +13,10 @@ import { TaskEither, taskEither } from "fp-ts/lib/TaskEither";
 import * as TE from "fp-ts/lib/TaskEither";
 import { flow } from "fp-ts/lib/function";
 import { pipe } from "fp-ts/lib/pipeable";
-import { readFile, writeFile } from "fs";
+import { createWriteStream, readFile } from "fs";
 import * as glob from "glob";
 import * as path from "path";
+import { Writable } from "stream";
 import { promisify } from "util";
 import { ConfigSpec, customConfig, defaultConfig } from "./Config";
 import hacss from "./hacss";
@@ -77,11 +78,24 @@ const sources: TaskEither<Error, string> = pipe(
   TE.map(reduce("", (a, b) => a + "\n" + b))
 );
 
+const createWriteStreamSafe = (f: string): IOEither<Error, Writable> =>
+  IOE.tryCatch(() => createWriteStream(f), toError);
+
+const outputStream: IOEither<Error, Writable> =
+  IOE.alt(() => IOE.right<Error, Writable>(process.stdout))(
+    pipe(
+      lookupArg(["-o", "--output"]),
+      mapIO(E.fromOption(() => new Error("Output not specified."))),
+      IOE.chain(createWriteStreamSafe)
+    )
+  );
+
 pipe(
   sequenceT(taskEither)(
     sources,
-    TE.fromIOEither(config)
+    TE.fromIOEither(config),
+    TE.fromIOEither(outputStream)
   ),
-  TE.map(([ sources, config ]) => console.log(hacss(sources, config))),
+  TE.map(([ sources, config, output ]) => output.write(hacss(sources, config))),
   TE.mapLeft(console.error)
 )();

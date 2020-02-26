@@ -28,4 +28,6 @@ const logUsage = Console_1.log(`
 const globT = TE.taskify(glob);
 const readFileUTF8T = function_1.flow(TE.taskify(fs_1.readFile), TE.map((b) => b.toString()), TE.mapLeft(Either_1.toError));
 const sources = pipeable_1.pipe(() => process.argv, IO_1.map(function_1.flow(Array_1.last, E.fromOption(() => new Error("Sources not specified.")))), TE.fromIOEither, TE.chain(globT), TE.chain(function_1.flow(Array_1.map(readFileUTF8T), Array_1.array.sequence(TE.taskEither))), TE.map(Array_1.reduce("", (a, b) => a + "\n" + b)));
-pipeable_1.pipe(Apply_1.sequenceT(TaskEither_1.taskEither)(sources, TE.fromIOEither(config)), TE.map(([sources, config]) => console.log(hacss_1.default(sources, config))), TE.mapLeft(console.error))();
+const createWriteStreamSafe = (f) => IOE.tryCatch(() => fs_1.createWriteStream(f), Either_1.toError);
+const outputStream = IOE.alt(() => IOE.right(process.stdout))(pipeable_1.pipe(lookupArg(["-o", "--output"]), IO_1.map(E.fromOption(() => new Error("Output not specified."))), IOE.chain(createWriteStreamSafe)));
+pipeable_1.pipe(Apply_1.sequenceT(TaskEither_1.taskEither)(sources, TE.fromIOEither(config), TE.fromIOEither(outputStream)), TE.map(([sources, config, output]) => output.write(hacss_1.default(sources, config))), TE.mapLeft(console.error))();
