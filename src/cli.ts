@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { array, elem, findIndex, last, lookup, map, reduce } from "fp-ts/lib/Array";
 import { sequenceT } from "fp-ts/lib/Apply";
 import { log } from "fp-ts/lib/Console";
