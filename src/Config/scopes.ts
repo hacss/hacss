@@ -1,5 +1,5 @@
 const scopes = <const>{
-  "default": (content: string) => content,
+  default: (content: string) => content,
   sm: (content: string) => {
     return `@media only screen and (max-width: 599px) { ${content} }`;
   },

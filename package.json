@@ -20,7 +20,7 @@
     "prettier": "^1.19.1"
   },
   "scripts": {
-    "format": "prettier --trailing-comma all --parser babel --write cli.js index.js output.js config/*.js",
+    "format": "prettier --trailing-comma all --parser typescript --write src/**/*.ts",
     "test": "node ./dist/cli.js --output test/styles.css --config test/config.js test/index.html && git diff --exit-code test/styles.css"
   },
   "devDependencies": {
