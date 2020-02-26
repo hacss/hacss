@@ -1,6 +1,15 @@
 #!/usr/bin/env node
 
-import { array, elem, findIndex, last, lookup, map, reduce } from "fp-ts/lib/Array";
+import {
+  array,
+  dropLeft,
+  elem,
+  findIndex,
+  last,
+  lookup,
+  map,
+  reduce
+} from "fp-ts/lib/Array";
 import { sequenceT } from "fp-ts/lib/Apply";
 import { log } from "fp-ts/lib/Console";
 import { toError } from "fp-ts/lib/Either";
@@ -71,6 +80,7 @@ const readFileUTF8T: (path: string) => TaskEither<Error, string> = flow(
 const sources: TaskEither<Error, string> = pipe(
   () => process.argv,
   mapIO(flow(
+    dropLeft(2),
     last,
     E.fromOption(() => new Error("Sources not specified."))
   )),
