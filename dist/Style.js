@@ -11,7 +11,7 @@ const Context_1 = require("./Context");
 const Pseudo_1 = require("./Pseudo");
 exports.stylesFromCode = (code) => {
     const matchEq = Eq_1.fromEquals((a, b) => a[0] === b[0]);
-    const matches = Array_1.array.filterMap(Array_1.uniq(matchEq)(Array.from(code.matchAll(/(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<ruleName>[A-Z][A-Za-z]*)(\((?<args>(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\)),)*(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\))))\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=(['"\s\\])|$)/gm))), match => match.groups
+    const matches = Array_1.array.filterMap(Array_1.uniq(matchEq)(Array.from(code.matchAll(/(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<ruleName>[A-Z][A-Za-z]*)(\((?<args>(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\)),)*(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\))))\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?(?=\W|$)/gm))), match => match.groups
         ? Option_1.some([match[0], match.groups])
         : Option_1.none);
     const styles = Array_1.array.map(matches, ([className, groups]) => ({
