@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const scopes = {
-    "default": (content) => content,
+    default: (content) => content,
     sm: (content) => {
         return `@media only screen and (max-width: 599px) { ${content} }`;
     },

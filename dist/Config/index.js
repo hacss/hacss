@@ -9,19 +9,19 @@ exports.defaultConfig = {
     rules: rules_1.default,
     scopes: scopes_1.default,
     globalMapArg: (x) => x,
-    globalMapOutput: (x) => x
+    globalMapOutput: (x) => x,
 };
 const mergeConfigWithDefault = (config) => ({
     globalMapArg: config.globalMapArg || exports.defaultConfig.globalMapArg,
     globalMapOutput: config.globalMapOutput || exports.defaultConfig.globalMapOutput,
     rules: {
         ...exports.defaultConfig.rules,
-        ...config.rules
+        ...config.rules,
     },
     scopes: {
         ...exports.defaultConfig.scopes,
-        ...config.scopes
-    }
+        ...config.scopes,
+    },
 });
 exports.customConfig = function_1.flow(E.fromNullable("Configuration cannot be null."), E.chain(c => {
     switch (typeof c) {
