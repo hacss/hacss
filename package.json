@@ -8,8 +8,8 @@
   "engines": {
     "node": ">=12.4.0"
   },
-  "main": "index.js",
-  "bin": "cli.js",
+  "main": "./dist/hacss.js",
+  "bin": "./dist/cli.js",
   "dependencies": {
     "css.escape": "^1.5.1",
     "fp-ts": "^2.5.1",
@@ -21,6 +21,7 @@
   },
   "scripts": {
     "format": "prettier --trailing-comma all --parser typescript --write src/**/*.ts",
+    "prepublishOnly": "tsc",
     "test": "node ./dist/cli.js --output test/styles.css --config test/config.js test/index.html && git diff --exit-code test/styles.css"
   },
   "devDependencies": {
