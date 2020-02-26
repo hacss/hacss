@@ -1,5 +1,6 @@
 import { array } from "fp-ts/lib/Array";
 import { Option, some, none } from "fp-ts/lib/Option";
+import { fromCompare } from "fp-ts/lib/Ord";
 import { Ordering } from "fp-ts/lib/Ordering";
 
 const pseudos = <const>{
@@ -114,7 +115,7 @@ const priority = (p: Pseudo): number => {
   }
 };
 
-export const comparePseudos = (a: Pseudo[], b: Pseudo[]): Ordering => {
+const comparePseudos = (a: Pseudo[], b: Pseudo[]): Ordering => {
   if (a.length !== 0 && b.length === 0) {
     return 1;
   }
@@ -131,3 +132,5 @@ export const comparePseudos = (a: Pseudo[], b: Pseudo[]): Ordering => {
   }
   return 0;
 };
+
+export const ordPseudos = fromCompare(comparePseudos);

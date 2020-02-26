@@ -1,3 +1,5 @@
+import { flow } from "fp-ts/lib/function";
+
 const colorPresets = <const>{
   t: "transparent",
   cc: "currentColor",
@@ -29,18 +31,17 @@ export const color = (c: string): string => {
   return c;
 };
 
-export const normalizeLength = (value: string): string =>
-  (
-    value.startsWith("calc(")
+export const normalizeLength: (value: string) => string = flow(
+  value => value.replace(/(?<num>[0-9]+)\/(?<den>[0-9]+)/g, (...args) => {
+    const { num, den } = args[args.length - 1];
+    return `${Math.round((num/den)*10000) / 100}%`;
+  }),
+  value => value.startsWith("calc(")
     ? value
         .replace(/[\+\-\*\/](?=\S)/g, op => `${op} `)
         .replace(/(?<=\S)[\+\-\*\/]/g, op => ` ${op}`)
     : value
-  )
-    .replace(/(?<num>[0-9]+)\/(?<den>[0-9]+)/g, (...args) => {
-      const { num, den } = args[args.length - 1];
-      return `${Math.round((num/den)*10000) / 100}%`;
-    });
+);
 
 export const lookup = (m: { [k: string]: string }) => (k: string) => m[k] || k;
 

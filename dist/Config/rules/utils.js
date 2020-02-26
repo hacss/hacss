@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const function_1 = require("fp-ts/lib/function");
 const colorPresets = {
     t: "transparent",
     cc: "currentColor",
@@ -25,15 +26,14 @@ exports.color = (c) => {
     }
     return c;
 };
-exports.normalizeLength = (value) => (value.startsWith("calc(")
+exports.normalizeLength = function_1.flow(value => value.replace(/(?<num>[0-9]+)\/(?<den>[0-9]+)/g, (...args) => {
+    const { num, den } = args[args.length - 1];
+    return `${Math.round((num / den) * 10000) / 100}%`;
+}), value => value.startsWith("calc(")
     ? value
         .replace(/[\+\-\*\/](?=\S)/g, op => `${op} `)
         .replace(/(?<=\S)[\+\-\*\/]/g, op => ` ${op}`)
-    : value)
-    .replace(/(?<num>[0-9]+)\/(?<den>[0-9]+)/g, (...args) => {
-    const { num, den } = args[args.length - 1];
-    return `${Math.round((num / den) * 10000) / 100}%`;
-});
+    : value);
 exports.lookup = (m) => (k) => m[k] || k;
 exports.mapArgs = (f, ...fs) => (...args) => f.apply(null, args.map((a, i) => {
     const fn = fs[i];

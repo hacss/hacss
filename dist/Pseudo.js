@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Array_1 = require("fp-ts/lib/Array");
 const Option_1 = require("fp-ts/lib/Option");
+const Ord_1 = require("fp-ts/lib/Ord");
 const pseudos = {
     ":a": ":active",
     ":c": ":checked",
@@ -108,7 +109,7 @@ const priority = (p) => {
             return -1;
     }
 };
-exports.comparePseudos = (a, b) => {
+const comparePseudos = (a, b) => {
     if (a.length !== 0 && b.length === 0) {
         return 1;
     }
@@ -125,3 +126,4 @@ exports.comparePseudos = (a, b) => {
     }
     return 0;
 };
+exports.ordPseudos = Ord_1.fromCompare(comparePseudos);

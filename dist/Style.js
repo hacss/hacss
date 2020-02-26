@@ -5,6 +5,7 @@ const Eq_1 = require("fp-ts/lib/Eq");
 const Option_1 = require("fp-ts/lib/Option");
 const O = require("fp-ts/lib/Option");
 const Ord_1 = require("fp-ts/lib/Ord");
+const function_1 = require("fp-ts/lib/function");
 const pipeable_1 = require("fp-ts/lib/pipeable");
 const Context_1 = require("./Context");
 const Pseudo_1 = require("./Pseudo");
@@ -23,7 +24,10 @@ exports.stylesFromCode = (code) => {
         pseudos: pipeable_1.pipe(O.fromNullable(groups["pseudos"]), O.chain(pseudos => O.fromNullable(pseudos.match(/\:{1,2}[a-z]+/g))), O.chain(x => Array_1.array.traverse(Option_1.option)(x, Pseudo_1.mkPseudo)), Option_1.getOrElse(() => [])),
         scope: pipeable_1.pipe(O.fromNullable(groups["scope"]), O.getOrElse(() => "default"))
     }));
+    const getStyleContextPseudos = function_1.flow(x => x.context, O.map(c => c.pseudos), Option_1.getOrElse(() => []));
+    const getStylePseudos = (x) => x.pseudos;
     return Array_1.sortBy([
-        Ord_1.ord.contramap(Ord_1.fromCompare(Pseudo_1.comparePseudos), (s) => s.pseudos)
+        Ord_1.ord.contramap(Pseudo_1.ordPseudos, getStyleContextPseudos),
+        Ord_1.ord.contramap(Pseudo_1.ordPseudos, getStylePseudos)
     ])(styles);
 };

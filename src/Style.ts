@@ -2,10 +2,11 @@ import { array, sortBy, uniq } from "fp-ts/lib/Array";
 import { fromEquals } from "fp-ts/lib/Eq";
 import { Option, getOrElse, option, none, some } from "fp-ts/lib/Option";
 import * as O from "fp-ts/lib/Option";
-import { fromCompare, ord } from "fp-ts/lib/Ord";
+import { ord } from "fp-ts/lib/Ord";
+import { flow } from "fp-ts/lib/function";
 import { pipe } from "fp-ts/lib/pipeable";
 import { Context, mkContext } from "./Context";
-import { Pseudo, comparePseudos, mkPseudo } from "./Pseudo";
+import { Pseudo, mkPseudo, ordPseudos } from "./Pseudo";
 
 export type Style = {
   className: string,
@@ -66,7 +67,22 @@ export const stylesFromCode = (code: string): Style[] => {
     })
   );
 
+  const getStyleContextPseudos: (x: Style) => Pseudo[] = flow(
+    x => x.context,
+    O.map(c => c.pseudos),
+    getOrElse(() => <Pseudo[]>[])
+  );
+
+  const getStylePseudos = (x: Style): Pseudo[] => x.pseudos;
+
   return sortBy([
-    ord.contramap(fromCompare(comparePseudos), (s: Style) => s.pseudos)
+    ord.contramap(
+      ordPseudos,
+      getStyleContextPseudos
+    ),
+    ord.contramap(
+      ordPseudos,
+      getStylePseudos
+    )
   ])(styles);
 };
