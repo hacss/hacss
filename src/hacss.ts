@@ -1,17 +1,17 @@
 import { filterMap, map, reduce, sortBy } from "fp-ts/lib/Array";
 import { flow } from "fp-ts/lib/function";
 import { groupBy } from "fp-ts/lib/NonEmptyArray";
-import { some } from "fp-ts/lib/Option";
 import * as O from "fp-ts/lib/Option";
+import { some } from "fp-ts/lib/Option";
 import { fromCompare } from "fp-ts/lib/Ord";
-import * as R from "fp-ts/lib/Record";
 import { pipe } from "fp-ts/lib/pipeable";
+import * as R from "fp-ts/lib/Record";
 import * as postcss from "postcss";
 import * as nested from "postcss-nested";
 import * as prettier from "prettier";
+import { ConfigSpec } from "./Config";
 import declarations from "./declarations";
 import selector from "./selector";
-import { ConfigSpec } from "./Config";
 import { stylesFromCode } from "./Style";
 
 const hacss = (code: string, config: ConfigSpec): string => pipe(

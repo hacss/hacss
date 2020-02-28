@@ -1,7 +1,6 @@
-import { Option, chain, fromNullable, map, none, some } from "fp-ts/lib/Option";
+import { chain, fromNullable, map, none, Option, some } from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/pipeable";
 import { ConfigSpec } from "./Config";
-import { RuleSpec } from "./Rule";
 import { Style } from "./Style";
 
 const declarations =

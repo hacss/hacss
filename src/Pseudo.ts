@@ -1,5 +1,5 @@
 import { array } from "fp-ts/lib/Array";
-import { Option, some, none } from "fp-ts/lib/Option";
+import { none, Option, some } from "fp-ts/lib/Option";
 import { fromCompare } from "fp-ts/lib/Ord";
 import { Ordering } from "fp-ts/lib/Ordering";
 

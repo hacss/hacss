@@ -2,15 +2,12 @@ import { sequenceT } from "fp-ts/lib/Apply";
 import { array, chunksOf, dropLeft, filterMap, foldLeft, head } from "fp-ts/lib/Array";
 import * as E from "fp-ts/lib/Either";
 import { Either } from "fp-ts/lib/Either";
-import { map as mapIO } from "fp-ts/lib/IO";
-import { rightIO } from "fp-ts/lib/IOEither";
-import * as IOE from "fp-ts/lib/IOEither";
-import { Option, none, option, some } from "fp-ts/lib/Option";
+import { flow } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
+import { none, Option, option, some } from "fp-ts/lib/Option";
+import { pipe } from "fp-ts/lib/pipeable";
 import * as R from "fp-ts/lib/Record";
 import * as TE from "fp-ts/lib/TaskEither";
-import { flow } from "fp-ts/lib/function";
-import { pipe } from "fp-ts/lib/pipeable";
 import { Args, build } from "./build";
 
 const mapArgName = (n: string): Option<string> => {

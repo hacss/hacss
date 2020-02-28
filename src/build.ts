@@ -1,32 +1,19 @@
-import {
-  array,
-  dropLeft,
-  elem,
-  findIndex,
-  last,
-  lookup,
-  map,
-  reduce
-} from "fp-ts/lib/Array";
 import { sequenceT } from "fp-ts/lib/Apply";
-import { log } from "fp-ts/lib/Console";
-import { toError } from "fp-ts/lib/Either";
+import { array, map, reduce } from "fp-ts/lib/Array";
 import * as E from "fp-ts/lib/Either";
-import { eqString } from "fp-ts/lib/Eq";
-import { IO, map as mapIO } from "fp-ts/lib/IO";
-import { IOEither } from "fp-ts/lib/IOEither";
-import * as IOE from "fp-ts/lib/IOEither";
-import { Option } from "fp-ts/lib/Option";
-import * as O from "fp-ts/lib/Option";
-import { TaskEither, taskEither } from "fp-ts/lib/TaskEither";
-import * as TE from "fp-ts/lib/TaskEither";
+import { toError } from "fp-ts/lib/Either";
 import { flow } from "fp-ts/lib/function";
+import * as IOE from "fp-ts/lib/IOEither";
+import { IOEither } from "fp-ts/lib/IOEither";
+import * as O from "fp-ts/lib/Option";
+import { Option } from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/pipeable";
+import * as TE from "fp-ts/lib/TaskEither";
+import { TaskEither, taskEither } from "fp-ts/lib/TaskEither";
 import { createWriteStream, existsSync, readFile } from "fs";
 import * as glob from "glob";
 import * as path from "path";
 import { Writable } from "stream";
-import { promisify } from "util";
 import { ConfigSpec, customConfig, defaultConfig } from "./Config";
 import hacss from "./hacss";
 

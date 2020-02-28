@@ -1,6 +1,5 @@
-import { Either, left, right } from "fp-ts/lib/Either";
 import * as E from "fp-ts/lib/Either";
-import { keys } from "fp-ts/lib/Record";
+import { Either, left, right } from "fp-ts/lib/Either";
 import { flow } from "fp-ts/lib/function";
 import { RuleSpec } from "../Rule";
 import rules from "./rules";

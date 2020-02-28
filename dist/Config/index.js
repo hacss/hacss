@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Either_1 = require("fp-ts/lib/Either");
 const E = require("fp-ts/lib/Either");
+const Either_1 = require("fp-ts/lib/Either");
 const function_1 = require("fp-ts/lib/function");
 const rules_1 = require("./rules");
 const scopes_1 = require("./scopes");
