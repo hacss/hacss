@@ -22,8 +22,8 @@
   "scripts": {
     "format": "prettier --trailing-comma all --parser typescript --write src/**/*.ts",
     "imports": "organize-imports-cli src/*.ts src/**/*.ts",
-    "prepublishOnly": "tsc",
-    "test": "node ./dist/cli.js --output test/styles.css --config test/config.js test/index.html && git diff --exit-code test/styles.css"
+    "prepublish": "tsc",
+    "test": "tsc && node ./dist/cli.js --output test/styles.css --config test/config.js test/index.html && git diff --exit-code test/styles.css"
   },
   "devDependencies": {
     "@types/glob": "^7.1.1",
