@@ -22,7 +22,7 @@ import { TaskEither, taskEither } from "fp-ts/lib/TaskEither";
 import * as TE from "fp-ts/lib/TaskEither";
 import { flow } from "fp-ts/lib/function";
 import { pipe } from "fp-ts/lib/pipeable";
-import { createWriteStream, readFile } from "fs";
+import { createWriteStream, existsSync, readFile } from "fs";
 import * as glob from "glob";
 import * as path from "path";
 import { Writable } from "stream";
@@ -30,14 +30,17 @@ import { promisify } from "util";
 import { ConfigSpec, customConfig, defaultConfig } from "./Config";
 import hacss from "./hacss";
 
-const localPath = (p: string): IOEither<Error, string> => pipe(
+const resolvePath = (p: string): IOEither<Error, string> => pipe(
   IOE.tryCatch(() => process.cwd(), toError),
-  IOE.map(d => path.join(d, p))
+  IOE.map(d => path.join(d, p)),
+  IOE.filterOrElse(
+    p => existsSync(p),
+    p => new Error(`Does not exist: ${p}`)
+  )
 );
 
-const loadConfig: ((file: string) => IOEither<Error, ConfigSpec>) = flow(
-  localPath,
-  IOE.chain(p => IOE.tryCatch(() => require(p), toError)),
+const loadConfig: (path: string) => IOEither<Error, ConfigSpec> = flow(
+  path => IOE.tryCatch(() => require(path), toError),
   IOE.chain(flow(customConfig, E.mapLeft(toError), IOE.fromEither))
 );
 
@@ -60,14 +63,16 @@ export type Args = {
 };
 
 export const build = (args: Args): TaskEither<Error, void> => {
-
-  // Todo: Fallbacks hide certain errors.
   const config: IOEither<Error, ConfigSpec> = pipe(
     args.config,
-    IOE.fromOption(() => new Error("Config not specified.")),
-    IOE.chain(loadConfig),
-    IOE.alt(() => loadConfig("hacss.config.js")),
-    IOE.alt(() => IOE.right<Error, ConfigSpec>(defaultConfig))
+    O.map(flow(IOE.right, IOE.chain(resolvePath), IOE.chain(loadConfig))),
+    O.getOrElse(() =>
+      pipe(
+        resolvePath("hacss.config.js"),
+        IOE.chain(loadConfig),
+        IOE.alt(() => IOE.right(defaultConfig))
+      )
+    )
   );
 
   const sources: TaskEither<Error, string> = pipe(
@@ -76,12 +81,16 @@ export const build = (args: Args): TaskEither<Error, void> => {
     TE.map(reduce("", (a, b) => a + "\n" + b))
   );
 
-  // Todo: Fallbacks hide certain errors.
   const outputStream: IOEither<Error, Writable> = pipe(
     args.output,
-    IOE.fromOption(() => new Error("Output not specified.")),
-    IOE.chain(createWriteStreamSafe),
-    IOE.alt(() => IOE.right<Error, Writable>(process.stdout))
+    O.map(
+      flow(
+        IOE.right,
+        IOE.chain(resolvePath),
+        IOE.chain(createWriteStreamSafe)
+      )
+    ),
+    O.getOrElse(() => IOE.right<Error, Writable>(process.stdout))
   );
 
   return pipe(

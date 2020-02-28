@@ -32,5 +32,5 @@ const parseArgs = function_1.flow(Array_1.dropLeft(2), Array_1.chunksOf(2), Arra
     });
     return pipeable_1.pipe(R.lookup("sources", r), O.map(sources => ({ ...optionalFields, sources })), E.fromOption(() => new Error("Sources not specified.")));
 });
-const main = pipeable_1.pipe(() => process.argv, IO_1.map(parseArgs), TE.fromIOEither, TE.chain(build_1.build));
+const main = pipeable_1.pipe(() => process.argv, IO_1.map(parseArgs), TE.fromIOEither, TE.chain(build_1.build), TE.mapLeft(error => console.error(error)));
 main();

@@ -56,7 +56,8 @@ const main = pipe(
   () => process.argv,
   mapIO(parseArgs),
   TE.fromIOEither,
-  TE.chain(build)
+  TE.chain(build),
+  TE.mapLeft(error => console.error(error))
 );
 
 main();
