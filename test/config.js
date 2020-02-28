@@ -1,4 +1,4 @@
-const { color, mapArgs } = require("../config/utils.js");
+const { color, mapArgs } = require("../dist/Config/rules/utils.js");
 
 module.exports = {
   rules: {
