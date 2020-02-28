@@ -1,7 +1,7 @@
 import { chain, fromNullable, map, none, Option, some } from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/pipeable";
-import { ConfigSpec } from "./Config";
-import { Style } from "./Style";
+import { ConfigSpec } from "./config";
+import { Style } from "./style";
 
 const declarations =
   ({ rules, globalMapArg, globalMapOutput }: ConfigSpec) =>

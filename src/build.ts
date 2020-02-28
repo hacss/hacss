@@ -14,7 +14,7 @@ import { createWriteStream, existsSync, readFile } from "fs";
 import * as glob from "glob";
 import * as path from "path";
 import { Writable } from "stream";
-import { ConfigSpec, customConfig, defaultConfig } from "./Config";
+import { ConfigSpec, customConfig, defaultConfig } from "./config";
 import hacss from "./hacss";
 
 const resolvePath = (p: string): IOEither<Error, string> => pipe(

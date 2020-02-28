@@ -9,10 +9,10 @@ import * as R from "fp-ts/lib/Record";
 import * as postcss from "postcss";
 import * as nested from "postcss-nested";
 import * as prettier from "prettier";
-import { ConfigSpec } from "./Config";
+import { ConfigSpec } from "./config";
 import declarations from "./declarations";
 import selector from "./selector";
-import { stylesFromCode } from "./Style";
+import { stylesFromCode } from "./style";
 
 const hacss = (code: string, config: ConfigSpec): string => pipe(
   stylesFromCode(code),

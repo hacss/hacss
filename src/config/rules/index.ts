@@ -1,4 +1,4 @@
-import { RuleSpec } from "../../Rule";
+import { RuleSpec } from "../../rule";
 import { color, normalizeLength, lookup, mapArgs } from "./utils";
 
 const borderStyles = <const>{

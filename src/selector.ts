@@ -2,10 +2,10 @@ require("css.escape");
 
 import { array } from "fp-ts/lib/Array";
 import { Option, option } from "fp-ts/lib/Option";
-import { Context } from "./Context";
-import * as Op from "./Operator";
-import * as P from "./Pseudo";
-import { Pseudo } from "./Pseudo";
+import { Context } from "./context";
+import * as Op from "./operator";
+import * as P from "./pseudo";
+import { Pseudo } from "./pseudo";
 
 type Spec = { className: string, pseudos: Pseudo[] };
 

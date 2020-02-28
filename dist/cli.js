@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Apply_1 = require("fp-ts/lib/Apply");
 const Array_1 = require("fp-ts/lib/Array");
 const E = require("fp-ts/lib/Either");
-const Option_1 = require("fp-ts/lib/Option");
+const function_1 = require("fp-ts/lib/function");
 const O = require("fp-ts/lib/Option");
+const Option_1 = require("fp-ts/lib/Option");
+const pipeable_1 = require("fp-ts/lib/pipeable");
 const R = require("fp-ts/lib/Record");
 const TE = require("fp-ts/lib/TaskEither");
-const function_1 = require("fp-ts/lib/function");
-const pipeable_1 = require("fp-ts/lib/pipeable");
 const build_1 = require("./build");
 const mapArgName = (n) => {
     switch (n) {

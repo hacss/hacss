@@ -1,7 +1,7 @@
 import * as E from "fp-ts/lib/Either";
 import { Either, left, right } from "fp-ts/lib/Either";
 import { flow } from "fp-ts/lib/function";
-import { RuleSpec } from "../Rule";
+import { RuleSpec } from "../rule";
 import rules from "./rules";
 import scopes from "./scopes";
 

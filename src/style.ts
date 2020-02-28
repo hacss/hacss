@@ -5,8 +5,8 @@ import * as O from "fp-ts/lib/Option";
 import { getOrElse, none, Option, option, some } from "fp-ts/lib/Option";
 import { ord } from "fp-ts/lib/Ord";
 import { pipe } from "fp-ts/lib/pipeable";
-import { Context, mkContext } from "./Context";
-import { mkPseudo, ordPseudos, Pseudo } from "./Pseudo";
+import { Context, mkContext } from "./context";
+import { mkPseudo, ordPseudos, Pseudo } from "./pseudo";
 
 export type Style = {
   className: string,

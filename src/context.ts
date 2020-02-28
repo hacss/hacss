@@ -3,8 +3,8 @@ import { array, head } from "fp-ts/lib/Array";
 import * as Opt from "fp-ts/lib/Option";
 import { Option, option } from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/pipeable";
-import { mkOperator, Operator } from "./Operator";
-import { mkPseudo, Pseudo } from "./Pseudo";
+import { mkOperator, Operator } from "./operator";
+import { mkPseudo, Pseudo } from "./pseudo";
 
 export type Context = {
   className: string,
