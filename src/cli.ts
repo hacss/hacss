@@ -52,12 +52,22 @@ const parseArgs: (a: string[]) => Either<Error, Args> = flow(
   }
 );
 
-const main = pipe(
-  () => process.argv,
-  mapIO(parseArgs),
-  TE.fromIOEither,
-  TE.chain(build),
-  TE.mapLeft(error => console.error(error))
-);
+const main = () => {
+  const { argv } = process;
+
+  if (argv.length < 3) {
+    return console.log(`
+    Usage: hacss [--config <config-file>] [--output <output-file>] <sources>
+    `.trim());
+  }
+
+  return pipe(
+    argv,
+    parseArgs,
+    TE.fromEither,
+    TE.chain(build),
+    TE.mapLeft(error => console.error(error))
+  );
+};
 
 main();

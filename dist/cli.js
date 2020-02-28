@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Apply_1 = require("fp-ts/lib/Apply");
 const Array_1 = require("fp-ts/lib/Array");
 const E = require("fp-ts/lib/Either");
-const IO_1 = require("fp-ts/lib/IO");
 const Option_1 = require("fp-ts/lib/Option");
 const O = require("fp-ts/lib/Option");
 const R = require("fp-ts/lib/Record");
@@ -32,5 +31,13 @@ const parseArgs = function_1.flow(Array_1.dropLeft(2), Array_1.chunksOf(2), Arra
     });
     return pipeable_1.pipe(R.lookup("sources", r), O.map(sources => ({ ...optionalFields, sources })), E.fromOption(() => new Error("Sources not specified.")));
 });
-const main = pipeable_1.pipe(() => process.argv, IO_1.map(parseArgs), TE.fromIOEither, TE.chain(build_1.build), TE.mapLeft(error => console.error(error)));
+const main = () => {
+    const { argv } = process;
+    if (argv.length < 3) {
+        return console.log(`
+    Usage: hacss [--config <config-file>] [--output <output-file>] <sources>
+    `.trim());
+    }
+    return pipeable_1.pipe(argv, parseArgs, TE.fromEither, TE.chain(build_1.build), TE.mapLeft(error => console.error(error)));
+};
 main();
