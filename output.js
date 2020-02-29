@@ -8,4 +8,4 @@ module.exports = ({ config, sources }) => new Promise((resolve, reject) => pipe(
   build({ sources, config: fromNullable(config) }),
   map(flow(code => ({ code }), resolve)),
   mapLeft(reject)
-));
+)());
