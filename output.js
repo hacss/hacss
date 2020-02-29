@@ -1,18 +1,11 @@
-const fs = require("fs");
-const glob = require("glob");
-const path = require("path");
-const { promisify } = require("util");
-const hacss = require("./index.js");
-const config = require("./config/index.js");
+const { fromNullable } = require("fp-ts/lib/Option");
+const { flow } = require("fp-ts/lib/function");
+const { pipe } = require("fp-ts/lib/pipeable");
+const { map, mapLeft } = require("fp-ts/lib/TaskEither");
+const { build } = require("./dist/build.js");
 
-const globP = promisify(glob);
-const readFileP = promisify(fs.readFile);
-
-module.exports = options => {
-  options.config =
-    options.config || path.join(process.cwd(), "hacss.config.js");
-  return globP(options.sources)
-    .then(sources => Promise.all(sources.map(s => readFileP(s, "utf8"))))
-    .then(sources => sources.join("\n"))
-    .then(code => ({ code: hacss(code, config(options.config)) }));
-};
+module.exports = ({ config, sources }) => new Promise((resolve, reject) => pipe(
+  build({ sources, config: fromNullable(config) }),
+  map(flow(code => ({ code }), resolve)),
+  mapLeft(reject)
+));
