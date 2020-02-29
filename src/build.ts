@@ -10,10 +10,9 @@ import { Option } from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as TE from "fp-ts/lib/TaskEither";
 import { TaskEither, taskEither } from "fp-ts/lib/TaskEither";
-import { createWriteStream, existsSync, readFile } from "fs";
+import { existsSync, readFile } from "fs";
 import * as glob from "glob";
 import * as path from "path";
-import { Writable } from "stream";
 import { ConfigSpec, customConfig, defaultConfig } from "./config";
 import hacss from "./hacss";
 
@@ -40,16 +39,12 @@ const readFileUTF8T: (path: string) => TaskEither<Error, string> = flow(
   TE.mapLeft(toError)
 );
 
-const createWriteStreamSafe = (f: string): IOEither<Error, Writable> =>
-  IOE.tryCatch(() => createWriteStream(f), toError);
-
-export type Args = {
+export type BuildArgs = {
   config: Option<string>;
-  output: Option<string>;
   sources: string;
 };
 
-export const build = (args: Args): TaskEither<Error, void> => {
+export const build = (args: BuildArgs): TaskEither<Error, string> => {
   const config: IOEither<Error, ConfigSpec> = pipe(
     args.config,
     O.map(flow(IOE.right, IOE.chain(resolvePath), IOE.chain(loadConfig))),
@@ -68,27 +63,12 @@ export const build = (args: Args): TaskEither<Error, void> => {
     TE.map(reduce("", (a, b) => a + "\n" + b))
   );
 
-  const outputStream: IOEither<Error, Writable> = pipe(
-    args.output,
-    O.map(
-      flow(
-        IOE.right,
-        IOE.chain(resolvePath),
-        IOE.chain(createWriteStreamSafe)
-      )
-    ),
-    O.getOrElse(() => IOE.right<Error, Writable>(process.stdout))
-  );
-
   return pipe(
     sequenceT(taskEither)(
       sources,
-      TE.fromIOEither(config),
-      TE.fromIOEither(outputStream)
+      TE.fromIOEither(config)
     ),
-    TE.map(
-      ([ sources, config, output ]) => { output.write(hacss(sources, config)); }
-    )
+    TE.map(([ sources, config ]) => hacss(sources, config))
   );
 
 };

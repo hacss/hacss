@@ -8,7 +8,9 @@ import { none, Option, option, some } from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as R from "fp-ts/lib/Record";
 import * as TE from "fp-ts/lib/TaskEither";
-import { Args, build } from "./build";
+import { TaskEither } from "fp-ts/lib/TaskEither";
+import { writeFile } from "fs";
+import { build, BuildArgs } from "./build";
 
 const mapArgName = (n: string): Option<string> => {
   switch (n) {
@@ -23,32 +25,49 @@ const mapArgName = (n: string): Option<string> => {
   }
 };
 
-const parseArgs: (a: string[]) => Either<Error, Args> = flow(
-  dropLeft(2),
-  chunksOf(2),
-  filterMap(
-    foldLeft(
-      () => none,
-      (h: string, t: string[]) => t.length === 0
-        ? sequenceT(option)(some("sources"), pipe(some(h), O.filter(x => x[0] !== "-")))
-        : sequenceT(option)(mapArgName(h), head(t))
-    )
-  ),
-  R.fromFoldable<any, string>({ concat: (a, b) => a }, array),
-  r => {
-    const optionalFields = R.map((x: string) => R.lookup(x, r))({
-      config: "config",
-      output: "output"
-    });
+const parseArgs
+  : (a: string[]) => Either<Error, BuildArgs & { output: Option<string> }>
+  = flow(
+      dropLeft(2),
+      chunksOf(2),
+      filterMap(
+        foldLeft(
+          () => none,
+          (h: string, t: string[]) => t.length === 0
+          ? sequenceT(option)(
+              some("sources"),
+              pipe(some(h), O.filter(x => x[0] !== "-"))
+            )
+            : sequenceT(option)(mapArgName(h), head(t))
+        )
+      ),
+      R.fromFoldable<any, string>({ concat: (a, b) => a }, array),
+      r => {
+        const optionalFields = R.map((x: string) => R.lookup(x, r))({
+          config: "config",
+          output: "output"
+        });
 
-    return pipe(
-      R.lookup("sources", r),
-      O.map(sources => ({ ...optionalFields, sources })),
-      E.fromOption(() => new Error("Sources not specified."))
+        return pipe(
+          R.lookup("sources", r),
+          O.map(sources => ({ ...optionalFields, sources })),
+          E.fromOption(() => new Error("Sources not specified."))
+        );
+      }
     );
-  }
-);
 
+const writeFileT: (a: string, b: string) => TaskEither<Error, any> =
+  TE.taskify(writeFile);
+
+const writeOutput
+  : (file: Option<string>) => (content: string) => TaskEither<Error, any>
+  = flow(
+      O.map((file: string) => (content: string) => writeFileT(file, content)),
+      O.getOrElse(() =>
+        (content: string) => TE.rightIO(() => process.stdout.write(content))
+      )
+    );
+ 
 const main = () => {
   const { argv } = process;
 
@@ -62,7 +81,10 @@ const main = () => {
     argv,
     parseArgs,
     TE.fromEither,
-    TE.chain(build),
+    TE.chain(({ config, sources, output }) => pipe(
+      build({ config, sources }),
+      TE.chain(writeOutput(output))
+    )),
     TE.mapLeft(error => console.error(error))
   );
 };
