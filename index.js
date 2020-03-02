@@ -14,7 +14,6 @@ const {
   match,
   pick,
   pipe,
-  tap,
   uniqBy
 } = require("ramda");
 
