@@ -3,6 +3,22 @@ require("css.escape");
 const prettier = require("prettier");
 const postcss = require("postcss");
 const nested = require("postcss-nested");
+const {
+  always,
+  defaultTo,
+  head,
+  identity,
+  ifElse,
+  isNil,
+  map,
+  match,
+  pick,
+  pipe,
+  tap,
+  uniqBy
+} = require("ramda");
+
+const { applyRecord, matchAll, renameKeys } = require("./src/function.js");
 
 const defaultConfig = require("./config/index.js");
 
@@ -50,13 +66,13 @@ const pseudoMap = {
 const comparePseudos = (a, b) => {
   if (a && b) {
     const [ap, bp] = [a, b].map(({ pseudos }) => pseudos);
-    if (ap && !bp) {
+    if (ap.length && !bp.length) {
       return 1;
     }
-    if (!ap && bp) {
+    if (!ap.length && bp.length) {
       return -1;
     }
-    if (ap && bp) {
+    if (ap.length && bp.length) {
       const [aix, bix] = [ap, bp].map(
         x => Math.max.apply(
           null,
@@ -74,32 +90,44 @@ const comparePseudos = (a, b) => {
   return 0;
 };
 
-const extract = code =>
-  Array.from(
-    code.matchAll(
-      /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<rule>[A-Z][A-Za-z]*)(\((?<args>(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\)),)*(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\))))\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?/gm,
-    ),
+const extract = pipe(
+  matchAll(/(\w+(\:{1,2}[a-z]+)*[_\+\>])?([A-Z][A-Za-z]*)(\(((([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\)),)*(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\))))\))?((\:{1,2}[a-z]+)+)?(\-\-([A-Za-z]+))?/m),
+  uniqBy(head),
+  map(
+    pipe(
+      pick([ 0, 1, 3, 5, 12, 15 ]),
+      renameKeys({
+        0: "className",
+        1: "context",
+        3: "rule",
+        5: "args",
+        12: "pseudos",
+        15: "scope"
+      }),
+      applyRecord({
+        className: identity,
+        context: ifElse(
+          isNil,
+          always(null),
+          pipe(
+            match(/([^\:_\+\>]+)((\:{1,2}[a-z]+)+)?([_\+\>])/),
+            pick([ 1, 2, 4 ]),
+            renameKeys({ 1: "className", 2: "pseudos", 4: "operator" }),
+            applyRecord({
+              className: identity,
+              pseudos: pipe(defaultTo(""), match(/\:{1,2}([a-z]+)/g)),
+              operator: identity
+            })
+          )
+        ),
+        rule: identity,
+        args: pipe(defaultTo(""), match(/([^,]+\([^\)]+\)|[^,]+)/g)),
+        pseudos: pipe(defaultTo(""), match(/\:{1,2}([a-z]+)/g)),
+        scope: defaultTo("default")
+      })
+    )
   )
-    .reduce((ms, m) => (ms.some(n => n[0] === m[0]) ? ms : ms.concat([m])), [])
-    .map(match => ({
-      className: match[0],
-      ...match.groups,
-    }))
-    .map(props => ({
-      ...props,
-      scope: props.scope || "default",
-      context: props.context
-        ? {
-            className: props.context.match(/[^\:_\+\>]+/)[0],
-            operator: props.context[props.context.length - 1],
-            pseudos: props.context.match(/\:{1,2}[a-z]+/g),
-          }
-        : null,
-      args: props.args
-        ? Array.from(props.args.matchAll(/(?:[^,]+\([^\)]+\)|[^,]+)/g)).map(([x]) => x)
-        : [],
-      pseudos: props.pseudos ? props.pseudos.match(/(\:{1,2}[a-z]+)/g) : null,
-    }));
+);
 
 const selector = (className, pseudos, ctx) => {
   const classSel = `.${CSS.escape(className)}${(pseudos || [])
