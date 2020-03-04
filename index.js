@@ -64,16 +64,12 @@ const applyRecord = f =>
       take(2),
       reverse,
       adjust(0, flip(prop)(f)),
-      apply(call)
-    )
+      apply(call),
+    ),
   );
 
-const computeField = (key, fn) => pipe(
-  flip(repeat)(2),
-  adjust(0, fn),
-  insert(0, key),
-  apply(assoc)
-);
+const computeField = (key, fn) =>
+  pipe(flip(repeat)(2), adjust(0, fn), insert(0, key), apply(assoc));
 
 const renameKeys = k => pipe(toPairs, map(adjust(0, flip(prop)(k))), fromPairs);
 
@@ -89,12 +85,13 @@ const matchAll = pattern => str => {
   return matches;
 };
 
-const declarations = ruleFn => pipe(
-  flip(repeat)(2),
-  adjust(0, prop("rule")),
-  adjust(1, prop("args")),
-  apply(ruleFn)
-);
+const declarations = ruleFn =>
+  pipe(
+    flip(repeat)(2),
+    adjust(0, prop("rule")),
+    adjust(1, prop("args")),
+    apply(ruleFn),
+  );
 
 const pseudoCSS = flip(prop)({
   ":a": ":active",
@@ -139,7 +136,7 @@ const pseudoCSS = flip(prop)({
 
 const pseudoWeight = pipe(
   map(flip(indexOf)([":li", ":vi", ":f", ":h", ":a", ":di"])),
-  reduce(max, -1)
+  reduce(max, -1),
 );
 
 const selector = pipe(
@@ -151,8 +148,8 @@ const selector = pipe(
     operator: ifElse(
       equals("_"),
       always(" "),
-      pipe(append(" "), prepend(" "), join(""))
-    )
+      pipe(append(" "), prepend(" "), join("")),
+    ),
   }),
   computeField(
     "selector",
@@ -160,27 +157,27 @@ const selector = pipe(
       pick(["className", "pseudos"]),
       values,
       insert(0, concat),
-      apply(reduce)
-    )
+      apply(reduce),
+    ),
   ),
   ifElse(
     has("operator"),
     computeField(
       "selector",
-      pipe(pick(["selector", "operator"]), values, join(""))
+      pipe(pick(["selector", "operator"]), values, join("")),
     ),
-    identity
+    identity,
   ),
   pick(["selector", "context"]),
   applyRecord({
     context: prop("selector"),
-    selector: identity
+    selector: identity,
   }),
   ifElse(
     has("context"),
     pipe(pick(["context", "selector"]), values, join("")),
-    identity
-  )
+    identity,
+  ),
 );
 
 const build = ({ rules, scopes, globalMapArg, globalMapOutput }) => {
@@ -191,7 +188,7 @@ const build = ({ rules, scopes, globalMapArg, globalMapOutput }) => {
     apply(xprod),
     map(reverse),
     addIndex(map)(pipe(unapply(identity), take(2), flatten)),
-    map(apply(globalMapArg))
+    map(apply(globalMapArg)),
   );
 
   const rule = (name, args) => {
@@ -228,18 +225,20 @@ const build = ({ rules, scopes, globalMapArg, globalMapOutput }) => {
   };
 
   return pipe(
-    matchAll(/(\w+(\:{1,2}[a-z]+)*[_\+\>])?([A-Z][A-Za-z]*)(\(((([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\)),)*(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\))))\))?((\:{1,2}[a-z]+)+)?(\-\-([A-Za-z]+))?/m),
+    matchAll(
+      /(\w+(\:{1,2}[a-z]+)*[_\+\>])?([A-Z][A-Za-z]*)(\(((([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\)),)*(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\))))\))?((\:{1,2}[a-z]+)+)?(\-\-([A-Za-z]+))?/m,
+    ),
     uniqBy(head),
     map(
       pipe(
-        pick([ 0, 1, 3, 5, 12, 15 ]),
+        pick([0, 1, 3, 5, 12, 15]),
         renameKeys({
           0: "className",
           1: "context",
           3: "rule",
           5: "args",
           12: "pseudos",
-          15: "scope"
+          15: "scope",
         }),
         applyRecord({
           className: identity,
@@ -248,19 +247,19 @@ const build = ({ rules, scopes, globalMapArg, globalMapOutput }) => {
             always(null),
             pipe(
               match(/([^\:_\+\>]+)((\:{1,2}[a-z]+)+)?([_\+\>])/),
-              pick([ 1, 2, 4 ]),
+              pick([1, 2, 4]),
               renameKeys({ 1: "className", 2: "pseudos", 4: "operator" }),
               applyRecord({
                 className: identity,
                 pseudos: pipe(defaultTo(""), match(/\:{1,2}([a-z]+)/g)),
-                operator: identity
-              })
-            )
+                operator: identity,
+              }),
+            ),
           ),
           rule: identity,
           args: pipe(defaultTo(""), match(/([^,]+\([^\)]+\)|[^,]+)/g)),
           pseudos: pipe(defaultTo(""), match(/\:{1,2}([a-z]+)/g)),
-          scope: defaultTo("default")
+          scope: defaultTo("default"),
         }),
         computeField("args", args),
         computeField("selector", selector),
@@ -278,18 +277,18 @@ const build = ({ rules, scopes, globalMapArg, globalMapOutput }) => {
                 always(null),
                 pipe(
                   replace(/__START__/g, "left"),
-                  replace(/__END__/g, "right")
-                )
-              )
-            )
-          )
-        )
-      )
+                  replace(/__END__/g, "right"),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     ),
     filter(pipe(prop("declarations"), isNil, not)),
     sortWith([
       ascend(pipe(path(["context", "pseudos"]), defaultTo([]), pseudoWeight)),
-      ascend(pipe(prop("pseudos"), pseudoWeight))
+      ascend(pipe(prop("pseudos"), pseudoWeight)),
     ]),
     groupBy(prop("scope")),
     map(
@@ -300,21 +299,21 @@ const build = ({ rules, scopes, globalMapArg, globalMapOutput }) => {
             values,
             insert(1, "{"),
             append("}"),
-            join(" ")
-          )
+            join(" "),
+          ),
         ),
-        join("\n")
-      )
+        join("\n"),
+      ),
     ),
     toPairs,
     sortBy(pipe(head, equals("default"), not)),
     map(
       pipe(
         adjust(0, pipe(flip(prop)(scopes), defaultTo(identity))),
-        apply(call)
-      )
+        apply(call),
+      ),
     ),
-    join("\n")
+    join("\n"),
   );
 };
 
