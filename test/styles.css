@@ -20,10 +20,6 @@
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
 }
-.foo:hover .foo\:h_Tstk\(1px\,\#060\) {
-  text-shadow: -1px -1px 0 #060, 1px -1px 0 #060, -1px 1px 0 #060,
-    1px 1px 0 #060;
-}
 .Fz\(64px\) {
   font-size: 64px;
 }
@@ -84,15 +80,6 @@
 .Bgi\(linear-gradient\(\#006\,\#009\)\) {
   background-image: linear-gradient(#006, #009);
 }
-.bar:hover .bar\:h_C\(\#09f\) {
-  color: #09f;
-}
-.bar:active .bar\:a_C\(\#f90\) {
-  color: #f90;
-}
-.bar:disabled .bar\:di_C\(\#ccc\) {
-  color: #ccc;
-}
 .Mstart\(8px\) {
   margin-left: 8px;
 }
@@ -115,7 +102,7 @@
   background-color: #009;
 }
 .Bdsp\(1px\) {
-  border-spacing: 1px;
+  border-spacing: 1px 1px;
 }
 .Fz\(16px\) {
   font-size: 16px;
@@ -155,4 +142,17 @@
 }
 .Bgi\(linear-gradient\(\#999\,\#ccc\)\)\:di:disabled {
   background-image: linear-gradient(#999, #ccc);
+}
+.foo:hover .foo\:h_Tstk\(1px\,\#060\) {
+  text-shadow: -1px -1px 0 #060, 1px -1px 0 #060, -1px 1px 0 #060,
+    1px 1px 0 #060;
+}
+.bar:hover .bar\:h_C\(\#09f\) {
+  color: #09f;
+}
+.bar:active .bar\:a_C\(\#f90\) {
+  color: #f90;
+}
+.bar:disabled .bar\:di_C\(\#ccc\) {
+  color: #ccc;
 }
