@@ -1,12 +1,99 @@
 require("css.escape");
 
-const prettier = require("prettier");
+const {
+  addIndex,
+  adjust,
+  always,
+  append,
+  apply,
+  ascend,
+  assoc,
+  call,
+  comparator,
+  concat,
+  curry,
+  defaultTo,
+  equals,
+  filter,
+  flatten,
+  flip,
+  fromPairs,
+  groupBy,
+  has,
+  head,
+  identity,
+  ifElse,
+  indexOf,
+  insert,
+  isNil,
+  join,
+  map,
+  mapObjIndexed,
+  match,
+  max,
+  not,
+  path,
+  pick,
+  pipe,
+  prepend,
+  prop,
+  reduce,
+  repeat,
+  replace,
+  reverse,
+  sort,
+  sortBy,
+  sortWith,
+  take,
+  toPairs,
+  unapply,
+  uncurryN,
+  unfold,
+  uniqBy,
+  values,
+  xprod,
+} = require("ramda");
+const { format } = require("prettier");
 const postcss = require("postcss");
 const nested = require("postcss-nested");
 
-const defaultConfig = require("./config/index.js");
+const applyRecord = f =>
+  mapObjIndexed(
+    pipe(
+      unapply(identity),
+      take(2),
+      reverse,
+      adjust(0, flip(prop)(f)),
+      apply(call),
+    ),
+  );
 
-const pseudoMap = {
+const computeField = (key, fn) =>
+  pipe(flip(repeat)(2), adjust(0, fn), insert(0, key), apply(assoc));
+
+const renameKeys = k => pipe(toPairs, map(adjust(0, flip(prop)(k))), fromPairs);
+
+const matchAll = pattern => str => {
+  const matches = [];
+  for (
+    let s = str, match = s.match(pattern);
+    s && match;
+    s = s.substring(match.index + match[0].length), match = s.match(pattern)
+  ) {
+    matches.push(match);
+  }
+  return matches;
+};
+
+const declarations = ruleFn =>
+  pipe(
+    flip(repeat)(2),
+    adjust(0, prop("rule")),
+    adjust(1, prop("args")),
+    apply(ruleFn),
+  );
+
+const pseudoCSS = flip(prop)({
   ":a": ":active",
   ":c": ":checked",
   ":d": ":default",
@@ -45,161 +132,193 @@ const pseudoMap = {
   "::fl": "::first-letter",
   "::fli": "::first-line",
   "::ph": "::placeholder",
-};
+});
 
-const comparePseudos = (a, b) => {
-  if (a && b) {
-    const [ap, bp] = [a, b].map(({ pseudos }) => pseudos);
-    if (ap && !bp) {
-      return 1;
-    }
-    if (!ap && bp) {
-      return -1;
-    }
-    if (ap && bp) {
-      const [aix, bix] = [ap, bp].map(
-        x => Math.max.apply(
-          null,
-          x.map(p => [":li", ":vi", ":f", ":h", ":a", ":di"].indexOf(p))
-        )
-      );
-      if (aix < bix) {
-        return -1;
-      }
-      if (aix > bix) {
-        return 1;
-      }
-    }
-  }
-  return 0;
-};
+const pseudoWeight = pipe(
+  map(flip(indexOf)([":li", ":vi", ":f", ":h", ":a", ":di"])),
+  reduce(max, -1),
+);
 
-const extract = code =>
-  Array.from(
-    code.matchAll(
-      /(?<context>\w+((\:{1,2}[a-z]+)+)?[_\+\>)])?(?<rule>[A-Z][A-Za-z]*)(\((?<args>(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\)),)*(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\))))\))?(?<pseudos>(\:{1,2}[a-z]+)+)?(\-\-(?<scope>[A-Za-z]+))?/gm,
+const selector = pipe(
+  pick(["className", "pseudos", "context", "operator"]),
+  applyRecord({
+    className: pipe(CSS.escape, prepend("."), join("")),
+    pseudos: map(pseudoCSS),
+    context: ifElse(isNil, always(null), x => selector(x)),
+    operator: ifElse(
+      equals("_"),
+      always(" "),
+      pipe(append(" "), prepend(" "), join("")),
     ),
-  )
-    .reduce((ms, m) => (ms.some(n => n[0] === m[0]) ? ms : ms.concat([m])), [])
-    .map(match => ({
-      className: match[0],
-      ...match.groups,
-    }))
-    .map(props => ({
-      ...props,
-      scope: props.scope || "default",
-      context: props.context
-        ? {
-            className: props.context.match(/[^\:_\+\>]+/)[0],
-            operator: props.context[props.context.length - 1],
-            pseudos: props.context.match(/\:{1,2}[a-z]+/g),
-          }
-        : null,
-      args: props.args
-        ? Array.from(props.args.matchAll(/(?:[^,]+\([^\)]+\)|[^,]+)/g)).map(([x]) => x)
-        : [],
-      pseudos: props.pseudos ? props.pseudos.match(/(\:{1,2}[a-z]+)/g) : null,
-    }));
+  }),
+  computeField(
+    "selector",
+    pipe(
+      pick(["className", "pseudos"]),
+      values,
+      insert(0, concat),
+      apply(reduce),
+    ),
+  ),
+  ifElse(
+    has("operator"),
+    computeField(
+      "selector",
+      pipe(pick(["selector", "operator"]), values, join("")),
+    ),
+    identity,
+  ),
+  pick(["selector", "context"]),
+  applyRecord({
+    context: prop("selector"),
+    selector: identity,
+  }),
+  ifElse(
+    has("context"),
+    pipe(pick(["context", "selector"]), values, join("")),
+    identity,
+  ),
+);
 
-const selector = (className, pseudos, ctx) => {
-  const classSel = `.${CSS.escape(className)}${(pseudos || [])
-    .map(p => pseudoMap[p])
-    .join("")}`;
-  return ctx
-    ? [
-        `.${CSS.escape(ctx.className)}`,
-        (ctx.pseudos || []).map(p => pseudoMap[p]).join(""),
-        ctx.operator === "_" ? " " : ` ${ctx.operator} `,
-        classSel,
-      ].join("")
-    : classSel;
-};
+const build = ({ rules, scopes, globalMapArg, globalMapOutput }) => {
+  const args = pipe(
+    pick(["rule", "args"]),
+    values,
+    adjust(0, unfold(identity)),
+    apply(xprod),
+    map(reverse),
+    addIndex(map)(pipe(unapply(identity), take(2), flatten)),
+    map(apply(globalMapArg)),
+  );
 
-const hacss = (code, config = defaultConfig()) => {
-  const { globalMapArg, globalMapOutput, scopes, rules } = config;
+  const rule = (name, args) => {
+    const rule = rules[name];
+    if (!rule) {
+      return null;
+    }
+    switch (typeof rule) {
+      case "string":
+        if (args.length) {
+          return null;
+        }
+        return rule;
+      case "function":
+        const decls = rule.apply(null, args);
+        if (~decls.indexOf("undefined")) {
+          return null;
+        }
+        return decls;
+      case "object":
+        const sub = rule[args.length];
+        if (!sub) {
+          return null;
+        }
+        switch (typeof sub) {
+          case "string":
+            return sub;
+          case "function":
+            return sub.apply(null, args);
+          default:
+            return null;
+        }
+    }
+  };
 
-  const styles = extract(code)
-    .map(spec => {
-      const { rule, args } = spec;
-      const ruleDef = rules[rule];
-      switch (typeof ruleDef) {
-        case "function":
-          if (!args.length) {
-            return spec;
-          }
-          return { ...spec, f: ruleDef };
-        case "string":
-          if (args.length) {
-            return spec;
-          }
-          return { ...spec, f: () => ruleDef };
-        case "object":
-          const ruleDefSub = ruleDef[args.length];
-          if (!ruleDefSub) {
-            return spec;
-          }
-          switch (typeof ruleDefSub) {
-            case "function":
-              if (!args.length) {
-                return spec;
-              }
-              return { ...spec, f: ruleDefSub };
-            case "string":
-              if (args.length) {
-                return spec;
-              }
-              return { ...spec, f: () => ruleDefSub };
-            default:
-              return spec;
-          }
-        default:
-          return spec;
-      }
-    })
-    .filter(({ f }) => f)
-    .sort((a, b) => {
-      const contextComp = comparePseudos(a.context, b.context);
-      if (contextComp !== 0) {
-        return contextComp;
-      }
-      return comparePseudos(a, b);
-    })
-    .map(({ scope, rule, f, args, context, pseudos, className }) => [
-      scope,
-      postcss([nested]).process(
-        `
-          ${selector(className, pseudos, context, scope)}
-          {
-            ${
-              globalMapOutput(
-                f.apply(
-                  null,
-                  (args || []).map((a, i) => globalMapArg(a, rule, i)),
+  return pipe(
+    matchAll(
+      /(\w+(\:{1,2}[a-z]+)*[_\+\>])?([A-Z][A-Za-z]*)(\(((([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\)),)*(([^\(\)]+|([a-z][a-z\-]+[a-z])\([^\(\)]+\))))\))?((\:{1,2}[a-z]+)+)?(\-\-([A-Za-z]+))?/m,
+    ),
+    uniqBy(head),
+    map(
+      pipe(
+        pick([0, 1, 3, 5, 12, 15]),
+        renameKeys({
+          0: "className",
+          1: "context",
+          3: "rule",
+          5: "args",
+          12: "pseudos",
+          15: "scope",
+        }),
+        applyRecord({
+          className: identity,
+          context: ifElse(
+            isNil,
+            always(null),
+            pipe(
+              match(/([^\:_\+\>]+)((\:{1,2}[a-z]+)+)?([_\+\>])/),
+              pick([1, 2, 4]),
+              renameKeys({ 1: "className", 2: "pseudos", 4: "operator" }),
+              applyRecord({
+                className: identity,
+                pseudos: pipe(defaultTo(""), match(/\:{1,2}([a-z]+)/g)),
+                operator: identity,
+              }),
+            ),
+          ),
+          rule: identity,
+          args: pipe(defaultTo(""), match(/([^,]+\([^\)]+\)|[^,]+)/g)),
+          pseudos: pipe(defaultTo(""), match(/\:{1,2}([a-z]+)/g)),
+          scope: defaultTo("default"),
+        }),
+        computeField("args", args),
+        computeField("selector", selector),
+        computeField(
+          "declarations",
+          declarations(
+            pipe(
+              unapply(identity),
+              flip(repeat)(2),
+              adjust(0, apply(rule)),
+              adjust(1, head),
+              apply(globalMapOutput),
+              ifElse(
+                isNil,
+                always(null),
+                pipe(
+                  replace(/__START__/g, "left"),
+                  replace(/__END__/g, "right"),
                 ),
-                rule,
-              )
-                .replace(/__START__/g, "left")
-                .replace(/__END__/g, "right")
-            }
-          }
-        `.trim(),
-      ).css,
-    ]);
-
-  const stylesheet = Object.entries(
-    styles.reduce(
-      (groups, [g, s]) => ({
-        ...groups,
-        [g]: (groups[g] || []).concat(s),
-      }),
-      {},
+              ),
+            ),
+          ),
+        ),
+      ),
     ),
-  )
-    .sort(([a], [b]) => (a === "default" ? -1 : b === "default" ? 1 : 0))
-    .map(([scope, styles]) => scopes[scope](styles.join(" ")))
-    .join(" ");
-
-  return prettier.format(stylesheet, { parser: "css" });
+    filter(pipe(prop("declarations"), isNil, not)),
+    sortWith([
+      ascend(pipe(path(["context", "pseudos"]), defaultTo([]), pseudoWeight)),
+      ascend(pipe(prop("pseudos"), pseudoWeight)),
+    ]),
+    groupBy(prop("scope")),
+    map(
+      pipe(
+        map(
+          pipe(
+            pick(["selector", "declarations"]),
+            values,
+            insert(1, "{"),
+            append("}"),
+            join(" "),
+          ),
+        ),
+        join("\n"),
+      ),
+    ),
+    toPairs,
+    sortBy(pipe(head, equals("default"), not)),
+    map(
+      pipe(
+        adjust(0, pipe(flip(prop)(scopes), defaultTo(identity))),
+        apply(call),
+      ),
+    ),
+    join("\n"),
+  );
 };
 
-module.exports = hacss;
+module.exports = pipe(
+  flip(uncurryN(2, build)),
+  css => postcss([nested]).process(css).css,
+  flip(curry(format))({ parser: "css" }),
+);

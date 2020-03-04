@@ -100,10 +100,7 @@ module.exports = {
       st: "stretch",
     }),
   ),
-  B: mapArgs(a => `bottom: ${a}`, [
-    normalizeLength,
-    lookup({ a: "auto" }),
-  ]),
+  B: mapArgs(a => `bottom: ${a}`, [normalizeLength, lookup({ a: "auto" })]),
   Bd: [
     "border-width: 1px; border-style: solid",
     mapArgs(a => `border: ${a}`, lookup({ 0: 0, n: "none" })),
@@ -371,10 +368,7 @@ module.exports = {
       width: 0;
     }
   `,
-  End: mapArgs(a => `__END__: ${a}`, [
-    normalizeLength,
-    lookup({ a: "auto" }),
-  ]),
+  End: mapArgs(a => `__END__: ${a}`, [normalizeLength, lookup({ a: "auto" })]),
   Ff: mapArgs(
     a => `font-family: ${a}`,
     lookup({
