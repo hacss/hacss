@@ -79,7 +79,6 @@ const renameKeys = k => pipe(toPairs, map(adjust(0, flip(prop)(k))), fromPairs);
 
 const matchAll = pattern => str => {
   const matches = [];
-  matches.push(str.match(pattern));
   for (
     let s = str, match = s.match(pattern);
     s && match;
