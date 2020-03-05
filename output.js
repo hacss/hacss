@@ -11,7 +11,7 @@ const [globP, accessP, readFileP] = [glob, fs.access, fs.readFile].map(
 
 const config = async source => {
   if (source) {
-    return customConfig(require(source));
+    return customConfig(require(path.join(process.cwd(), source)));
   }
   const defaultSource = path.join(process.cwd(), "hacss.config.js");
   try {

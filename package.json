@@ -22,7 +22,7 @@
   "scripts": {
     "format": "prettier --trailing-comma all --parser babel --write .eslintrc.js cli.js index.js output.js config/*.js",
     "lint": "eslint .eslintrc.js cli.js index.js output.js config/*.js",
-    "test": "./cli.js --output test/styles.css --config test/config.js test/index.html && git diff --exit-code test/styles.css"
+    "test": "./cli.js --output test/styles.css --config test/config.js test/index.html && git diff --exit-code test/styles.css && ./test/output.js"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
