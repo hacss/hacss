@@ -1,6 +1,6 @@
 {
   "name": "hacss",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "description": "Hackable inline style language embedded in HTML classes",
   "repository": "https://github.com/nsaunders/hacss.git",
   "author": "Nick Saunders <nick@saunde.rs>",
