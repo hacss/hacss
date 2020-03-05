@@ -26,8 +26,7 @@ const config = async source => {
   try {
     await accessP(defaultSource);
     return customConfig(require(defaultSource));
-  }
-  catch {
+  } catch (e) {
     return defaultConfig;
   }
 };

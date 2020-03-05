@@ -5,11 +5,9 @@ const { promisify } = require("util");
 const hacss = require("./index.js");
 const { customConfig, defaultConfig } = require("./config/index.js");
 
-const [globP, accessP, readFileP] = [
-  glob,
-  fs.access,
-  fs.readFile,
-].map(promisify);
+const [globP, accessP, readFileP] = [glob, fs.access, fs.readFile].map(
+  promisify,
+);
 
 const config = async source => {
   if (source) {
@@ -19,8 +17,7 @@ const config = async source => {
   try {
     await accessP(defaultSource);
     return customConfig(require(defaultSource));
-  }
-  catch {
+  } catch (e) {
     return defaultConfig;
   }
 };
