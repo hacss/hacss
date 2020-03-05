@@ -8,14 +8,29 @@ const util = require("util");
 
 const { name } = require("./package.json");
 const hacss = require("./index.js");
-const config = require("./config/index.js");
+const { customConfig, defaultConfig } = require("./config/index.js");
 
-const [globP, mkdirpP, readFileP, writeFileP] = [
+const [globP, mkdirpP, accessP, readFileP, writeFileP] = [
   glob,
   mkdirp,
+  fs.access,
   fs.readFile,
   fs.writeFile,
 ].map(util.promisify);
+
+const config = async source => {
+  if (source) {
+    return customConfig(require(source));
+  }
+  const defaultSource = path.join(process.cwd(), "hacss.config.js");
+  try {
+    await accessP(defaultSource);
+    return customConfig(require(defaultSource));
+  }
+  catch {
+    return defaultConfig;
+  }
+};
 
 const a = process.argv.slice(2);
 
@@ -30,7 +45,6 @@ if (!validArgs) {
   );
 } else {
   const options = {
-    config: path.join(process.cwd(), "hacss.config.js"),
     output: null,
     sources: a[a.length - 1],
   };
@@ -47,10 +61,13 @@ if (!validArgs) {
     options.output = path.join(process.cwd(), a[outputIx + 1]);
   }
 
-  globP(options.sources)
-    .then(sources => Promise.all(sources.map(s => readFileP(s, "utf8"))))
-    .then(sources => sources.join("\n"))
-    .then(code => hacss(code, config(options.config)))
+  Promise.all([
+    globP(options.sources)
+      .then(sources => Promise.all(sources.map(s => readFileP(s, "utf8"))))
+      .then(sources => sources.join("\n")),
+    config(options.config),
+  ])
+    .then(x => hacss.apply(null, x))
     .then(css =>
       options.output
         ? mkdirpP(path.dirname(options.output)).then(() =>

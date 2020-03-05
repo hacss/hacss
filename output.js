@@ -3,16 +3,34 @@ const glob = require("glob");
 const path = require("path");
 const { promisify } = require("util");
 const hacss = require("./index.js");
-const config = require("./config/index.js");
+const { customConfig, defaultConfig } = require("./config/index.js");
 
-const globP = promisify(glob);
-const readFileP = promisify(fs.readFile);
+const [globP, accessP, readFileP] = [
+  glob,
+  fs.access,
+  fs.readFile,
+].map(util.promisify);
+
+const config = async source => {
+  if (source) {
+    return customConfig(require(source));
+  }
+  const defaultSource = path.join(process.cwd(), "hacss.config.js");
+  try {
+    await accessP(defaultSource);
+    return customConfig(require(defaultSource));
+  }
+  catch {
+    return defaultConfig;
+  }
+};
 
 module.exports = options => {
-  options.config =
-    options.config || path.join(process.cwd(), "hacss.config.js");
-  return globP(options.sources)
-    .then(sources => Promise.all(sources.map(s => readFileP(s, "utf8"))))
-    .then(sources => sources.join("\n"))
-    .then(code => ({ code: hacss(code, config(options.config)) }));
+  return Promise.all([
+    globP(options.sources)
+      .then(sources => Promise.all(sources.map(s => readFileP(s, "utf8"))))
+      .then(sources => sources.join("\n")),
+    config(options.config),
+  ])
+    .then(x => hacss.apply(null, x));
 };

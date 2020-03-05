@@ -1,34 +1,25 @@
-const fs = require("fs");
+const {
+  applyTo,
+  equals,
+  ifElse,
+  identity,
+  mergeDeepRight,
+  pipe,
+  type,
+} = require("ramda");
 const rules = require("./rules.js");
 const scopes = require("./scopes.js");
 
-const defaults = {
-  globalMapArg: x => x,
-  globalMapOutput: x => x,
+const defaultConfig = {
+  globalMapArg: identity,
+  globalMapOutput: identity,
   rules,
   scopes,
 };
 
-module.exports = configPath => {
-  if (configPath && fs.existsSync(configPath)) {
-    const custom = (c => (typeof c === "function" ? c(defaults) : c))(
-      require(configPath),
-    );
+const customConfig = pipe(
+  ifElse(pipe(type, equals("Function")), applyTo(defaultConfig), identity),
+  mergeDeepRight(defaultConfig),
+);
 
-    return {
-      ...defaults,
-      globalMapArg: custom.globalMapArg || defaults.globalMapArg,
-      globalMapOutput: custom.globalMapOutput || defaults.globalMapOutput,
-      scopes: {
-        ...defaults.scopes,
-        ...custom.scopes,
-      },
-      rules: {
-        ...defaults.rules,
-        ...custom.rules,
-      },
-    };
-  }
-
-  return defaults;
-};
+module.exports = { customConfig, defaultConfig };
