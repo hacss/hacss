@@ -9,7 +9,7 @@ const [globP, accessP, readFileP] = [
   glob,
   fs.access,
   fs.readFile,
-].map(util.promisify);
+].map(promisify);
 
 const config = async source => {
   if (source) {
