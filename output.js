@@ -32,5 +32,6 @@ module.exports = options => {
       .then(sources => sources.join("\n")),
     config(options.config),
   ])
-    .then(x => hacss.apply(null, x));
+    .then(x => hacss.apply(null, x))
+    .then(code => ({ code }));
 };
