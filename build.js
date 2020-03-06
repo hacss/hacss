@@ -21,9 +21,10 @@ const loadConfig = c => {
   return defaultConfig;
 };
 
-const loadSources = s => globP(s)
-  .then(sources => Promise.all(sources.map(s => readFileP(s, "utf8"))))
-  .then(code => code.join("\n"));
+const loadSources = s =>
+  globP(s)
+    .then(sources => Promise.all(sources.map(s => readFileP(s, "utf8"))))
+    .then(code => code.join("\n"));
 
 module.exports = (s, c) => {
   const config = loadConfig(c);

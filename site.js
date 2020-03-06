@@ -1,14 +1,15 @@
 const hacss = require("./index.js");
 const { customConfig } = require("./config/index.js");
 const testConfig = require("./test/config.js");
-import example from "./test/index.html";
+const example = require("./test/index.html").default;
 
 (function() {
   const style = document.createElement("style");
   document.head.appendChild(style);
 
   const container = document.createElement("div");
-  container.className = "Pos(a) T(0) End(0) B(0) Start(0) D(f) Fxf(r) Fxf(c)--sm Fxf(c)--md";
+  container.className =
+    "Pos(a) T(0) End(0) B(0) Start(0) D(f) Fxf(r) Fxf(c)--sm Fxf(c)--md";
   document.body.insertBefore(container, document.body.firstChild);
 
   const editPanel = document.createElement("div");
@@ -27,7 +28,7 @@ import example from "./test/index.html";
     tabSize: 2,
     useSoftTabs: true,
   });
-  editor.session.setValue(example);
+  editor.session.setValue(example.trim());
   editor.session.on("change", function() {
     var code = editor.session.getValue();
     updatePreview(code);

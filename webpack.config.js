@@ -12,7 +12,11 @@ module.exports = {
   mode: "production",
   plugins: [
     new CopyPlugin([
-      { from: "node_modules/ace-builds/src-min/**/*", to: "ace", flatten: true },
+      {
+        from: "node_modules/ace-builds/src-min/**/*",
+        to: "ace",
+        flatten: true,
+      },
       { from: "node_modules/prettier/standalone.js", to: "prettier" },
       { from: "node_modules/prettier/parser-postcss.js", to: "prettier" },
     ]),
