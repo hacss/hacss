@@ -53,7 +53,8 @@ const {
   values,
   xprod,
 } = require("ramda");
-const { format } = require("prettier");
+const { format } = require("prettier/standalone");
+const prettierCSS = require("prettier/parser-postcss");
 const postcss = require("postcss");
 const nested = require("postcss-nested");
 
@@ -320,5 +321,5 @@ const build = ({ rules, scopes, globalMapArg, globalMapOutput }) => {
 module.exports = pipe(
   flip(uncurryN(2, build)),
   css => postcss([nested]).process(css).css,
-  flip(curry(format))({ parser: "css" }),
+  flip(curry(format))({ parser: "css", plugins: [ prettierCSS ] }),
 );
