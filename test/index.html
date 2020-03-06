@@ -1,42 +1,48 @@
 <link rel="stylesheet" href="styles.css" />
-<div class="W(400px)">
-  <div class="W(400px) H(200px) Lh(200px) Bgc(#ccc) Bgc(#cdc):h Ta(c) foo">
-    <span class="C(#fff) Tstk(1px,#000) foo:h_Tstk(1px,#060) Fz(64px)">hacss</span>
+<div class="M(16px)">
+  <div class="W(400px)">
+    <div class="W(400px) H(200px) Lh(200px) Bgc(#ccc) Bgc(#cdc):h Ta(c) foo">
+      <span class="C(#fff) Tstk(1px,#000) foo:h_Tstk(1px,#060) Fz(64px)">
+        hacss
+      </span>
+    </div>
+    <p class="Fz(18px) Lh(1.5) LineClamp(2,54px)">
+      Lorem ipsum dolor sit amet, id oratio graeco nostrum sit, latine eligendi
+      scribentur mea ex. Tota dolorem voluptua eos at. Ei nec reque viderer
+      facilis. Aliquip necessitatibus ex pri, pertinax atomorum ei sea. Ea
+      omittam appetere posidonium per, te meliore volutpat duo, dolorem ponderum
+      interpretaris sea ut.
+    </p>
   </div>
-  <p class="Fz(18px) Lh(1.5) LineClamp(2,54px)">
-    Lorem ipsum dolor sit amet, id oratio graeco nostrum sit, latine eligendi
-    scribentur mea ex. Tota dolorem voluptua eos at. Ei nec reque viderer
-    facilis. Aliquip necessitatibus ex pri, pertinax atomorum ei sea. Ea omittam
-    appetere posidonium per, te meliore volutpat duo, dolorem ponderum
-    interpretaris sea ut.
-  </p>
+  <div class="Mt(24px)">
+    <button class="Bds(n) Bdrs(4px) P(8px) C(#fff) Ff(ss) Fw(n) Fz(14px) Bgi(linear-gradient(#900,#c00)):a Bgi(linear-gradient(#999,#ccc)):di Bgi(linear-gradient(#009,#00c)):h Bgi(linear-gradient(#006,#009)) bar">
+      <span class="bar:a_C(#f90) bar:di_C(#ccc) bar:h_C(#09f)">&#9679;</span>
+      Testing
+    </button>
+    <label class="Mstart(8px)">
+      Disabled:
+      <input
+        type="checkbox"
+        onchange="this.parentElement.previousElementSibling.disabled=this.checked" />
+    </label>
+  </div>
+  <div class="Mt(24px) W(100px) H(10px) Bgc(#999)">
+    <div class="W(calc(1/2+5px)) H(100%) Bgc(#009)"></div>
+  </div>
+  <table class="Mt(24px) Bdsp(1px) Ff(ss) Fz(16px) C(#333)">
+    <thead>
+      <tr>
+        <th class="P(8px) Fw(b) Ta(c) Bgc(#f5925a)">A</th>
+        <th class="P(8px) Fw(b) Ta(c) Bgc(#92f55a)">B</th>
+        <th class="P(8px) Fw(b) Ta(c) Bgc(#5a92f5)">C</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="P(8px) Fw(n) Ta(c) Bgc(#ffdfa7)">1</td>
+        <td class="P(8px) Fw(n) Ta(c) Bgc(#dfffa7)">2</td>
+        <td class="P(8px) Fw(n) Ta(c) Bgc(#a7dfff)">3</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-<div class="Mt(24px)">
-  <button class="Bds(n) Bdrs(4px) P(8px) C(#fff) Ff(ss) Fw(n) Fz(14px) Bgi(linear-gradient(#900,#c00)):a Bgi(linear-gradient(#999,#ccc)):di Bgi(linear-gradient(#009,#00c)):h Bgi(linear-gradient(#006,#009)) bar">
-    <span class="bar:a_C(#f90) bar:di_C(#ccc) bar:h_C(#09f)">&#9679;</span>
-    Testing
-  </button>
-  <label class="Mstart(8px)">
-    Disabled:
-    <input type="checkbox" onchange="this.parentElement.previousElementSibling.disabled=this.checked" />
-  </label>
-</div>
-<div class="Mt(24px) W(100px) H(10px) Bgc(#999)">
-  <div class="W(calc(1/2+5px)) H(100%) Bgc(#009)"></div>
-</div>
-<table class="Mt(24px) Bdsp(1px) Ff(ss) Fz(16px) C(#333)">
-  <thead>
-    <tr>
-      <th class="P(8px) Fw(b) Ta(c) Bgc(#f5925a)">A</th>
-      <th class="P(8px) Fw(b) Ta(c) Bgc(#92f55a)">B</th>
-      <th class="P(8px) Fw(b) Ta(c) Bgc(#5a92f5)">C</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="P(8px) Fw(n) Ta(c) Bgc(#ffdfa7)">1</td>
-      <td class="P(8px) Fw(n) Ta(c) Bgc(#dfffa7)">2</td>
-      <td class="P(8px) Fw(n) Ta(c) Bgc(#a7dfff)">3</td>
-    </tr>
-  </tbody>
-</table>
