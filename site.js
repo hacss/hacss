@@ -1,7 +1,7 @@
 const hacss = require("./index.js");
 const { customConfig } = require("./config/index.js");
 const testConfig = require("./test/config.js");
-const example = require("./test/index.html").default;
+const example = require("./test/index.html");
 
 (function() {
   const style = document.createElement("style");
@@ -28,7 +28,7 @@ const example = require("./test/index.html").default;
     tabSize: 2,
     useSoftTabs: true,
   });
-  editor.session.setValue(example.trim());
+  editor.session.setValue(example);
   editor.session.on("change", function() {
     var code = editor.session.getValue();
     updatePreview(code);

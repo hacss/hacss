@@ -51,7 +51,14 @@ module.exports = {
       },
       {
         test: /\.html$/,
-        use: ["raw-loader"],
+        use: [
+          {
+            loader: "raw-loader",
+            options: {
+              esModule: false,
+            },
+          },
+        ],
       },
       {
         test: /\/test\/index\.html$/,
@@ -59,7 +66,7 @@ module.exports = {
           {
             loader: "string-replace-loader",
             options: {
-              search: `<link rel="stylesheet" href="styles.css" />`,
+              search: `<link rel="stylesheet" href="styles.css" />\n`,
               replace: "",
             },
           },
