@@ -321,5 +321,5 @@ const build = ({ rules, scopes, globalMapArg, globalMapOutput }) => {
 module.exports = pipe(
   flip(uncurryN(2, build)),
   css => postcss([nested]).process(css).css,
-  flip(curry(format))({ parser: "css", plugins: [ prettierCSS ] }),
+  flip(curry(format))({ parser: "css", plugins: [prettierCSS] }),
 );

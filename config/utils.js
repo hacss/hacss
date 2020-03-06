@@ -27,7 +27,7 @@ exports.color = c => {
 exports.normalizeLength = value => {
   const fractionToPercentage = value =>
     value.replace(/([0-9]+)\/([0-9]+)/g, (...args) => {
-      const [ num, den ] = args.slice(1);
+      const [num, den] = args.slice(1);
       return `${Math.round((num / den) * 10000) / 100}%`;
     });
 

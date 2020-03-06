@@ -25,9 +25,11 @@ const mkdirpP = promisify(mkdirp);
 const build = require("./build.js");
 
 if (process.argv.length < 3) {
-  return console.log(`
+  return console.log(
+    `
     Usage: hacss [--config <config-file>] [--output <output-file>] <sources>
-  `.trim());
+  `.trim(),
+  );
 }
 
 const { sources, config, output } = pipe(
@@ -37,17 +39,16 @@ const { sources, config, output } = pipe(
     ifElse(
       pipe(length, equals(2)),
       adjust(0, dropWhile(equals("-"))),
-      insert(0, "sources")
-    )
+      insert(0, "sources"),
+    ),
   ),
-  fromPairs
+  fromPairs,
 )(process.argv);
 
 build(sources, config)
-  .then(css => output
-    ? mkdirpP(dirname(output)).then(() =>
-        writeFileP(output, css),
-      )
-    : process.stdout.write(css),
+  .then(css =>
+    output
+      ? mkdirpP(dirname(output)).then(() => writeFileP(output, css))
+      : process.stdout.write(css),
   )
   .catch(err => console.error(err));
