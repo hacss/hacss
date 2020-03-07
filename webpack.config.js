@@ -20,7 +20,12 @@ module.exports = {
       { from: "node_modules/prettier/standalone.js", to: "prettier" },
       { from: "node_modules/prettier/parser-postcss.js", to: "prettier" },
     ]),
-    new HtmlPlugin({ title: "Hacss Playground" }),
+    new HtmlPlugin({
+      title: "Hacss Playground",
+      meta: {
+        viewport: "width=device-width, initial-scale=1, shrink-to-fit=no"
+      },
+    }),
     new HtmlIncludeAssetsPlugin({
       assets: [
         "ace/ace.js",
