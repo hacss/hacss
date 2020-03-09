@@ -32,6 +32,7 @@ const {
   match,
   max,
   not,
+  o,
   of,
   path,
   pick,
@@ -51,6 +52,7 @@ const {
   uncurryN,
   uniqBy,
   values,
+  when,
   xprod,
 } = require("ramda");
 const { format } = require("prettier/standalone");
@@ -145,7 +147,7 @@ const selector = pipe(
   applyRecord({
     className: pipe(CSS.escape, prepend("."), join("")),
     pseudos: map(pseudoCSS),
-    context: ifElse(isNil, always(null), x => selector(x)),
+    context: when(o(not, isNil), x => selector(x)),
     operator: ifElse(
       equals("_"),
       always(" "),
@@ -161,23 +163,21 @@ const selector = pipe(
       apply(reduce),
     ),
   ),
-  ifElse(
+  when(
     has("operator"),
     computeField(
       "selector",
       pipe(pick(["selector", "operator"]), values, join("")),
     ),
-    identity,
   ),
   pick(["selector", "context"]),
   applyRecord({
     context: prop("selector"),
     selector: identity,
   }),
-  ifElse(
+  when(
     has("context"),
     pipe(pick(["context", "selector"]), values, join("")),
-    identity,
   ),
 );
 
@@ -243,9 +243,8 @@ const build = ({ rules, scopes, globalMapArg, globalMapOutput }) => {
         }),
         applyRecord({
           className: identity,
-          context: ifElse(
-            isNil,
-            always(null),
+          context: when(
+            o(not, isNil),
             pipe(
               match(/([^\:_\+\>]+)((\:{1,2}[a-z]+)+)?([_\+\>])/),
               pick([1, 2, 4]),
@@ -273,9 +272,8 @@ const build = ({ rules, scopes, globalMapArg, globalMapOutput }) => {
               adjust(0, apply(rule)),
               adjust(1, head),
               apply(globalMapOutput),
-              ifElse(
-                isNil,
-                always(null),
+              when(
+                o(not, isNil),
                 pipe(
                   replace(/__START__/g, "left"),
                   replace(/__END__/g, "right"),
