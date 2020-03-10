@@ -2,7 +2,7 @@ const { existsSync, readFile } = require("fs");
 const glob = require("glob");
 const path = require("path");
 const { promisify } = require("util");
-const { uniq } = require("ramda");
+const { flatten, nthArg, pipe, uniq } = require("ramda");
 
 const readFileP = promisify(readFile);
 const globP = promisify(glob);
@@ -23,7 +23,7 @@ const loadConfig = c => {
 };
 
 const loadSources = s =>
-  s.map ? Promise.all(s.map(globP)).then(uniq) : globP(s)
+  (s.map ? Promise.all(s.map(pipe(nthArg(0), globP))).then(pipe(flatten, uniq)) : globP(s))
     .then(sources => Promise.all(sources.map(s => readFileP(s, "utf8"))))
     .then(code => code.join("\n"));
 
