@@ -25,5 +25,7 @@ When specified, Hacss will write its output to the specified file. When not
 specified, Hacss output will be written to the standard output.
 
 #### ```<sources>```
-The [glob](https://www.npmjs.com/package/glob) pattern specified here will be used to search for source files from
-which to produce the stylesheet.
+The [glob](https://www.npmjs.com/package/glob) pattern specified here will be
+used to search for source files from which to produce the stylesheet. You can
+also specify a series of globs.
+
