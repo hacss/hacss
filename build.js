@@ -23,7 +23,10 @@ const loadConfig = c => {
 };
 
 const loadSources = s =>
-  (s.map ? Promise.all(s.map(pipe(nthArg(0), globP))).then(pipe(flatten, uniq)) : globP(s))
+  (s.map
+    ? Promise.all(s.map(pipe(nthArg(0), globP))).then(pipe(flatten, uniq))
+    : globP(s)
+  )
     .then(sources => Promise.all(sources.map(s => readFileP(s, "utf8"))))
     .then(code => code.join("\n"));
 

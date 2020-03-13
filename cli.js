@@ -45,8 +45,20 @@ const { sources, config, output } = pipe(
   drop(2),
   splitEvery(2),
   flip(repeat)(2),
-  adjust(0, pipe(takeWhile(pipe(head, startsWith("--"))), map(adjust(0, drop(2))))),
-  adjust(1, pipe(dropWhile(pipe(head, startsWith("--"))), flatten, of, insert(0, "sources"), of)),
+  adjust(
+    0,
+    pipe(takeWhile(pipe(head, startsWith("--"))), map(adjust(0, drop(2)))),
+  ),
+  adjust(
+    1,
+    pipe(
+      dropWhile(pipe(head, startsWith("--"))),
+      flatten,
+      of,
+      insert(0, "sources"),
+      of,
+    ),
+  ),
   apply(concat),
   fromPairs,
 )(process.argv);
