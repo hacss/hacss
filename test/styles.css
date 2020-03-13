@@ -1,37 +1,50 @@
 .M\(16px\) {
   margin: 16px;
 }
+
 .W\(400px\) {
   width: 400px;
 }
+
 .H\(200px\) {
   height: 200px;
 }
+
 .Lh\(200px\) {
   line-height: 200px;
 }
+
 .Bgc\(\#ccc\) {
   background-color: #ccc;
 }
+
 .Ta\(c\) {
   text-align: center;
 }
+
 .C\(\#fff\) {
   color: #fff;
 }
+
 .Tstk\(1px\,\#000\) {
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
-    1px 1px 0 #000;
+  text-shadow: -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
 }
+
 .Fz\(64px\) {
   font-size: 64px;
 }
+
 .Fz\(18px\) {
   font-size: 18px;
 }
+
 .Lh\(1\.5\) {
   line-height: 1.5;
 }
+
 .LineClamp\(2\,54px\) {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -39,17 +52,20 @@
   display: -webkit-box;
   overflow: hidden;
 }
-@supports (display: -moz-box):  {
+
+@supports (display:-moz-box): {
   .LineClamp\(2\,54px\) {
     display: block;
   }
 }
+
 .LineClamp\(2\,54px\):not(:not(a)) {
   display: inline-block;
   display: -webkit-box;
   *display: inline;
   zoom: 1;
 }
+
 .LineClamp\(2\,54px\):not(:not(a))::after {
   content: ".";
   font-size: 0;
@@ -59,103 +75,138 @@
   height: 0;
   width: 0;
 }
+
 .Mt\(24px\) {
   margin-top: 24px;
 }
+
 .Bds\(n\) {
   border-style: none;
 }
+
 .Bdrs\(4px\) {
   border-radius: 4px;
 }
+
 .P\(8px\) {
   padding: 8px;
 }
+
 .Ff\(ss\) {
   font-family: Helvetica, Arial, sans-serif;
 }
+
 .Fw\(n\) {
   font-weight: normal;
 }
+
 .Fz\(14px\) {
   font-size: 14px;
 }
+
 .Bgi\(linear-gradient\(\#006\,\#009\)\) {
-  background-image: linear-gradient(#006, #009);
+  background-image: linear-gradient(#006,#009);
 }
+
 .Mstart\(8px\) {
   margin-left: 8px;
 }
+
 .W\(100px\) {
   width: 100px;
 }
+
 .H\(10px\) {
   height: 10px;
 }
+
 .Bgc\(\#999\) {
   background-color: #999;
 }
+
 .W\(calc\(1\/2\+5px\)\) {
   width: calc(50% + 5px);
 }
+
 .H\(100\%\) {
   height: 100%;
 }
+
 .Bgc\(\#009\) {
   background-color: #009;
 }
+
 .Bdsp\(1px\) {
   border-spacing: 1px;
 }
+
 .Fz\(16px\) {
   font-size: 16px;
 }
+
 .C\(\#333\) {
   color: #333;
 }
+
 .Fw\(b\) {
   font-weight: bold;
 }
+
 .Bgc\(\#f5925a\) {
   background-color: #f5925a;
 }
+
 .Bgc\(\#92f55a\) {
   background-color: #92f55a;
 }
+
 .Bgc\(\#5a92f5\) {
   background-color: #5a92f5;
 }
+
 .Bgc\(\#ffdfa7\) {
   background-color: #ffdfa7;
 }
+
 .Bgc\(\#dfffa7\) {
   background-color: #dfffa7;
 }
+
 .Bgc\(\#a7dfff\) {
   background-color: #a7dfff;
 }
+
 .Bgc\(\#cdc\)\:h:hover {
   background-color: #cdc;
 }
+
 .Bgi\(linear-gradient\(\#009\,\#00c\)\)\:h:hover {
-  background-image: linear-gradient(#009, #00c);
+  background-image: linear-gradient(#009,#00c);
 }
+
 .Bgi\(linear-gradient\(\#900\,\#c00\)\)\:a:active {
-  background-image: linear-gradient(#900, #c00);
+  background-image: linear-gradient(#900,#c00);
 }
+
 .Bgi\(linear-gradient\(\#999\,\#ccc\)\)\:di:disabled {
-  background-image: linear-gradient(#999, #ccc);
+  background-image: linear-gradient(#999,#ccc);
 }
+
 .foo:hover .foo\:h_Tstk\(1px\,\#060\) {
-  text-shadow: -1px -1px 0 #060, 1px -1px 0 #060, -1px 1px 0 #060,
-    1px 1px 0 #060;
+  text-shadow: -1px -1px 0 #060,
+        1px -1px 0 #060,
+        -1px 1px 0 #060,
+        1px 1px 0 #060;
 }
+
 .bar:hover .bar\:h_C\(\#09f\) {
   color: #09f;
 }
+
 .bar:active .bar\:a_C\(\#f90\) {
   color: #f90;
 }
+
 .bar:disabled .bar\:di_C\(\#ccc\) {
   color: #ccc;
 }

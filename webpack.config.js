@@ -17,28 +17,18 @@ module.exports = {
         to: "ace",
         flatten: true,
       },
-      { from: "node_modules/prettier/standalone.js", to: "prettier" },
-      { from: "node_modules/prettier/parser-postcss.js", to: "prettier" },
     ]),
     new HtmlPlugin({
       title: "Hacss Playground",
       meta: {
-        viewport: "width=device-width, initial-scale=1, shrink-to-fit=no"
+        viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
       },
     }),
     new HtmlIncludeAssetsPlugin({
-      assets: [
-        "ace/ace.js",
-        "prettier/standalone.js",
-        "prettier/parser-postcss.js",
-      ],
+      assets: ["ace/ace.js"],
       append: false,
     }),
   ],
-  externals: {
-    "prettier/standalone": "prettier",
-    "prettier/parser-postcss": "prettierPlugins.postcss",
-  },
   module: {
     rules: [
       {
