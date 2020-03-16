@@ -677,7 +677,7 @@ module.exports = {
     lookup({ n: "none", b: "both", h: "horizontal", v: "vertical" }),
   ),
   Saturate: a => `filter: saturate(${a})`,
-  Scale: (a, b) => `transform: scale(${a},${b})`,
+  Scale: (a, b = a) => `transform: scale(${a},${b})`,
   Scale3d: (a, b, c) => `transform: scale3d(${a},${b},${c})`,
   ScaleX: a => `transform: scaleX(${a})`,
   ScaleY: a => `transform: scaleY(${a})`,
