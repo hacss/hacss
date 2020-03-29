@@ -2,6 +2,7 @@ const hacss = require("./index.js");
 const { customConfig } = require("./config/index.js");
 const testConfig = require("./test/config.js");
 const example = require("./test/index.html");
+const autoprefixer = require("autoprefixer");
 
 (function() {
   const style = document.createElement("style");
@@ -35,7 +36,8 @@ const example = require("./test/index.html");
   });
 
   function updatePreview(code) {
-    style.textContent = hacss(code, customConfig(testConfig));
+    style.textContent =
+      autoprefixer.process(hacss(code, customConfig(testConfig))).css;
     previewPanel.innerHTML = code;
   }
 })();

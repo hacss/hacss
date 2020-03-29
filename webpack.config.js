@@ -1,7 +1,8 @@
 const path = require("path");
+const terser = require("terser");
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlPlugin = require("html-webpack-plugin");
-const HtmlIncludeAssetsPlugin = require("html-webpack-include-assets-plugin");
+const HtmlTagsPlugin = require("html-webpack-tags-plugin");
 
 module.exports = {
   entry: ["./output.js", "./site.js"],
@@ -17,6 +18,10 @@ module.exports = {
         to: "ace",
         flatten: true,
       },
+      {
+        from: "node_modules/autoprefixer-rails/vendor/autoprefixer.js",
+        transform: content => terser.minify(content.toString()).code,
+      },
     ]),
     new HtmlPlugin({
       title: "Hacss Playground",
@@ -24,11 +29,12 @@ module.exports = {
         viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
       },
     }),
-    new HtmlIncludeAssetsPlugin({
-      assets: ["ace/ace.js"],
+    new HtmlTagsPlugin({
+      tags: ["ace/ace.js", "autoprefixer.js"],
       append: false,
     }),
   ],
+  externals: ["autoprefixer"],
   module: {
     rules: [
       {
