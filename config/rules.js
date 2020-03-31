@@ -223,11 +223,17 @@ module.exports = {
   ),
   Bgpx: mapArgs(
     a => `background-position-x: ${a}`,
-    lookup({ start: "__START__", end: "__END__", c: "50%" }),
+    [
+      normalizeLength,
+      lookup({ start: "__START__", end: "__END__", c: "50%" }),
+    ],
   ),
   Bgpy: mapArgs(
     a => `background-position-y: ${a}`,
-    lookup({ t: "0", b: "100%", c: "50%" }),
+    [
+      normalizeLength,
+      lookup({ t: "0", b: "100%", c: "50%" }),
+    ],
   ),
   Bgr: mapArgs(
     a => `background-repeat: ${a}`,
