@@ -14,30 +14,32 @@ const autoprefixer = require("autoprefixer");
   document.body.insertBefore(container, document.body.firstChild);
 
   const editPanel = document.createElement("div");
-  editPanel.className = "Fxg(1) Fxs(1) Fxb(1/2)";
+  editPanel.className = "Fxg(0) Fxs(0) Fxb(1/2)";
   container.appendChild(editPanel);
 
   const previewPanel = document.createElement("div");
-  previewPanel.className = "Fxg(1) Fxs(1) Fxb(1/2) Ov(a) Pos(r)";
-  updatePreview(example);
+  previewPanel.className = "Fxg(0) Fxs(0) Fxb(1/2) Ov(a) Pos(r)";
   container.appendChild(previewPanel);
 
   const editor = ace.edit(editPanel);
+
   editor.setTheme("ace/theme/cobalt");
-  editor.session.setMode("ace/mode/html");
-  editor.session.setOptions({
+
+  const session = editor.session;
+
+  session.setMode("ace/mode/html");
+
+  session.setOptions({
     tabSize: 2,
     useSoftTabs: true,
   });
-  editor.session.setValue(example);
-  editor.session.on("change", function() {
-    var code = editor.session.getValue();
-    updatePreview(code);
-  });
 
-  function updatePreview(code) {
+  session.on("change", function() {
+    const code = session.getValue();
     style.textContent =
       autoprefixer.process(hacss(code, customConfig(testConfig))).css;
     previewPanel.innerHTML = code;
-  }
+  });
+
+  session.setValue(example);
 })();
