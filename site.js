@@ -38,7 +38,7 @@ const autoprefixer = require("autoprefixer");
   title.innerText = "Hacss Playground";
   editorTogglePanel.appendChild(title);
 
-  const buttonClasses = "Bd(n) Px(8px) Mstart(2px) Ff(ss) Fz(14px) Bdrs(0) O(n) Cur(p)";
+  const buttonClasses = "Bd(n) Px(8px) My(0) Mend(0) Mstart(2px) Ff(ss) Fz(14px) Bdrs(0) O(n) Cur(p)";
   const activeButtonClasses = buttonClasses + " Bgc(#8ec58e) C(#000)";
   const inactiveButtonClasses = buttonClasses + " Bgc(#444) C(#ccc)";
 
