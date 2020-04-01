@@ -51,7 +51,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.html$/,
+        test: /test/,
         use: [
           {
             loader: "raw-loader",
