@@ -74,7 +74,8 @@ const autoprefixer = require("autoprefixer");
       let parsedConfig;
 
       try {
-        parsedConfig = eval(config);
+        parsedConfig =
+          Function(config.replace(/module\.exports\s?=\s?/, "return "))();
       }
       catch (_) {
         return;
