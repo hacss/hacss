@@ -9,6 +9,10 @@ exports.color = c => {
     return presets[c];
   }
 
+  if (typeof c !== "string") {
+    return c;
+  }
+
   const hexAlpha = c.match(/^\#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})(\.[0-9]{1,2})$/);
   if (hexAlpha) {
     const [_, hex, alpha] = hexAlpha;
@@ -25,6 +29,10 @@ exports.color = c => {
 };
 
 exports.normalizeLength = value => {
+  if (typeof value !== "string") {
+    return value;
+  }
+  
   const fractionToPercentage = value =>
     value.replace(/([0-9]+)\/([0-9]+)/g, (...args) => {
       const [num, den] = args.slice(1);
