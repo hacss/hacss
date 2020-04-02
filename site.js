@@ -25,7 +25,7 @@ const autoprefixer = require("autoprefixer");
 
   markupEditor.className =
     configEditor.className =
-      "Pos(a) T(40px) End(8px) B(8px) Start(8px) Bdw(2px) Bdc(#8ec58e) Bds(s)";
+      "Pos(a) T(40px) End(8px) B(8px) Start(8px) Bdw(2px) Bdc(#ffff7e) Bds(s)";
 
   configEditor.classList.add("D(n)");
 
@@ -38,9 +38,9 @@ const autoprefixer = require("autoprefixer");
   title.innerText = "Hacss Playground";
   editorTogglePanel.appendChild(title);
 
-  const buttonClasses = "Bd(n) Px(8px) My(0) Mend(0) Mstart(2px) Ff(ss) Fz(14px) Bdrs(0) O(n) Cur(p)";
-  const activeButtonClasses = buttonClasses + " Bgc(#8ec58e) C(#000)";
-  const inactiveButtonClasses = buttonClasses + " Bgc(#444) C(#ccc)";
+  const buttonClasses = "Bd(n) Px(8px) My(0) Mend(0) Mstart(2px) Ff(ss) Fz(14px) Bdrs(0) O(n)";
+  const activeButtonClasses = buttonClasses + " Bgc(#ffff7e) C(#000)";
+  const inactiveButtonClasses = buttonClasses + " Bgc(#444) Bgc(#555):h C(#ccc) Cur(p)";
 
   const markupButton = document.createElement("button");
   const configButton = document.createElement("button");
@@ -128,7 +128,7 @@ const autoprefixer = require("autoprefixer");
 
   function initEditor(host, mode, initialValue, callback) {
     const editor = ace.edit(host);
-    editor.setTheme("ace/theme/tomorrow_night_eighties");
+    editor.setTheme("ace/theme/merbivore");
     const session = editor.session;
     session.setMode("ace/mode/" + mode);
     session.setOptions({
