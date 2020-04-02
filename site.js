@@ -14,7 +14,7 @@ const autoprefixer = require("autoprefixer");
   document.body.insertBefore(container, document.body.firstChild);
 
   const editPanel = document.createElement("div");
-  editPanel.className = "Bgc(#222) Fxg(0) Fxs(0) Fxb(1/2) Pos(r)";
+  editPanel.className = "Bgc(#1a1817) Fxg(0) Fxs(0) Fxb(1/2) Pos(r)";
   container.appendChild(editPanel);
 
   const markupEditor = document.createElement("div");
@@ -25,7 +25,7 @@ const autoprefixer = require("autoprefixer");
 
   markupEditor.className =
     configEditor.className =
-      "Pos(a) T(40px) End(8px) B(8px) Start(8px) Bdw(2px) Bdc(#ffff7e) Bds(s)";
+      "Pos(a) T(40px) End(8px) B(8px) Start(8px) Bdw(2px) Bdc(#7e7c8d) Bds(s)";
 
   configEditor.classList.add("D(n)");
 
@@ -39,8 +39,8 @@ const autoprefixer = require("autoprefixer");
   editorTogglePanel.appendChild(title);
 
   const buttonClasses = "Bd(n) Px(8px) My(0) Mend(0) Mstart(2px) Ff(ss) Fz(14px) Bdrs(0) O(n)";
-  const activeButtonClasses = buttonClasses + " Bgc(#ffff7e) C(#000)";
-  const inactiveButtonClasses = buttonClasses + " Bgc(#444) Bgc(#555):h C(#ccc) Cur(p)";
+  const activeButtonClasses = buttonClasses + " Bgc(#7e7c8d) C(#e4e2f3)";
+  const inactiveButtonClasses = buttonClasses + " Bgc(#313835) Bgc(#4b524f):h C(#cad1ce) C(#e3eae7):h Cur(p)";
 
   const markupButton = document.createElement("button");
   const configButton = document.createElement("button");
@@ -128,7 +128,7 @@ const autoprefixer = require("autoprefixer");
 
   function initEditor(host, mode, initialValue, callback) {
     const editor = ace.edit(host);
-    editor.setTheme("ace/theme/merbivore");
+    editor.setTheme("ace/theme/kr_theme");
     const session = editor.session;
     session.setMode("ace/mode/" + mode);
     session.setOptions({
