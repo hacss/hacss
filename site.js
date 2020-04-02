@@ -34,7 +34,7 @@ const autoprefixer = require("autoprefixer");
   editPanel.appendChild(editorTogglePanel);
 
   const title = document.createElement("h1");
-  title.className = "M(0) Ff(ss) Fw(n) Fz(20px) C(#ccc) W(100%) D(if) Ai(c)";
+  title.className = "M(0) Ff(ss) Fw(n) Fz(20px) C(#cad1ce) W(100%) D(if) Ai(c)";
   title.innerText = "Hacss Playground";
   editorTogglePanel.appendChild(title);
 
