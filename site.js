@@ -81,17 +81,23 @@ const autoprefixer = require("autoprefixer");
         return;
       }
 
-      style.textContent =
-        autoprefixer
-          .process(
-            hacss(
-              code,
-              customConfig(parsedConfig),
+      try {
+        style.textContent =
+          autoprefixer
+            .process(
+              hacss(
+                code,
+                customConfig(parsedConfig),
+              )
             )
-          )
-          .css;
+            .css;
 
-      previewPanel.innerHTML = code;
+        previewPanel.innerHTML = code;
+      }
+      catch (_) {
+        // TODO: Fix issue upstream.
+        return;
+      }
     },
     example,
     testConfig,
