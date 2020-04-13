@@ -203,18 +203,18 @@
         1px 1px 0 #060;
 }
 
-.bar:hover .bar\:h_C\(\#09f\) {
+.abc-def:hover .abc-def\:h_C\(\#09f\) {
   color: #09f;
 }
 
-.bar:active .bar\:a_Scale\(0\.9\) {
+.abc-def:active .abc-def\:a_Scale\(0\.9\) {
   transform: scale(0.9,0.9);
 }
 
-.bar:active .bar\:a_C\(\#f90\) {
+.abc-def:active .abc-def\:a_C\(\#f90\) {
   color: #f90;
 }
 
-.bar:disabled .bar\:di_C\(\#ccc\) {
+.abc-def:disabled .abc-def\:di_C\(\#ccc\) {
   color: #ccc;
 }
