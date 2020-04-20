@@ -35,6 +35,7 @@ const {
   mapObjIndexed,
   match,
   max,
+  mergeRight,
   not,
   nth,
   nthArg,
@@ -58,6 +59,12 @@ const {
   zip,
 } = require("ramda");
 const knownProperties = require("known-css-properties").all;
+
+const DEFAULT_MEDIA_QUERIES = {
+  "small": "only screen and (max-width: 599px)",
+  "medium": "only screen and (min-width: 600px) and (max-width: 999px)",
+  "large": "only screen and (min-width: 1000px)",
+};
 
 const DEFAULT_PLUGINS = [
   require("./plugins/calc.js"),
@@ -168,7 +175,9 @@ const wrapper = curryN(
   ),
 );
 
-const build = ({ mediaQueries = {}, plugins = [] } = {}) => {
+const build = config => {
+  const mediaQueries = mergeRight(DEFAULT_MEDIA_QUERIES, config.mediaQueries);
+
   const applyPlugins = pipe(
     map(
       cond([
@@ -178,12 +187,12 @@ const build = ({ mediaQueries = {}, plugins = [] } = {}) => {
       ])
     ),
     reduce(o, identity),
-  )(plugins.concat(DEFAULT_PLUGINS));
+  )(config.plugins.concat(DEFAULT_PLUGINS));
 
   const properties = reduce(
     concat,
     knownProperties,
-    map(o(defaultTo([]), nth(1)), plugins),
+    map(o(defaultTo([]), nth(1)), config.plugins),
   );
 
   const pattern = new RegExp(`(@(\\w+){)?(([\\w:]+)([_+>]))?((:[^\\s{]+){)?(((${

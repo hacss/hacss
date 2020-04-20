@@ -3,9 +3,8 @@ const indexedVariables = require("../plugins/indexed-variables.js");
 
 module.exports = {
   mediaQueries: {
-    "small": "only screen and (max-width: 599px)",
-    "medium": "only screen and (min-width: 600px) and (max-width: 1000px)",
-    "large": "only screen and (min-width: 1000px)",
+    "medium": "only screen and (min-width: 600px) and (max-width: 1199px)",
+    "large": "only screen and (min-width: 1200px)",
   },
   plugins: [
     globalVariables({
