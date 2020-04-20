@@ -12,11 +12,9 @@
   "bin": "cli.js",
   "dependencies": {
     "css.escape": "^1.5.1",
-    "cssbeautify": "^0.3.1",
     "glob": "^7.1.6",
+    "known-css-properties": "^0.18.0",
     "mkdirp": "^0.5.1",
-    "postcss": "^7.0.26",
-    "postcss-nested": "^4.2.1",
     "ramda": "^0.27.0"
   },
   "scripts": {

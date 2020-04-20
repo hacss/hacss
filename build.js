@@ -8,18 +8,19 @@ const readFileP = promisify(readFile);
 const globP = promisify(glob);
 
 const hacss = require("./index.js");
-const { customConfig, defaultConfig } = require("./config/index.js");
 
 const loadConfig = c => {
-  const load = x => customConfig(require(path.join(process.cwd(), x)));
+  const load = x => require(path.join(process.cwd(), x));
 
   if (c) {
     return load(c);
   }
+
   if (existsSync("hacss.config.js")) {
     return load("hacss.config.js");
   }
-  return defaultConfig;
+
+  return {};
 };
 
 const loadSources = s =>
