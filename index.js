@@ -59,6 +59,11 @@ const {
 } = require("ramda");
 const knownProperties = require("known-css-properties").all;
 
+const DEFAULT_PLUGINS = [
+  require("./plugins/calc.js"),
+  require("./plugins/space.js"),
+];
+
 const applyRecord = f =>
   mapObjIndexed(
     pipe(
@@ -173,7 +178,7 @@ const build = ({ mediaQueries = {}, plugins = [] } = {}) => {
       ])
     ),
     reduce(o, identity),
-  )(plugins);
+  )(plugins.concat(DEFAULT_PLUGINS));
 
   const properties = reduce(
     concat,
