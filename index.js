@@ -69,6 +69,7 @@ const DEFAULT_MEDIA_QUERIES = {
 
 const DEFAULT_PLUGINS = [
   require("./plugins/calc.js"),
+  require("./plugins/url.js"),
   require("./plugins/space.js"),
 ];
 
