@@ -18,6 +18,7 @@ const {
   defaultTo,
   descend,
   dissoc,
+  drop,
   equals,
   filter,
   flip,
@@ -152,7 +153,7 @@ const selector = pipe(
 const parseDeclarations = pipe(
   split(";"),
   filter(o(not, isEmpty)),
-  map(split(":")),
+  map(pipe(match(/([^\:]+)\:(.+)/), drop(1))),
   fromPairs,
 );
 
