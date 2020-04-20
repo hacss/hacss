@@ -9,7 +9,7 @@ const {
   test,
 } = require("ramda");
 
-const url = map(
+module.exports = map(
   replace(
     /url\((.+?)\)/g,
     ifElse(
