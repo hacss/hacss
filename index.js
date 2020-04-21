@@ -177,7 +177,10 @@ const wrapper = curryN(
 );
 
 const build = config => {
-  const mediaQueries = mergeRight(DEFAULT_MEDIA_QUERIES, config.mediaQueries);
+  const mediaQueries = mergeRight(
+    DEFAULT_MEDIA_QUERIES,
+    config.mediaQueries || [],
+  );
 
   const applyPlugins = pipe(
     map(
@@ -188,12 +191,12 @@ const build = config => {
       ])
     ),
     reduce(o, identity),
-  )(config.plugins.concat(DEFAULT_PLUGINS));
+  )((config.plugins || []).concat(DEFAULT_PLUGINS));
 
   const properties = reduce(
     concat,
     knownProperties,
-    map(o(defaultTo([]), nth(1)), config.plugins),
+    map(o(defaultTo([]), nth(1)), (config.plugins || [])),
   );
 
   const pattern = new RegExp(`(@(\\w+){)?(([\\w:]+)([_+>]))?((:[^\\s{]+){)?(((${
