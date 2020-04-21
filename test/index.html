@@ -1,105 +1,98 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Hacss Tests</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body class="margin:16px; font-family:$sans-serif; font-size:$medium; font-weight:400; background:#fff; color:#000;">
-    <h1 class="font-weight:400; font-size:$extra-large;">Hacss Tests</h1> 
+<link rel="stylesheet" href="styles.css" />
+<div class="font-family:$sans-serif; font-size:$medium; font-weight:400; background:#fff; color:#000;">
+  <h1 class="font-weight:400; font-size:$extra-large;">Hacss Tests</h1> 
+  <section>
+    <h2 class="font-weight:400; font-size:$large;">Media Queries</h2>
+    <p>
+      You should see text below indicate the name of the current breakpoint.
+    </p>
+    <p>
+      The current breakpoint is:
+      <span class="font-weight:700; display:none; @small{display:inline;}">small</span>
+      <span class="font-weight:700; display:none; @medium{display:inline;}">medium</span>
+      <span class="font-weight:700; display:none; @large{display:inline;}">large</span>
+    </p>
+  </section>
+  <section>
+    <h2 class="font-weight:400; font-size:$large;">Context</h2>
     <section>
-      <h2 class="font-weight:400; font-size:$large;">Media Queries</h2>
-      <p>
-        You should see text below indicate the name of the current breakpoint.
-      </p>
-      <p>
-        The current breakpoint is:
-        <span class="font-weight:700; display:none; @small{display:inline;}">small</span>
-        <span class="font-weight:700; display:none; @medium{display:inline;}">medium</span>
-        <span class="font-weight:700; display:none; @large{display:inline;}">large</span>
+      <h3 class="font-weight:500; font-size:$medium-plus;">Descendant</h3>
+      <p class="ctxp">
+        <span>
+          When you hover over this paragraph,
+          <span class="ctxp:hover_background:#ff0; color:#000; font-weight:700;">
+            this text
+          </span>
+          should be highlighted.
+        </span>
       </p>
     </section>
     <section>
-      <h2 class="font-weight:400; font-size:$large;">Context</h2>
-      <section>
-        <h3 class="font-weight:500; font-size:$medium-plus;">Descendant</h3>
-        <p class="ctxp">
-          <span>
-            When you hover over this paragraph,
-            <span class="ctxp:hover_background:#ff0; color:#000; font-weight:700;">
-              this text
-            </span>
-            should be highlighted.
-          </span>
-        </p>
-      </section>
-      <section>
-        <h3 class="font-weight:500; font-size:$medium-plus;">Adjacent Sibling</h3>
-        <p>
-          <span class="word word:hover+background:#ff0;">Each</span>
-          <span class="word word:hover+background:#ff0;">word</span>
-          <span class="word word:hover+background:#ff0;">should</span>
-          <span class="word word:hover+background:#ff0;">be</span>
-          <span class="word word:hover+background:#ff0;">highlighted</span>
-          <span class="word word:hover+background:#ff0;">when</span>
-          <span class="word word:hover+background:#ff0;">hovering</span>
-          <span class="word word:hover+background:#ff0;">over</span>
-          <span class="word word:hover+background:#ff0;">the</span>
-          <span class="word word:hover+background:#ff0;">previous</span>
-          <span class="word word:hover+background:#ff0;">word</span>.
-        </p>
-      </section>
-      <section>
-        <h3 class="font-weight:500; font-size:$medium-plus;">Child</h3>
-        <p class="ctxp">
-          <span>
-            When you hover over this paragraph,
-            <span class="ctxp:hover>background:#ff0; color:#000; font-weight:700;">
-              this text
-            </span>
-            <em>should not</em> be highlighted.
-          </span>
-          However,
+      <h3 class="font-weight:500; font-size:$medium-plus;">Adjacent Sibling</h3>
+      <p>
+        <span class="word word:hover+background:#ff0;">Each</span>
+        <span class="word word:hover+background:#ff0;">word</span>
+        <span class="word word:hover+background:#ff0;">should</span>
+        <span class="word word:hover+background:#ff0;">be</span>
+        <span class="word word:hover+background:#ff0;">highlighted</span>
+        <span class="word word:hover+background:#ff0;">when</span>
+        <span class="word word:hover+background:#ff0;">hovering</span>
+        <span class="word word:hover+background:#ff0;">over</span>
+        <span class="word word:hover+background:#ff0;">the</span>
+        <span class="word word:hover+background:#ff0;">previous</span>
+        <span class="word word:hover+background:#ff0;">word</span>.
+      </p>
+    </section>
+    <section>
+      <h3 class="font-weight:500; font-size:$medium-plus;">Child</h3>
+      <p class="ctxp">
+        <span>
+          When you hover over this paragraph,
           <span class="ctxp:hover>background:#ff0; color:#000; font-weight:700;">
             this text
           </span>
-          <em>should</em> be highlighted.
-        </p>
-      </section>
-    </section>
-    <section>
-      <h2 class="font-weight:400; font-size:$large;">Pseudo Classes</h2>
-      <p>
-        The first row below shows how the button should appear in various
-        states. The second shows a button that should match each of these
-        examples in various states, as well as a button that is disabled.
+          <em>should not</em> be highlighted.
+        </span>
+        However,
+        <span class="ctxp:hover>background:#ff0; color:#000; font-weight:700;">
+          this text
+        </span>
+        <em>should</em> be highlighted.
       </p>
-      <div class="width:100%; max-width:500px; display:flex; flex-direction:column; margin:-2px;">
-        <div class="display:flex; flex-direction:row;">
-          <div class="flex:1; font:inherit; border:0; background:#009; color:#fff; padding:8px__16px; text-align:center; margin:2px;">Normal</div>
-          <div class="flex:1; font:inherit; border:0; background:#00c; color:#fff; padding:8px__16px; text-align:center; margin:2px;">Hover</div>
-          <div class="flex:1; font:inherit; border:0; background:#c00; color:#fff; padding:8px__16px; text-align:center; margin:2px;">Active</div>
-          <div class="flex:1; font:inherit; border:0; background:#999; color:#fff; padding:8px__16px; text-align:center; margin:2px;">Disabled</div>
-        </div>
-        <div class="display:flex;">
-          <button class="flex:1; font:inherit; border:0; :active{background:#c00;} :disabled{background:#999;} :hover{background:#00c;} background:#009; color:#fff; padding:8px__16px; margin:2px;">
-            Button
-          </button>
-          <button class="width:calc(25%-4px); font:inherit; border:0; :active{background:#c00;} :disabled{background:#999;} :hover{background:#00c;} background:#009; color:#fff; padding:8px__16px; margin:2px;" disabled>
-            Button
-          </button>
-        </div>
+    </section>
+  </section>
+  <section>
+    <h2 class="font-weight:400; font-size:$large;">Pseudo Classes</h2>
+    <p>
+      The first row below shows how the button should appear in various
+      states. The second shows a button that should match each of these
+      examples in various states, as well as a button that is disabled.
+    </p>
+    <div class="width:100%; max-width:500px; display:flex; flex-direction:column; margin:-2px;">
+      <div class="display:flex; flex-direction:row;">
+        <div class="flex:1; font:inherit; border:0; background:#009; color:#fff; padding:8px__16px; text-align:center; margin:2px;">Normal</div>
+        <div class="flex:1; font:inherit; border:0; background:#00c; color:#fff; padding:8px__16px; text-align:center; margin:2px;">Hover</div>
+        <div class="flex:1; font:inherit; border:0; background:#c00; color:#fff; padding:8px__16px; text-align:center; margin:2px;">Active</div>
+        <div class="flex:1; font:inherit; border:0; background:#999; color:#fff; padding:8px__16px; text-align:center; margin:2px;">Disabled</div>
       </div>
-    </section>
-    <section>
-      <h2 class="font-weight:400; font-size:$large;">Pseudo Elements</h2>
-      <p>
-        You should see an answer to the question below when this feature works
-        correctly.
-      </p>
-      <p class="::after{content:'Yes';font-weight:700;}">
-        Does this work?
-      </p>
-    </section>
-  </body>
-</html>
+      <div class="display:flex;">
+        <button class="flex:1; font:inherit; border:0; :active{background:#c00;} :disabled{background:#999;} :hover{background:#00c;} background:#009; color:#fff; padding:8px__16px; margin:2px;">
+          Button
+        </button>
+        <button class="width:calc(25%-4px); font:inherit; border:0; :active{background:#c00;} :disabled{background:#999;} :hover{background:#00c;} background:#009; color:#fff; padding:8px__16px; margin:2px;" disabled>
+          Button
+        </button>
+      </div>
+    </div>
+  </section>
+  <section>
+    <h2 class="font-weight:400; font-size:$large;">Pseudo Elements</h2>
+    <p>
+      You should see an answer to the question below when this feature works
+      correctly.
+    </p>
+    <p class="::after{content:'Yes';font-weight:700;}">
+      Does this work?
+    </p>
+  </section>
+</div>
