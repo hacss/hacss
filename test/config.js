@@ -18,23 +18,5 @@ module.exports = {
         "extra-large": "40px",
       },
     }),
-    [
-      decls => {
-        if ("text-stroke" in decls) {
-          const [ size, color ] = decls["text-stroke"].split(/\s+/);
-          if (size && color) {
-            decls["text-shadow"] = `
-              -${size} -${size} 0 ${color},
-              ${size} -${size} 0 ${color},
-              -${size} ${size} 0 ${color},
-              ${size} ${size} 0 ${color}
-            `;
-            delete decls["text-stroke"];
-          }
-        }
-        return decls;
-      },
-      ["text-stroke"],
-    ],
   ],
 };

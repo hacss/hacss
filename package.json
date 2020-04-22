@@ -20,7 +20,7 @@
   "scripts": {
     "format": "prettier --trailing-comma all --parser babel --write .eslintrc.js *.js config/*.js",
     "lint": "eslint .eslintrc.js *.js config/*.js",
-    "test": "node cli.js --output test/styles.css --config test/config.js test/index.html && echo \"\n@import 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap';\" >> test/styles.css && git diff --exit-code test/styles.css && ./test/output.js"
+    "test": "node cli.js --output test/styles.css --config test/config.js test/index.html && git diff --exit-code test/styles.css && ./test/output.js"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
