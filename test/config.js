@@ -8,7 +8,7 @@ module.exports = {
   },
   plugins: [
     globalVariables({
-      "sans-serif": "'Roboto', sans-serif",
+      "sans-serif": "'Inter', sans-serif",
     }),
     indexedVariables({
       "font-size": {
