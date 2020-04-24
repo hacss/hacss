@@ -6,7 +6,7 @@
   "author": "Nick Saunders <nick@saunde.rs>",
   "license": "MIT",
   "engines": {
-    "node": ">=11.0.0"
+    "node": ">=8.2.1"
   },
   "main": "index.js",
   "bin": "cli.js",
