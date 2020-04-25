@@ -221,9 +221,13 @@ const build = config => {
         fromPairs,
         computeField("selector", selector),
         applyRecord({
-          mediaQuery: pipe(
-            flip(prop)(mediaQueries),
-            when(o(not, isNil), concat("@media ")),
+          mediaQuery: when(
+            o(not, isNil),
+            pipe(
+              flip(prop)(mediaQueries),
+              defaultTo("not all"),
+              concat("@media "),
+            ),
           ),
           declarations: pipe(
             parseDeclarations,

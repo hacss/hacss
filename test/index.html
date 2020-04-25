@@ -6,13 +6,17 @@
   <section>
     <h2 class="font-weight:400; font-size:$large;">Media Queries</h2>
     <p>
-      You should see text below indicate the name of the current breakpoint.
+      You should see the name of the current breakpoint below:
     </p>
     <p>
       The current breakpoint is:
       <span class="font-weight:700; display:none; @small{display:inline;}">small</span>
       <span class="font-weight:700; display:none; @medium{display:inline;}">medium</span>
       <span class="font-weight:700; display:none; @large{display:inline;}">large</span>
+    </p>
+    <p class="display:none; @doesnotexist{display:block;}">
+      You should not see this line of text because the specified media query is
+      not configured.
     </p>
   </section>
   <section>

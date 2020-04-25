@@ -38,3 +38,4 @@
 @media only screen and (max-width: 599px){.\@small\{display\:inline\;\}{display:inline;}}
 @media only screen and (min-width: 600px) and (max-width: 1199px){.\@medium\{display\:inline\;\}{display:inline;}}
 @media only screen and (min-width: 1200px){.\@large\{display\:inline\;\}{display:inline;}}
+@media not all{.\@doesnotexist\{display\:block\;\}{display:block;}}
