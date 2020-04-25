@@ -1,47 +1,16 @@
-# hacss ![Build status](https://travis-ci.org/nsaunders/hacss.svg?branch=master)
-## Hackable inline style language embedded in HTML classes
+<p align="center">
+  <a href="https://hacss.io" target="_blank"><img width="256" src="https://raw.githubusercontent.com/hacss/hacss/master/img/logo-hacss.svg"></a><br>
+  Inline styles without the limitations
+</p>
 
-While many consider inline styles to be, in essence, more maintainable than
-external stylesheets, the limited capabilities of vanilla inline styles (e. g.
-no media queries or pseudo-selectors) often force a project to use external
-stylesheets or to resort to JavaScript for even trivial state changes (like
-changing the color of a button on hover) or responsive designs. Moreover,
-JavaScript cannot replace stylesheets completely, as it offers no direct way
-to style pseudo-elements such as input placeholders.
+<p align="center">
+    <a href="https://travis-ci.org/hacss/hacss"><img src="https://img.shields.io/travis/hacss/hacss/master.svg" alt="Build Status"></a>
+    <a href="https://github.com/hacss/hacss/releases"><img src="https://img.shields.io/npm/v/hacss.svg" alt="Latest Release"></a>
+    <a href="https://github.com/hacss/hacss/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/hacss.svg" alt="License"></a>
+</p>
 
-Hacss combines the maintainability benefits of inline styles with the
-capabilities of external stylesheets by embedding its own styling DSL within
-HTML `class` attributes. At build time, Hacss automatically generates a
-stylesheet from the CSS classes used throughout the project:
-`<h1 class="C(red)">Hello World</h1>`, for example, yields a CSS block
-`.C\(red\) { color: red; }`.
+## Resources
 
-Hacss is a drop-in replacement for [acss.io](https://acss.io)'s
-[Atomizer](https://github.com/acss-io/atomizer) tool for the majority of use
-cases. In general, the "Atomic" and "Helper" classes listed on the
-[acss.io Reference page](http://acss.io/reference.html) are applicable to Hacss
-as well. Hacss may be a better option than Atomizer for non-basic use cases for
-a few reasons:
-
-1. Simpler configuration model. Hacss combines
-   ["rules"](https://github.com/acss-io/atomizer/blob/master/src/rules.js)
-   (aka "atomic classes") and
-   ["helpers"](https://github.com/acss-io/atomizer/blob/master/src/helpers.js)
-   into a single concept of a [rule](guides/config.md#rules). Verbose schemas
-   for defining "rules" and "helpers" are replaced by a simple map between a
-   rule name and its definition (typically a function used to generate the
-   corresponding styles).
-2. Where Atomizer
-   [blocks attempts to change rules](https://github.com/acss-io/atomizer/search?q=already+exists+with+a+different&unscoped_q=already+exists+with+a+different),
-   Hacss makes redefining rules easy. A common use case for this would be to
-   re-implement
-   [`O` (outline)](https://github.com/nsaunders/hacss/search?q=outline&unscoped_q=outline)
-   using `box-shadow` as described
-   [here](https://dev.to/hybrid_alex/better-css-outlines-with-box-shadows-1k7j).
-3. Hacss configuration is function-oriented, offering greater control and
-   flexibility. Instead of a
-   [map of global variables](https://github.com/acss-io/atomizer/blob/fc0d460e2e0f82acaa3d626da03193b9895c8010/examples/example-config.js#L6),
-   for example, Hacss uses [`globalMapArg`](guides/config.md#globalMapArg) to allow global
-   variable lookups as well as other transformations.
-
-For more, see the [guides](./guides).
+* Guides, Getting Started, and more: [hacss.io](https://hacss.io)
+* [Tests](test/index.html)
+* Try Hacss in your browser: [Basement Hacss](https://basement.hacss.io)
