@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://hacss.io" target="_blank"><img width="256" src="https://raw.githubusercontent.com/hacss/hacss/master/img/logo-hacss.svg"></a><br>
-  Inline styles without the limitations
+  Style like you mean it.
 </p>
 
 <p align="center">
