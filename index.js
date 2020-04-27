@@ -199,7 +199,7 @@ const build = config => {
     map(o(defaultTo([]), nth(1)), (config.plugins || [])),
   );
 
-  const pattern = new RegExp(`(@(\\w+){)?(([\\w:]+)([_+>]))?((:[^\\s{]+){)?(((${
+  const pattern = new RegExp(`(@(\\w+){)?((\\w+(:[^\\s]+)?)([_+>]))?((:[^\\s{]+){)?(((${
     join("|", properties)
   }):[^\\s;]+;)+)[}]*`);
 
@@ -209,7 +209,7 @@ const build = config => {
     uniqBy(head),
     map(
       pipe(
-        addIndex(filter)(pipe(nthArg(1), flip(contains)([0, 2, 4, 5, 7, 8]))),
+        addIndex(filter)(pipe(nthArg(1), flip(contains)([0, 2, 4, 6, 8, 9]))),
         zip([
           "className",
           "mediaQuery",
