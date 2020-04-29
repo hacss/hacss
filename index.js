@@ -47,6 +47,7 @@ const {
   prop,
   reduce,
   repeat,
+  replace,
   reverse,
   sortWith,
   split,
@@ -66,11 +67,6 @@ const DEFAULT_MEDIA_QUERIES = {
   "medium": "only screen and (min-width: 600px) and (max-width: 999px)",
   "large": "only screen and (min-width: 1000px)",
 };
-
-const DEFAULT_PLUGINS = [
-  require("./plugins/calc.js"),
-  require("./plugins/space.js"),
-];
 
 const applyRecord = f =>
   mapObjIndexed(
@@ -157,6 +153,19 @@ const parseDeclarations = pipe(
   fromPairs,
 );
 
+const applyFixes = map(
+  pipe(
+    replace(
+      /calc\(.+\)/g,
+      replace(
+        /[\+\-\*\/]/g,
+        o(concat(" "), flip(concat)(" ")),
+      ),
+    ),
+    replace(/__/g, " "),
+  ),
+);
+
 const stringifyDeclarations = pipe(
   toPairs,
   map(o(flip(concat)(";"), join(":"))),
@@ -191,7 +200,7 @@ const build = config => {
       ])
     ),
     reduce(o, identity),
-  )((config.plugins || []).concat(DEFAULT_PLUGINS));
+  )(config.plugins || []);
 
   const properties = reduce(
     concat,
@@ -231,6 +240,7 @@ const build = config => {
           ),
           declarations: pipe(
             parseDeclarations,
+            applyFixes,
             applyPlugins,
             stringifyDeclarations,
           ),
