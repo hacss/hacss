@@ -2,7 +2,8 @@
   "name": "hacss",
   "version": "1.0.12",
   "description": "Hackable inline style language embedded in HTML classes",
-  "repository": "https://github.com/nsaunders/hacss.git",
+  "repository": "https://github.com/hacss/hacss.git",
+  "homepage": "https://hacss.io/",
   "author": "Nick Saunders <nick@saunde.rs>",
   "license": "MIT",
   "engines": {
