@@ -1,15 +1,15 @@
-.font-family\:\$sans-serif\;{font-family:'Inter', sans-serif;}
-.font-size\:\$medium\;{font-size:16px;}
+.font-family\:sans-serif\;{font-family:'Inter', sans-serif;}
+.font-size\:16px\;{font-size:16px;}
 .font-weight\:400\;{font-weight:400;}
 .background\:\#fff\;{background:#fff;}
 .color\:\#000\;{color:#000;}
 .margin\:16px\;{margin:16px;}
-.font-size\:\$extra-large\;{font-size:40px;}
-.font-size\:\$large\;{font-size:28px;}
+.font-size\:40px\;{font-size:40px;}
+.font-size\:28px\;{font-size:28px;}
 .font-weight\:700\;{font-weight:700;}
 .display\:none\;{display:none;}
 .font-weight\:500\;{font-weight:500;}
-.font-size\:\$medium-plus\;{font-size:20px;}
+.font-size\:20px\;{font-size:20px;}
 .cbx:not(:checked) + .cbx\:not\(\:checked\)\+text-decoration\:line-through\;{text-decoration:line-through;}
 .width\:100\%\;{width:100%;}
 .max-width\:500px\;{max-width:500px;}
