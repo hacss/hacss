@@ -274,4 +274,4 @@ const build = config => {
   );
 };
 
-module.exports = (code, config) => build(config)(code);
+module.exports = (code, config = {}) => build(config)(code);
