@@ -210,7 +210,7 @@ const build = config => {
 
   const pattern = new RegExp(`(@(\\w+){)?((\\w+(:[^\\s]+)?)([_+>]))?((:[^\\s{]+){)?(((${
     join("|", properties)
-  }):[^\\s;]+;)+)[}]*`);
+  }):[^\\s\\{\\};]+;)+)[}]*`);
 
   return pipe(
     matchAll(pattern),
