@@ -63,9 +63,9 @@ const {
 const knownProperties = require("known-css-properties").all;
 
 const DEFAULT_MEDIA_QUERIES = {
-  "small": "only screen and (max-width: 599px)",
-  "medium": "only screen and (min-width: 600px) and (max-width: 999px)",
-  "large": "only screen and (min-width: 1000px)",
+  small: "only screen and (max-width: 599px)",
+  medium: "only screen and (min-width: 600px) and (max-width: 999px)",
+  large: "only screen and (min-width: 1000px)",
 };
 
 const applyRecord = f =>
@@ -105,14 +105,16 @@ const balanced = pipe(
 );
 
 const pseudoWeight = pipe(
-  map(flip(indexOf)([
-    ":link",
-    ":visited",
-    ":focus",
-    ":hover",
-    ":active",
-    ":disabled",
-  ])),
+  map(
+    flip(indexOf)([
+      ":link",
+      ":visited",
+      ":focus",
+      ":hover",
+      ":active",
+      ":disabled",
+    ]),
+  ),
   reduce(max, -1),
 );
 
@@ -157,10 +159,7 @@ const applyFixes = map(
   pipe(
     replace(
       /calc\(.+\)/g,
-      replace(
-        /[\+\-\*\/]/g,
-        o(concat(" "), flip(concat)(" ")),
-      ),
+      replace(/[\+\-\*\/]/g, o(concat(" "), flip(concat)(" "))),
     ),
     replace(/__/g, " "),
   ),
@@ -194,10 +193,10 @@ const build = config => {
   const applyPlugins = pipe(
     map(
       cond([
-        [ pipe(type, equals("Array")), nth(0) ],
-        [ pipe(type, equals("Function")), identity ],
-        [ T, always(identity) ],
-      ])
+        [pipe(type, equals("Array")), nth(0)],
+        [pipe(type, equals("Function")), identity],
+        [T, always(identity)],
+      ]),
     ),
     reduce(o, identity),
   )(config.plugins || []);
@@ -205,12 +204,15 @@ const build = config => {
   const properties = reduce(
     concat,
     knownProperties,
-    map(o(defaultTo([]), nth(1)), (config.plugins || [])),
+    map(o(defaultTo([]), nth(1)), config.plugins || []),
   );
 
-  const pattern = new RegExp(`(@(\\w+){)?((\\w+(:[^\\s]+)?)([_+>]))?((:[^\\s{]+){)?(((${
-    join("|", properties)
-  }):[^\\s\\{\\};]+;)+)[}]*`);
+  const pattern = new RegExp(
+    `(@(\\w+){)?((\\w+(:[^\\s]+)?)([_+>]))?((:[^\\s{]+){)?(((${join(
+      "|",
+      properties,
+    )}):[^\\s\\{\\};]+;)+)[}]*`,
+  );
 
   return pipe(
     matchAll(pattern),
@@ -249,23 +251,22 @@ const build = config => {
     ),
     sortWith([
       descend(pipe(prop("mediaQuery"), isNil)),
-      ascend(pipe(prop("context"), defaultTo(""), match(/:[^:]+/g), pseudoWeight)),
-      ascend(pipe(prop("pseudos"), defaultTo(""), match(/:[^:]+/g), pseudoWeight)),
+      ascend(
+        pipe(prop("context"), defaultTo(""), match(/:[^:]+/g), pseudoWeight),
+      ),
+      ascend(
+        pipe(prop("pseudos"), defaultTo(""), match(/:[^:]+/g), pseudoWeight),
+      ),
     ]),
     map(
       pipe(
-        apply(pipe, map(dissoc, ["className", "pseudos", "context", "operator"])),
+        apply(
+          pipe,
+          map(dissoc, ["className", "pseudos", "context", "operator"]),
+        ),
         flip(repeat)(2),
         adjust(0, prop("declarations")),
-        adjust(
-          1,
-          pipe(
-            dissoc("declarations"),
-            values,
-            reverse,
-            map(wrapper),
-          ),
-        ),
+        adjust(1, pipe(dissoc("declarations"), values, reverse, map(wrapper))),
         prepend(applyTo),
         apply(reduce),
       ),
