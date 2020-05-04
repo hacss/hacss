@@ -11,6 +11,7 @@
   },
   "main": "index.js",
   "bin": "cli.js",
+  "prettier": "@hacss/prettier-config",
   "dependencies": {
     "css.escape": "^1.5.1",
     "glob": "^7.1.6",
@@ -19,13 +20,14 @@
     "ramda": "^0.27.0"
   },
   "scripts": {
-    "format": "prettier --trailing-comma all --arrow-parens avoid --parser babel --write .eslintrc.js *.js",
+    "format": "prettier --parser babel --write .eslintrc.js *.js",
     "lint": "eslint .eslintrc.js *.js test/*.js",
     "test": "npm run lint && node cli.js --output test/styles.css --config test/config.js test/index.html && git diff --exit-code test/styles.css && ./test/output.js"
   },
   "devDependencies": {
+    "@hacss/eslint-config": "^1.0.0",
+    "@hacss/prettier-config": "^1.0.0",
     "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.0",
     "prettier": "^2.0.2"
   }
 }
