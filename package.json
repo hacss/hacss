@@ -10,7 +10,8 @@
     "node": ">=8.2.1"
   },
   "main": "index.js",
+  "bin": "index.js",
   "dependencies": {
-    "@hacss/cli": "^2.1.1"
+    "@hacss/cli": "*"
   }
 }
