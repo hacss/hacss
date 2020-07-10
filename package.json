@@ -10,36 +10,7 @@
     "node": ">=8.2.1"
   },
   "main": "index.js",
-  "bin": "cli.js",
-  "prettier": "@hacss/prettier-config",
   "dependencies": {
-    "css.escape": "^1.5.1",
-    "glob": "^7.1.6",
-    "known-css-properties": "^0.18.0",
-    "mkdirp": "^0.5.1",
-    "ramda": "^0.27.0"
-  },
-  "scripts": {
-    "test": "node cli.js --output test/styles.css --config test/config.js test/index.html && git diff --exit-code test/styles.css && ./test/output.js"
-  },
-  "devDependencies": {
-    "@hacss/eslint-config": "^1.0.0",
-    "@hacss/prettier-config": "^1.0.0",
-    "eslint": "^6.8.0",
-    "husky": "^4.2.5",
-    "lint-staged": "^10.2.2",
-    "prettier": "^2.0.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.js": [
-      "prettier --parser babel --write",
-      "eslint",
-      "npm run test"
-    ]
+    "@hacss/cli": "^2.1.1"
   }
 }
